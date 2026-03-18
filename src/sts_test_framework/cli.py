@@ -25,6 +25,8 @@ def main() -> None:
     parser.add_argument("--tags", default=None, help="Comma-separated tags to run (default: all)")
     parser.add_argument("--no-negative", action="store_true", help="Skip negative test cases")
     parser.add_argument("--quiet", action="store_true", help="Minimal output: only run count, report paths, and result")
+    parser.add_argument("--model", default=None, help="Model handle to test (e.g. C3DC). If omitted, first model from /models/ is used.")
+    parser.add_argument("--release", action="store_true", help="Use latest release version (no hyphen) for the model; otherwise first version.")
     args = parser.parse_args()
 
     base_url = args.base_url or os.getenv("STS_BASE_URL", "https://sts.cancer.gov/v2")
@@ -65,16 +67,23 @@ def main() -> None:
 
     # Step 3: Discovery
     log("Running discovery...")
-    test_data = discover(client)
+    test_data = discover(
+        client,
+        model_handle=args.model.strip() if args.model else None,
+        use_release_version=args.release,
+    )
+    discovery_info = None
     if test_data:
         # Summary of what was found (keys only; optional 1–2 example values)
         parts = []
+        discovery_info = {}
         for key in ("model_handle", "model_version", "node_handle", "prop_handle", "term_value", "tag_key", "tag_value"):
             if key in test_data:
                 v = test_data[key]
                 if isinstance(v, str) and len(v) > 20:
                     v = v[:17] + "..."
                 parts.append(f"{key}={v!r}")
+                discovery_info[key] = v
         log(f"Discovery: {', '.join(parts)}")
     else:
         log("Discovery: no data (API may be unreachable or returned no models).")
@@ -120,7 +129,16 @@ def main() -> None:
     json_path = Path(report_dir) / f"{report_basename}.json"
     html_path = Path(report_dir) / f"{report_basename}.html"
     write_json_report(summary, results, json_path)
-    write_html_report(summary, results, html_path, base_url=base_url)
+    write_html_report(
+        summary,
+        results,
+        html_path,
+        base_url=base_url,
+        model_handle=test_data.get("model_handle") if test_data else None,
+        model_version=test_data.get("model_version") if test_data else None,
+        discovery_info=discovery_info,
+        cases_generated={"total": len(cases), "positive": n_positive, "negative": n_negative},
+    )
     if quiet:
         print(f"Report written: {json_path}, {html_path}", flush=True)
     else:

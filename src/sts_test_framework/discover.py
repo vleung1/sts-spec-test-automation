@@ -9,13 +9,42 @@ from urllib.parse import quote
 from .client import APIClient
 
 
-def discover(client: APIClient, base_path: str = "/v2") -> dict:
+def _is_release_version(version_str: str) -> bool:
+    """True if version has no hyphen (e.g. 2.1.0 is release; 2.1.0-0338852 is pre-release)."""
+    return "-" not in version_str
+
+
+def _latest_release_version(versions: list[str]) -> str | None:
+    """Return the latest release version (no hyphen), or None if none. Sorts by major.minor.patch."""
+    release = [v for v in versions if _is_release_version(v)]
+    if not release:
+        return None
+
+    def version_key(v: str) -> tuple:
+        try:
+            parts = v.split(".")[:3]
+            return tuple(int(x) if x.isdigit() else 0 for x in parts)
+        except (ValueError, AttributeError):
+            return (0, 0, 0)
+
+    return max(release, key=version_key)
+
+
+def discover(
+    client: APIClient,
+    base_path: str = "/v2",
+    model_handle: str | None = None,
+    use_release_version: bool = False,
+) -> dict:
     """
     Call the API sequentially to collect handles and sample term/tag values.
 
     Args:
         client: Configured with base URL ending in ``/v2`` (or matching ``base_path``).
         base_path: Used only to choose relative paths (``/models/`` vs prefixed).
+        model_handle: If set, use the first model from /models/ with this handle.
+        use_release_version: If True, use latest release version from /model/{handle}/versions
+            (version with no hyphen); otherwise use first version in the list.
 
     Returns:
         Partial dict on failure (e.g. empty if ``GET /models/`` fails). On success
@@ -23,7 +52,6 @@ def discover(client: APIClient, base_path: str = "/v2") -> dict:
         ``node_handle``, ``prop_handle``, ``term_value``, ``tag_key``/``tag_value``.
     """
     data = {}
-    # Paths are relative to client.base_url which ends with /v2 -> use /models/ not /v2/models/
     models_path = "/models/" if base_path == "/v2" else f"{base_path.rstrip('/')}/models/"
     response = client.get(models_path)
     if response.status_code != 200:
@@ -34,16 +62,38 @@ def discover(client: APIClient, base_path: str = "/v2") -> dict:
         return data
 
     data["models"] = models
-    model = models[0]
-    data["model_handle"] = model.get("handle")
-    data["model_version"] = model.get("version")
-    data["model_nanoid"] = model.get("nanoid")
+    if model_handle:
+        model = next((m for m in models if isinstance(m, dict) and m.get("handle") == model_handle), None)
+        if not model:
+            return data
+    else:
+        model = models[0]
 
-    if not data.get("model_handle") or not data.get("model_version"):
+    data["model_handle"] = model.get("handle")
+    data["model_nanoid"] = model.get("nanoid")
+    if not data.get("model_handle"):
         return data
 
-    model_handle = data["model_handle"]
+    model_handle_resolved = data["model_handle"]
+    versions_path = f"/model/{quote(model_handle_resolved, safe='')}/versions"
+    response = client.get(versions_path)
+    if response.status_code != 200:
+        return data
+    versions = response.json()
+    if not isinstance(versions, list) or len(versions) == 0:
+        return data
+
+    if use_release_version:
+        chosen = _latest_release_version(versions)
+        data["model_version"] = chosen if chosen is not None else versions[0]
+    else:
+        data["model_version"] = versions[0]
+
+    if not data.get("model_version"):
+        return data
+
     model_version = data["model_version"]
+    model_handle = model_handle_resolved
     nodes_path = f"/model/{quote(model_handle, safe='')}/version/{quote(model_version, safe='')}/nodes"
     response = client.get(nodes_path)
     if response.status_code != 200:

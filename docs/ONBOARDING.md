@@ -61,7 +61,7 @@ The framework **loads** this file and uses it to decide which requests to send a
 
 Many endpoints need **real values** in the URL. For example, “get node by handle” requires a real `modelHandle`, `versionString`, and `nodeHandle`. We don’t hardcode those; we **discover** them by calling the API once at the start:
 
-1. GET `/models/` → take the first model’s `handle` and `version`.
+1. GET `/models/` → choose a model (by **`--model`** handle if provided, otherwise the first in the list). GET `/model/{handle}/versions` → choose a version: with **`--release`**, the latest **release** version (version string with no hyphen, e.g. `2.1.0`); otherwise the first version in the list (which may be a pre-release).
 2. GET `/model/{handle}/version/{version}/nodes` → take the first node’s `handle`.
 3. GET that node’s properties → take the first property’s `handle`.
 4. GET that property’s terms → take a real `term` value.
@@ -345,11 +345,54 @@ python -m sts_test_framework.cli --tags id,model,models
 
 # Run only positive cases (skip negative 404/422 tests)
 python -m sts_test_framework.cli --no-negative
+
+# Test a specific data model (e.g. PSDC, CTDC)
+python -m sts_test_framework.cli --report reports/ --model PSDC
+
+# Use the latest release version for that model (no pre-release hash)
+python -m sts_test_framework.cli --report reports/ --model PSDC --release
 ```
+
+- **`--model <handle>`** – Model handle to test (e.g. `PSDC`, `C3DC`, `CDS`). Discovery uses this model and its version for all path parameters. If omitted, the first model returned by `/models/` is used.
+- **`--release`** – Use the latest **release** version from `/model/{handle}/versions`. A release version is one whose string has no hyphen (e.g. `2.1.0`). If the model has no release versions, the first available version is used. Without `--release`, the first version in the list (which may be a pre-release) is used.
 
 When any test fails, the CLI exits with code 1 so CI can detect failure.
 
-### 6.6 What happens when you run (under the hood)
+### 6.6 Running all data models in one go (multi-model runner)
+
+To run the full test suite once **per data model** (CDS, CCDI, CCDI-DCC, ICDC, CTDC, C3DC, PSDC) and get separate reports per model, use the **multi-model runner** script:
+
+```bash
+# From project root; uses STS_BASE_URL (default: https://sts-qa.cancer.gov/v2)
+python scripts/run_all_models.py
+```
+
+**Behavior:**
+
+- Runs the CLI once per model with `--model <handle>` (and optionally `--release` if you add it to the script).
+- Writes reports to **`reports/<model>/`** (e.g. `reports/PSDC/report_2025-03-12T14-30-45.html` and `.json`). Each run gets timestamped files so previous reports are not overwritten.
+- Exits with code **1** if any model run fails, so CI can detect failure.
+
+**Environment variables:**
+
+| Variable         | Meaning                                                                 | Default                         |
+| ---------------- | ----------------------------------------------------------------------- | ------------------------------- |
+| `STS_BASE_URL`   | Base URL of the STS v2 API (used for all model runs)                    | `https://sts-qa.cancer.gov/v2`  |
+| `STS_MODELS`     | Comma-separated list of model handles to run (e.g. `PSDC,CTDC`). If unset, all default models are run. | (all: CDS, CCDI, CCDI-DCC, ICDC, CTDC, C3DC, PSDC) |
+
+**Example – run only PSDC and CTDC:**
+
+```bash
+STS_MODELS=PSDC,CTDC python scripts/run_all_models.py
+```
+
+**Example – run against prod:**
+
+```bash
+STS_BASE_URL=https://sts.cancer.gov/v2 python scripts/run_all_models.py
+```
+
+### 6.7 What happens when you run (under the hood)
 
 Whether you use **pytest** or the **CLI**, the same pipeline runs: load spec → create client → discover → generate cases → run cases. The CLI then adds the report step.
 

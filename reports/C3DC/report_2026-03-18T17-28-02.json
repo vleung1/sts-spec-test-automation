@@ -1,0 +1,1212 @@
+{
+  "summary": {
+    "total": 58,
+    "passed": 58,
+    "failed": 0,
+    "by_tag": {
+      "id": {
+        "total": 2,
+        "passed": 2
+      },
+      "model": {
+        "total": 30,
+        "passed": 30
+      },
+      "models": {
+        "total": 4,
+        "passed": 4
+      },
+      "tag": {
+        "total": 10,
+        "passed": 10
+      },
+      "tags": {
+        "total": 4,
+        "passed": 4
+      },
+      "terms": {
+        "total": 8,
+        "passed": 8
+      }
+    },
+    "by_operation": {
+      "id_id_get_v2_id__id__get": {
+        "passed": true,
+        "duration": 0.3560514590353705,
+        "error": null
+      },
+      "model_model_versions_get_v2_model__modelHandle__versions_get": {
+        "passed": true,
+        "duration": 0.1112998750177212,
+        "error": null
+      },
+      "model_model_versions_get_v2_model__modelHandle__versions_get__bad_query_skip": {
+        "passed": true,
+        "duration": 0.10632274998351932,
+        "error": null
+      },
+      "model_model_versions_get_v2_model__modelHandle__versions_get__bad_query_limit": {
+        "passed": true,
+        "duration": 0.1053384579718113,
+        "error": null
+      },
+      "model_model_latest_version_get_v2_model__modelHandle__latest_version_get": {
+        "passed": true,
+        "duration": 0.11032529198564589,
+        "error": null
+      },
+      "model_model_handle_nodes_get_v2_model__modelHandle__version__versionString__nodes_get": {
+        "passed": true,
+        "duration": 0.09618333296384662,
+        "error": null
+      },
+      "model_model_handle_nodes_get_v2_model__modelHandle__version__versionString__nodes_get__bad_query_skip": {
+        "passed": true,
+        "duration": 0.1045765420421958,
+        "error": null
+      },
+      "model_model_handle_nodes_get_v2_model__modelHandle__version__versionString__nodes_get__bad_query_limit": {
+        "passed": true,
+        "duration": 0.09487224998883903,
+        "error": null
+      },
+      "model_model_handle_nodes_count_get_v2_model__modelHandle__version__versionString__nodes_count_get": {
+        "passed": true,
+        "duration": 0.09659812500467524,
+        "error": null
+      },
+      "model_model_handle_node_node_handle_get_v2_model__modelHandle__version__versionString__node__nodeHandle__get": {
+        "passed": true,
+        "duration": 0.11875666701234877,
+        "error": null
+      },
+      "model_model_handle_node_node_handle_properties_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_get": {
+        "passed": true,
+        "duration": 0.10687712504295632,
+        "error": null
+      },
+      "model_model_handle_node_node_handle_properties_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_get__bad_query_skip": {
+        "passed": true,
+        "duration": 0.09276654198765755,
+        "error": null
+      },
+      "model_model_handle_node_node_handle_properties_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_get__bad_query_limit": {
+        "passed": true,
+        "duration": 0.0912568750209175,
+        "error": null
+      },
+      "model_model_handle_node_node_handle_properties_count_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_count_get": {
+        "passed": true,
+        "duration": 0.11216249997960404,
+        "error": null
+      },
+      "model_model_handle_node_node_handle_property_prop_handle_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__get": {
+        "passed": true,
+        "duration": 0.1066614169976674,
+        "error": null
+      },
+      "model_model_handle_node_node_handle_property_prop_handle_terms_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_get": {
+        "passed": true,
+        "duration": 0.12230083299800754,
+        "error": null
+      },
+      "model_model_handle_node_node_handle_property_prop_handle_terms_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_get__bad_query_skip": {
+        "passed": true,
+        "duration": 0.1001108749769628,
+        "error": null
+      },
+      "model_model_handle_node_node_handle_property_prop_handle_terms_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_get__bad_query_limit": {
+        "passed": true,
+        "duration": 0.10889345803298056,
+        "error": null
+      },
+      "model_model_handle_node_node_handle_property_prop_handle_terms_count_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_count_get": {
+        "passed": true,
+        "duration": 0.09708662499906495,
+        "error": null
+      },
+      "model_model_handle_node_node_handle_property_prop_handle_term_term_value_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__term__termValue__get": {
+        "passed": true,
+        "duration": 0.10611170798074454,
+        "error": null
+      },
+      "models_get_v2_models__get": {
+        "passed": true,
+        "duration": 0.1502670839545317,
+        "error": null
+      },
+      "models_get_v2_models__get__bad_query_skip": {
+        "passed": true,
+        "duration": 0.10957658302504569,
+        "error": null
+      },
+      "models_get_v2_models__get__bad_query_limit": {
+        "passed": true,
+        "duration": 0.10470500000519678,
+        "error": null
+      },
+      "models_count_get_v2_models_count_get": {
+        "passed": true,
+        "duration": 0.10079062503064051,
+        "error": null
+      },
+      "tag_key_values_get_v2_tag__key__values_get": {
+        "passed": true,
+        "duration": 0.14932958403369412,
+        "error": null
+      },
+      "tag_key_values_get_v2_tag__key__values_get__bad_query_skip": {
+        "passed": true,
+        "duration": 0.09480525000253692,
+        "error": null
+      },
+      "tag_key_values_get_v2_tag__key__values_get__bad_query_limit": {
+        "passed": true,
+        "duration": 0.11362775001907721,
+        "error": null
+      },
+      "tag_key_value_entities_get_v2_tag__key___value__entities_get": {
+        "passed": true,
+        "duration": 0.10955475002992898,
+        "error": null
+      },
+      "tag_key_value_entities_get_v2_tag__key___value__entities_get__bad_query_skip": {
+        "passed": true,
+        "duration": 0.09082408295944333,
+        "error": null
+      },
+      "tag_key_value_entities_get_v2_tag__key___value__entities_get__bad_query_limit": {
+        "passed": true,
+        "duration": 0.10091366700362414,
+        "error": null
+      },
+      "tag_key_value_entities_count_get_v2_tag__key___value__entities_count_get": {
+        "passed": true,
+        "duration": 0.09538320795400068,
+        "error": null
+      },
+      "tags_get_v2_tags__get": {
+        "passed": true,
+        "duration": 13.965293750050478,
+        "error": null
+      },
+      "tags_get_v2_tags__get__bad_query_skip": {
+        "passed": true,
+        "duration": 0.13321624998934567,
+        "error": null
+      },
+      "tags_get_v2_tags__get__bad_query_limit": {
+        "passed": true,
+        "duration": 0.10831212502671406,
+        "error": null
+      },
+      "tags_count_get_v2_tags_count_get": {
+        "passed": true,
+        "duration": 0.10253229201771319,
+        "error": null
+      },
+      "pvs_synonyms_model_version_get_v2_terms_model_pvs__model___property__get": {
+        "passed": true,
+        "duration": 0.10622158297337592,
+        "error": null
+      },
+      "pvs_synonyms_model_version_get_v2_terms_model_pvs__model___property__get__bad_query_skip": {
+        "passed": true,
+        "duration": 0.11053741601062939,
+        "error": null
+      },
+      "pvs_synonyms_model_version_get_v2_terms_model_pvs__model___property__get__bad_query_limit": {
+        "passed": true,
+        "duration": 0.10504120896803215,
+        "error": null
+      },
+      "cde_pvs_by_id_with_version_get_v2_terms_cde_pvs__id___version__pvs_get": {
+        "passed": true,
+        "duration": 0.2915492500178516,
+        "error": null
+      },
+      "cde_pvs_by_id_with_version_get_v2_terms_cde_pvs__id___version__pvs_get__bad_query_skip": {
+        "passed": true,
+        "duration": 0.13365412497660145,
+        "error": null
+      },
+      "cde_pvs_by_id_with_version_get_v2_terms_cde_pvs__id___version__pvs_get__bad_query_limit": {
+        "passed": true,
+        "duration": 0.18122120801126584,
+        "error": null
+      }
+    },
+    "durations_ms": [
+      319.29,
+      356.05,
+      98.66,
+      106.32,
+      105.34,
+      111.3,
+      107.26,
+      110.33,
+      109.49,
+      104.58,
+      94.87,
+      96.18,
+      107.09,
+      96.6,
+      101.88,
+      118.76,
+      115.58,
+      92.77,
+      91.26,
+      106.88,
+      113.06,
+      112.16,
+      105.61,
+      106.66,
+      103.26,
+      100.11,
+      108.89,
+      122.3,
+      101.64,
+      97.09,
+      113.86,
+      106.11,
+      150.27,
+      109.58,
+      104.71,
+      100.79,
+      207.01,
+      94.81,
+      113.63,
+      149.33,
+      1444.81,
+      90.82,
+      100.91,
+      109.55,
+      104.7,
+      95.38,
+      13965.29,
+      133.22,
+      108.31,
+      102.53,
+      168.07,
+      110.54,
+      105.04,
+      106.22,
+      289.11,
+      133.65,
+      181.22,
+      291.55
+    ],
+    "p95_ms": 356.05,
+    "errors": []
+  },
+  "results": [
+    {
+      "operation_id": "id_id_get_v2_id__id__get",
+      "summary": "Get MDB entity with specified nanoid",
+      "path": "/id/UGeJ2p",
+      "path_display": "/id/UGeJ2p",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.3192921669688076,
+      "error": null,
+      "tag": "id",
+      "negative": false
+    },
+    {
+      "operation_id": "id_id_get_v2_id__id__get",
+      "summary": "Get MDB entity with specified nanoid (invalid param)",
+      "path": "/id/invalid_nonexistent_xyz",
+      "path_display": "/id/invalid_nonexistent_xyz",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.3560514590353705,
+      "error": null,
+      "tag": "id",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_versions_get_v2_model__modelHandle__versions_get",
+      "summary": "Get all versions for specified model",
+      "path": "/model/C3DC/versions",
+      "path_display": "/model/C3DC/versions?skip=0&limit=0",
+      "params": {
+        "skip": 0,
+        "limit": 0
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.09866233298089355,
+      "error": null,
+      "tag": "model",
+      "negative": false
+    },
+    {
+      "operation_id": "model_model_versions_get_v2_model__modelHandle__versions_get__bad_query_skip",
+      "summary": "Get all versions for specified model (bad query: skip=-1)",
+      "path": "/model/C3DC/versions",
+      "path_display": "/model/C3DC/versions?skip=-1&limit=0",
+      "params": {
+        "skip": -1,
+        "limit": 0
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.10632274998351932,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_versions_get_v2_model__modelHandle__versions_get__bad_query_limit",
+      "summary": "Get all versions for specified model (bad query: limit=not_a_number)",
+      "path": "/model/C3DC/versions",
+      "path_display": "/model/C3DC/versions?skip=0&limit=not_a_number",
+      "params": {
+        "skip": 0,
+        "limit": "not_a_number"
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.1053384579718113,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_versions_get_v2_model__modelHandle__versions_get",
+      "summary": "Get all versions for specified model (invalid param)",
+      "path": "/model/invalid_nonexistent_xyz/versions",
+      "path_display": "/model/invalid_nonexistent_xyz/versions",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.1112998750177212,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_latest_version_get_v2_model__modelHandle__latest_version_get",
+      "summary": "Get latest version of specified model",
+      "path": "/model/C3DC/latest-version",
+      "path_display": "/model/C3DC/latest-version",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.10726437496487051,
+      "error": null,
+      "tag": "model",
+      "negative": false
+    },
+    {
+      "operation_id": "model_model_latest_version_get_v2_model__modelHandle__latest_version_get",
+      "summary": "Get latest version of specified model (invalid param)",
+      "path": "/model/invalid_nonexistent_xyz/latest-version",
+      "path_display": "/model/invalid_nonexistent_xyz/latest-version",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.11032529198564589,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_nodes_get_v2_model__modelHandle__version__versionString__nodes_get",
+      "summary": "Get all nodes for specified model",
+      "path": "/model/C3DC/version/4.0.5/nodes",
+      "path_display": "/model/C3DC/version/4.0.5/nodes?skip=0&limit=0",
+      "params": {
+        "skip": 0,
+        "limit": 0
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.10949424997670576,
+      "error": null,
+      "tag": "model",
+      "negative": false
+    },
+    {
+      "operation_id": "model_model_handle_nodes_get_v2_model__modelHandle__version__versionString__nodes_get__bad_query_skip",
+      "summary": "Get all nodes for specified model (bad query: skip=-1)",
+      "path": "/model/C3DC/version/4.0.5/nodes",
+      "path_display": "/model/C3DC/version/4.0.5/nodes?skip=-1&limit=0",
+      "params": {
+        "skip": -1,
+        "limit": 0
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.1045765420421958,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_nodes_get_v2_model__modelHandle__version__versionString__nodes_get__bad_query_limit",
+      "summary": "Get all nodes for specified model (bad query: limit=not_a_number)",
+      "path": "/model/C3DC/version/4.0.5/nodes",
+      "path_display": "/model/C3DC/version/4.0.5/nodes?skip=0&limit=not_a_number",
+      "params": {
+        "skip": 0,
+        "limit": "not_a_number"
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.09487224998883903,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_nodes_get_v2_model__modelHandle__version__versionString__nodes_get",
+      "summary": "Get all nodes for specified model (invalid param)",
+      "path": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/nodes",
+      "path_display": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/nodes",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.09618333296384662,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_nodes_count_get_v2_model__modelHandle__version__versionString__nodes_count_get",
+      "summary": "Get number of nodes for specified model",
+      "path": "/model/C3DC/version/4.0.5/nodes/count",
+      "path_display": "/model/C3DC/version/4.0.5/nodes/count",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.10708941699704155,
+      "error": null,
+      "tag": "model",
+      "negative": false
+    },
+    {
+      "operation_id": "model_model_handle_nodes_count_get_v2_model__modelHandle__version__versionString__nodes_count_get",
+      "summary": "Get number of nodes for specified model (invalid param)",
+      "path": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/nodes/count",
+      "path_display": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/nodes/count",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.09659812500467524,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_get_v2_model__modelHandle__version__versionString__node__nodeHandle__get",
+      "summary": "Retrieve a specified node from a model",
+      "path": "/model/C3DC/version/4.0.5/node/diagnosis",
+      "path_display": "/model/C3DC/version/4.0.5/node/diagnosis",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.10187562496867031,
+      "error": null,
+      "tag": "model",
+      "negative": false
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_get_v2_model__modelHandle__version__versionString__node__nodeHandle__get",
+      "summary": "Retrieve a specified node from a model (invalid param)",
+      "path": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz",
+      "path_display": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.11875666701234877,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_properties_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_get",
+      "summary": "Get all properties for specified node",
+      "path": "/model/C3DC/version/4.0.5/node/diagnosis/properties",
+      "path_display": "/model/C3DC/version/4.0.5/node/diagnosis/properties?skip=0&limit=0",
+      "params": {
+        "skip": 0,
+        "limit": 0
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.11557799996808171,
+      "error": null,
+      "tag": "model",
+      "negative": false
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_properties_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_get__bad_query_skip",
+      "summary": "Get all properties for specified node (bad query: skip=-1)",
+      "path": "/model/C3DC/version/4.0.5/node/diagnosis/properties",
+      "path_display": "/model/C3DC/version/4.0.5/node/diagnosis/properties?skip=-1&limit=0",
+      "params": {
+        "skip": -1,
+        "limit": 0
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.09276654198765755,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_properties_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_get__bad_query_limit",
+      "summary": "Get all properties for specified node (bad query: limit=not_a_number)",
+      "path": "/model/C3DC/version/4.0.5/node/diagnosis/properties",
+      "path_display": "/model/C3DC/version/4.0.5/node/diagnosis/properties?skip=0&limit=not_a_number",
+      "params": {
+        "skip": 0,
+        "limit": "not_a_number"
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.0912568750209175,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_properties_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_get",
+      "summary": "Get all properties for specified node (invalid param)",
+      "path": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/properties",
+      "path_display": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/properties",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.10687712504295632,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_properties_count_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_count_get",
+      "summary": "Get number of properties for specified node",
+      "path": "/model/C3DC/version/4.0.5/node/diagnosis/properties/count",
+      "path_display": "/model/C3DC/version/4.0.5/node/diagnosis/properties/count",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.1130561669706367,
+      "error": null,
+      "tag": "model",
+      "negative": false
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_properties_count_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_count_get",
+      "summary": "Get number of properties for specified node (invalid param)",
+      "path": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/properties/count",
+      "path_display": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/properties/count",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.11216249997960404,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_property_prop_handle_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__get",
+      "summary": "Retrieve a specified property from a model",
+      "path": "/model/C3DC/version/4.0.5/node/diagnosis/property/tumor_grade",
+      "path_display": "/model/C3DC/version/4.0.5/node/diagnosis/property/tumor_grade",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.1056126250186935,
+      "error": null,
+      "tag": "model",
+      "negative": false
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_property_prop_handle_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__get",
+      "summary": "Retrieve a specified property from a model (invalid param)",
+      "path": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/property/invalid_nonexistent_xyz",
+      "path_display": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/property/invalid_nonexistent_xyz",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.1066614169976674,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_property_prop_handle_terms_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_get",
+      "summary": "Get the terms (acceptable values) for specified property, if applicable to property.",
+      "path": "/model/C3DC/version/4.0.5/node/diagnosis/property/tumor_grade/terms",
+      "path_display": "/model/C3DC/version/4.0.5/node/diagnosis/property/tumor_grade/terms?skip=0&limit=0",
+      "params": {
+        "skip": 0,
+        "limit": 0
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.10326479200739413,
+      "error": null,
+      "tag": "model",
+      "negative": false
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_property_prop_handle_terms_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_get__bad_query_skip",
+      "summary": "Get the terms (acceptable values) for specified property, if applicable to property. (bad query: skip=-1)",
+      "path": "/model/C3DC/version/4.0.5/node/diagnosis/property/tumor_grade/terms",
+      "path_display": "/model/C3DC/version/4.0.5/node/diagnosis/property/tumor_grade/terms?skip=-1&limit=0",
+      "params": {
+        "skip": -1,
+        "limit": 0
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.1001108749769628,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_property_prop_handle_terms_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_get__bad_query_limit",
+      "summary": "Get the terms (acceptable values) for specified property, if applicable to property. (bad query: limit=not_a_number)",
+      "path": "/model/C3DC/version/4.0.5/node/diagnosis/property/tumor_grade/terms",
+      "path_display": "/model/C3DC/version/4.0.5/node/diagnosis/property/tumor_grade/terms?skip=0&limit=not_a_number",
+      "params": {
+        "skip": 0,
+        "limit": "not_a_number"
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.10889345803298056,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_property_prop_handle_terms_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_get",
+      "summary": "Get the terms (acceptable values) for specified property, if applicable to property. (invalid param)",
+      "path": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/property/invalid_nonexistent_xyz/terms",
+      "path_display": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/property/invalid_nonexistent_xyz/terms",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.12230083299800754,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_property_prop_handle_terms_count_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_count_get",
+      "summary": "Get number of terms for specified property",
+      "path": "/model/C3DC/version/4.0.5/node/diagnosis/property/tumor_grade/terms/count",
+      "path_display": "/model/C3DC/version/4.0.5/node/diagnosis/property/tumor_grade/terms/count",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.10164108296157792,
+      "error": null,
+      "tag": "model",
+      "negative": false
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_property_prop_handle_terms_count_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_count_get",
+      "summary": "Get number of terms for specified property (invalid param)",
+      "path": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/property/invalid_nonexistent_xyz/terms/count",
+      "path_display": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/property/invalid_nonexistent_xyz/terms/count",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.09708662499906495,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_property_prop_handle_term_term_value_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__term__termValue__get",
+      "summary": "Get a specific term value for specified property",
+      "path": "/model/C3DC/version/4.0.5/node/diagnosis/property/tumor_grade/term/G3%20High%20Grade",
+      "path_display": "/model/C3DC/version/4.0.5/node/diagnosis/property/tumor_grade/term/G3%20High%20Grade",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.11386279202997684,
+      "error": null,
+      "tag": "model",
+      "negative": false
+    },
+    {
+      "operation_id": "model_model_handle_node_node_handle_property_prop_handle_term_term_value_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__term__termValue__get",
+      "summary": "Get a specific term value for specified property (invalid param)",
+      "path": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/property/invalid_nonexistent_xyz/term/invalid_nonexistent_xyz",
+      "path_display": "/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/property/invalid_nonexistent_xyz/term/invalid_nonexistent_xyz",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.10611170798074454,
+      "error": null,
+      "tag": "model",
+      "negative": true
+    },
+    {
+      "operation_id": "models_get_v2_models__get",
+      "summary": "Get info on available models",
+      "path": "/models/",
+      "path_display": "/models/?skip=0&limit=0",
+      "params": {
+        "skip": 0,
+        "limit": 0
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.1502670839545317,
+      "error": null,
+      "tag": "models",
+      "negative": false
+    },
+    {
+      "operation_id": "models_get_v2_models__get__bad_query_skip",
+      "summary": "Get info on available models (bad query: skip=-1)",
+      "path": "/models/",
+      "path_display": "/models/?skip=-1&limit=0",
+      "params": {
+        "skip": -1,
+        "limit": 0
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.10957658302504569,
+      "error": null,
+      "tag": "models",
+      "negative": true
+    },
+    {
+      "operation_id": "models_get_v2_models__get__bad_query_limit",
+      "summary": "Get info on available models (bad query: limit=not_a_number)",
+      "path": "/models/",
+      "path_display": "/models/?skip=0&limit=not_a_number",
+      "params": {
+        "skip": 0,
+        "limit": "not_a_number"
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.10470500000519678,
+      "error": null,
+      "tag": "models",
+      "negative": true
+    },
+    {
+      "operation_id": "models_count_get_v2_models_count_get",
+      "summary": "Get number of available models",
+      "path": "/models/count",
+      "path_display": "/models/count",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.10079062503064051,
+      "error": null,
+      "tag": "models",
+      "negative": false
+    },
+    {
+      "operation_id": "tag_key_values_get_v2_tag__key__values_get",
+      "summary": "Get list of tag values having specified tag key",
+      "path": "/tag/mapping_source/values",
+      "path_display": "/tag/mapping_source/values?skip=0&limit=0",
+      "params": {
+        "skip": 0,
+        "limit": 0
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.20700670895166695,
+      "error": null,
+      "tag": "tag",
+      "negative": false
+    },
+    {
+      "operation_id": "tag_key_values_get_v2_tag__key__values_get__bad_query_skip",
+      "summary": "Get list of tag values having specified tag key (bad query: skip=-1)",
+      "path": "/tag/mapping_source/values",
+      "path_display": "/tag/mapping_source/values?skip=-1&limit=0",
+      "params": {
+        "skip": -1,
+        "limit": 0
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.09480525000253692,
+      "error": null,
+      "tag": "tag",
+      "negative": true
+    },
+    {
+      "operation_id": "tag_key_values_get_v2_tag__key__values_get__bad_query_limit",
+      "summary": "Get list of tag values having specified tag key (bad query: limit=not_a_number)",
+      "path": "/tag/mapping_source/values",
+      "path_display": "/tag/mapping_source/values?skip=0&limit=not_a_number",
+      "params": {
+        "skip": 0,
+        "limit": "not_a_number"
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.11362775001907721,
+      "error": null,
+      "tag": "tag",
+      "negative": true
+    },
+    {
+      "operation_id": "tag_key_values_get_v2_tag__key__values_get",
+      "summary": "Get list of tag values having specified tag key (invalid param)",
+      "path": "/tag/invalid_nonexistent_xyz/values",
+      "path_display": "/tag/invalid_nonexistent_xyz/values",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.14932958403369412,
+      "error": null,
+      "tag": "tag",
+      "negative": true
+    },
+    {
+      "operation_id": "tag_key_value_entities_get_v2_tag__key___value__entities_get",
+      "summary": "Get list of entities tagged by key:value",
+      "path": "/tag/mapping_source/alternate_name/entities",
+      "path_display": "/tag/mapping_source/alternate_name/entities?skip=0&limit=0",
+      "params": {
+        "skip": 0,
+        "limit": 0
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 1.444814916991163,
+      "error": null,
+      "tag": "tag",
+      "negative": false
+    },
+    {
+      "operation_id": "tag_key_value_entities_get_v2_tag__key___value__entities_get__bad_query_skip",
+      "summary": "Get list of entities tagged by key:value (bad query: skip=-1)",
+      "path": "/tag/mapping_source/alternate_name/entities",
+      "path_display": "/tag/mapping_source/alternate_name/entities?skip=-1&limit=0",
+      "params": {
+        "skip": -1,
+        "limit": 0
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.09082408295944333,
+      "error": null,
+      "tag": "tag",
+      "negative": true
+    },
+    {
+      "operation_id": "tag_key_value_entities_get_v2_tag__key___value__entities_get__bad_query_limit",
+      "summary": "Get list of entities tagged by key:value (bad query: limit=not_a_number)",
+      "path": "/tag/mapping_source/alternate_name/entities",
+      "path_display": "/tag/mapping_source/alternate_name/entities?skip=0&limit=not_a_number",
+      "params": {
+        "skip": 0,
+        "limit": "not_a_number"
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.10091366700362414,
+      "error": null,
+      "tag": "tag",
+      "negative": true
+    },
+    {
+      "operation_id": "tag_key_value_entities_get_v2_tag__key___value__entities_get",
+      "summary": "Get list of entities tagged by key:value (invalid param)",
+      "path": "/tag/invalid_nonexistent_xyz/invalid_nonexistent_xyz/entities",
+      "path_display": "/tag/invalid_nonexistent_xyz/invalid_nonexistent_xyz/entities",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.10955475002992898,
+      "error": null,
+      "tag": "tag",
+      "negative": true
+    },
+    {
+      "operation_id": "tag_key_value_entities_count_get_v2_tag__key___value__entities_count_get",
+      "summary": "Get number of entities tagged by key:value",
+      "path": "/tag/mapping_source/alternate_name/entities/count",
+      "path_display": "/tag/mapping_source/alternate_name/entities/count",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.1047017090022564,
+      "error": null,
+      "tag": "tag",
+      "negative": false
+    },
+    {
+      "operation_id": "tag_key_value_entities_count_get_v2_tag__key___value__entities_count_get",
+      "summary": "Get number of entities tagged by key:value (invalid param)",
+      "path": "/tag/invalid_nonexistent_xyz/invalid_nonexistent_xyz/entities/count",
+      "path_display": "/tag/invalid_nonexistent_xyz/invalid_nonexistent_xyz/entities/count",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.09538320795400068,
+      "error": null,
+      "tag": "tag",
+      "negative": true
+    },
+    {
+      "operation_id": "tags_get_v2_tags__get",
+      "summary": "Get all tag nodes in MDB",
+      "path": "/tags/",
+      "path_display": "/tags/?skip=0&limit=0",
+      "params": {
+        "skip": 0,
+        "limit": 0
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 13.965293750050478,
+      "error": null,
+      "tag": "tags",
+      "negative": false
+    },
+    {
+      "operation_id": "tags_get_v2_tags__get__bad_query_skip",
+      "summary": "Get all tag nodes in MDB (bad query: skip=-1)",
+      "path": "/tags/",
+      "path_display": "/tags/?skip=-1&limit=0",
+      "params": {
+        "skip": -1,
+        "limit": 0
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.13321624998934567,
+      "error": null,
+      "tag": "tags",
+      "negative": true
+    },
+    {
+      "operation_id": "tags_get_v2_tags__get__bad_query_limit",
+      "summary": "Get all tag nodes in MDB (bad query: limit=not_a_number)",
+      "path": "/tags/",
+      "path_display": "/tags/?skip=0&limit=not_a_number",
+      "params": {
+        "skip": 0,
+        "limit": "not_a_number"
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.10831212502671406,
+      "error": null,
+      "tag": "tags",
+      "negative": true
+    },
+    {
+      "operation_id": "tags_count_get_v2_tags_count_get",
+      "summary": "Get number of tags present in MDB",
+      "path": "/tags/count",
+      "path_display": "/tags/count",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.10253229201771319,
+      "error": null,
+      "tag": "tags",
+      "negative": false
+    },
+    {
+      "operation_id": "pvs_synonyms_model_version_get_v2_terms_model_pvs__model___property__get",
+      "summary": "Get Permissible Values and Synonyms for a model, optionally filtered by property and version.",
+      "path": "/terms/model-pvs/C3DC/tumor_grade",
+      "path_display": "/terms/model-pvs/C3DC/tumor_grade?skip=0&limit=0&version=4.0.5",
+      "params": {
+        "skip": 0,
+        "limit": 0,
+        "version": "4.0.5"
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.16807454102672637,
+      "error": null,
+      "tag": "terms",
+      "negative": false
+    },
+    {
+      "operation_id": "pvs_synonyms_model_version_get_v2_terms_model_pvs__model___property__get__bad_query_skip",
+      "summary": "Get Permissible Values and Synonyms for a model, optionally filtered by property and version. (bad query: skip=-1)",
+      "path": "/terms/model-pvs/C3DC/tumor_grade",
+      "path_display": "/terms/model-pvs/C3DC/tumor_grade?skip=-1&limit=0&version=4.0.5",
+      "params": {
+        "skip": -1,
+        "limit": 0,
+        "version": "4.0.5"
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.11053741601062939,
+      "error": null,
+      "tag": "terms",
+      "negative": true
+    },
+    {
+      "operation_id": "pvs_synonyms_model_version_get_v2_terms_model_pvs__model___property__get__bad_query_limit",
+      "summary": "Get Permissible Values and Synonyms for a model, optionally filtered by property and version. (bad query: limit=not_a_number)",
+      "path": "/terms/model-pvs/C3DC/tumor_grade",
+      "path_display": "/terms/model-pvs/C3DC/tumor_grade?skip=0&limit=not_a_number&version=4.0.5",
+      "params": {
+        "skip": 0,
+        "limit": "not_a_number",
+        "version": "4.0.5"
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.10504120896803215,
+      "error": null,
+      "tag": "terms",
+      "negative": true
+    },
+    {
+      "operation_id": "pvs_synonyms_model_version_get_v2_terms_model_pvs__model___property__get",
+      "summary": "Get Permissible Values and Synonyms for a model, optionally filtered by property and version. (invalid param)",
+      "path": "/terms/model-pvs/invalid_nonexistent_xyz/invalid_nonexistent_xyz",
+      "path_display": "/terms/model-pvs/invalid_nonexistent_xyz/invalid_nonexistent_xyz",
+      "params": null,
+      "expected_status": 404,
+      "actual_status": 404,
+      "passed": true,
+      "duration": 0.10622158297337592,
+      "error": null,
+      "tag": "terms",
+      "negative": true
+    },
+    {
+      "operation_id": "cde_pvs_by_id_with_version_get_v2_terms_cde_pvs__id___version__pvs_get",
+      "summary": "Get PVs for a given CDE id and version.",
+      "path": "/terms/cde-pvs/UGeJ2p/4.0.5/pvs",
+      "path_display": "/terms/cde-pvs/UGeJ2p/4.0.5/pvs?use_null_cde=False&skip=0&limit=0",
+      "params": {
+        "use_null_cde": false,
+        "skip": 0,
+        "limit": 0
+      },
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.289105209056288,
+      "error": null,
+      "tag": "terms",
+      "negative": false
+    },
+    {
+      "operation_id": "cde_pvs_by_id_with_version_get_v2_terms_cde_pvs__id___version__pvs_get__bad_query_skip",
+      "summary": "Get PVs for a given CDE id and version. (bad query: skip=-1)",
+      "path": "/terms/cde-pvs/UGeJ2p/4.0.5/pvs",
+      "path_display": "/terms/cde-pvs/UGeJ2p/4.0.5/pvs?use_null_cde=False&skip=-1&limit=0",
+      "params": {
+        "use_null_cde": false,
+        "skip": -1,
+        "limit": 0
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.13365412497660145,
+      "error": null,
+      "tag": "terms",
+      "negative": true
+    },
+    {
+      "operation_id": "cde_pvs_by_id_with_version_get_v2_terms_cde_pvs__id___version__pvs_get__bad_query_limit",
+      "summary": "Get PVs for a given CDE id and version. (bad query: limit=not_a_number)",
+      "path": "/terms/cde-pvs/UGeJ2p/4.0.5/pvs",
+      "path_display": "/terms/cde-pvs/UGeJ2p/4.0.5/pvs?use_null_cde=False&skip=0&limit=not_a_number",
+      "params": {
+        "use_null_cde": false,
+        "skip": 0,
+        "limit": "not_a_number"
+      },
+      "expected_status": 422,
+      "actual_status": 422,
+      "passed": true,
+      "duration": 0.18122120801126584,
+      "error": null,
+      "tag": "terms",
+      "negative": true
+    },
+    {
+      "operation_id": "cde_pvs_by_id_with_version_get_v2_terms_cde_pvs__id___version__pvs_get",
+      "summary": "Get PVs for a given CDE id and version. (invalid param)",
+      "path": "/terms/cde-pvs/invalid_nonexistent_xyz/invalid_nonexistent_xyz/pvs",
+      "path_display": "/terms/cde-pvs/invalid_nonexistent_xyz/invalid_nonexistent_xyz/pvs",
+      "params": null,
+      "expected_status": 200,
+      "actual_status": 200,
+      "passed": true,
+      "duration": 0.2915492500178516,
+      "error": null,
+      "tag": "terms",
+      "negative": true
+    }
+  ]
+}

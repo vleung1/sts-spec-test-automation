@@ -6,6 +6,18 @@ from datetime import datetime
 from urllib.parse import urlparse
 
 
+def _environment_label(host_or_env: str) -> str:
+    """Map hostname or URL to friendly environment name: QA, Stage, or Prod."""
+    s = (host_or_env or "").lower()
+    if "qa" in s:
+        return "QA"
+    if "stage" in s or "staging" in s:
+        return "Stage"
+    if "prod" in s or s == "sts.cancer.gov" or s.startswith("sts.cancer.gov"):
+        return "Prod"
+    return host_or_env or ""
+
+
 def write_html_report(
     summary: dict,
     results: list[dict],
@@ -13,8 +25,16 @@ def write_html_report(
     title: str = "STS v2 API Test Report",
     base_url: str | None = None,
     environment: str | None = None,
+    model_handle: str | None = None,
+    model_version: str | None = None,
+    discovery_info: dict | None = None,
+    cases_generated: dict | None = None,
 ) -> None:
-    """Build rows from ``results``, render via ``_template``, write UTF-8 HTML to disk."""
+    """Build rows from ``results``, render via ``_template``, write UTF-8 HTML to disk.
+
+    discovery_info: optional dict of discovery keys/values (e.g. model_handle, node_handle, ...).
+    cases_generated: optional dict with keys total, positive, negative (counts of generated cases).
+    """
     path = Path(out_path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -42,7 +62,16 @@ def write_html_report(
         except Exception:
             environment = base_url
 
-    html = _template(title, summary, rows, base_url=base_url, environment=environment)
+    environment_label = _environment_label(environment) if environment else environment
+    html = _template(
+        title, summary, rows,
+        base_url=base_url,
+        environment=environment_label,
+        model_handle=model_handle,
+        model_version=model_version,
+        discovery_info=discovery_info,
+        cases_generated=cases_generated,
+    )
     path.write_text(html, encoding="utf-8")
 
 
@@ -52,6 +81,10 @@ def _template(
     rows: list[dict],
     base_url: str | None = None,
     environment: str | None = None,
+    model_handle: str | None = None,
+    model_version: str | None = None,
+    discovery_info: dict | None = None,
+    cases_generated: dict | None = None,
 ) -> str:
     """Assemble full HTML document string with inline CSS and result table rows."""
     total = summary.get("total", 0)
@@ -61,13 +94,30 @@ def _template(
     p95_str = f"{p95} ms" if p95 is not None else "N/A"
 
     env_block = ""
-    if base_url is not None or environment is not None:
-        env_lines = []
-        if environment is not None:
-            env_lines.append(f"<strong>Environment:</strong> {_esc(environment)}")
-        if base_url is not None:
-            env_lines.append(f"<strong>URL:</strong> <code>{_esc(base_url)}</code>")
+    env_lines = []
+    if environment is not None:
+        env_lines.append(f"<strong>Environment:</strong> {_esc(environment)}")
+    if base_url is not None:
+        env_lines.append(f"<strong>URL:</strong> <code>{_esc(base_url)}</code>")
+    if model_handle is not None or model_version is not None:
+        data_model = _esc(model_handle or "")
+        if model_version:
+            data_model = f"{data_model} / {_esc(model_version)}" if data_model else _esc(model_version)
+        if data_model:
+            env_lines.append(f"<strong>Data model:</strong> {data_model}")
+    if env_lines:
         env_block = '<div class="env">' + " &nbsp;|&nbsp; ".join(env_lines) + "</div>"
+
+    discovery_block = ""
+    if discovery_info:
+        parts = [f"{k}={_esc(repr(v))}" for k, v in discovery_info.items()]
+        discovery_block = '<div class="discovery"><strong>Discovery:</strong> ' + " ".join(parts) + "</div>"
+    cases_block = ""
+    if cases_generated:
+        t = cases_generated.get("total", 0)
+        pos = cases_generated.get("positive", 0)
+        neg = cases_generated.get("negative", 0)
+        cases_block = f'<div class="cases-generated"><strong>Generated cases:</strong> {t} total ({pos} positive, {neg} negative).</div>'
 
     rows_html = "".join(
         f"""
@@ -94,8 +144,9 @@ def _template(
         body {{ font-family: system-ui, sans-serif; margin: 1rem 2rem; }}
         h1 {{ margin-bottom: 0.25rem; }}
         .meta {{ color: #666; margin-bottom: 0.5rem; }}
-        .env {{ color: #444; margin-bottom: 1rem; font-size: 0.95rem; }}
+        .env {{ color: #444; margin-bottom: 0.5rem; font-size: 0.95rem; }}
         .env code {{ background: #f0f0f0; padding: 0.15rem 0.4rem; border-radius: 3px; }}
+        .discovery, .cases-generated {{ color: #444; margin-bottom: 0.5rem; font-size: 0.9rem; font-family: ui-monospace, monospace; }}
         table {{ border-collapse: collapse; width: 100%; }}
         th, td {{ border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }}
         th {{ background: #f5f5f5; }}
@@ -109,6 +160,8 @@ def _template(
     <h1>{_esc(title)}</h1>
     <p class="meta">Generated {datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")}</p>
     {env_block}
+    {discovery_block}
+    {cases_block}
     <div class="summary">
         <span><strong>Total:</strong> {total}</span>
         <span><strong>Passed:</strong> {passed}</span>

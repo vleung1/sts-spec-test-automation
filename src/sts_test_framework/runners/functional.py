@@ -64,6 +64,14 @@ def run_functional_tests(
             error = f"Expected {expected_status}, got {response.status_code}"
             if response.body:
                 error += f": {response.body[:200]}"
+            # Property /terms and /terms/count: 404 with "Property exists, but does not use an acceptable value set." is expected when the property has no value set.
+            if expected_status == 200 and response.status_code == 404:
+                path_no_query = path.split("?")[0].rstrip("/")
+                if path_no_query.endswith("/terms") or path_no_query.endswith("/terms/count"):
+                    data = response.json()
+                    if isinstance(data, dict) and data.get("detail") == "Property exists, but does not use an acceptable value set.":
+                        passed = True
+                        error = f"Special expected 404: {response.body}" if response.body else "Acceptable 404 but response body was empty without detail message — unexpected; please investigate."
 
         # Optional: basic shape check for 200
         if passed and expected_status == 200 and response.json() is not None:

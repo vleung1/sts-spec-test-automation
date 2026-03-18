@@ -49,6 +49,23 @@ pytest tests/ -v --report reports/
 python -m sts_test_framework.cli --spec spec/v2.yaml --base-url https://sts.cancer.gov/v2 --report reports/
 ```
 
+**Test a specific data model** (e.g. PSDC, CTDC) and use the **latest release version** (no pre-release hash):
+
+```bash
+STS_BASE_URL=https://sts-qa.cancer.gov/v2 python -m sts_test_framework.cli --report reports/ --model PSDC --release
+```
+
+- `--model` – Model handle to test (e.g. `PSDC`, `C3DC`). If omitted, the first model from `/models/` is used.
+- `--release` – Use the latest **release** version (version string with no hyphen, e.g. `2.1.0`) from `/model/{handle}/versions`. If omitted, the first version in the list is used. If the model has no release versions, the first available version (e.g. pre-release) is used.
+
+**Run all data models in one go** (CDS, CCDI, CCDI-DCC, ICDC, CTDC, C3DC, PSDC):
+
+```bash
+STS_BASE_URL=https://sts-qa.cancer.gov/v2 python scripts/run_all_models.py
+```
+
+Reports are written to `reports/<model>/report_<timestamp>.html` (and `.json`) per model. Optional: set `STS_MODELS=PSDC,CTDC` to run only those models. See [docs/ONBOARDING.md](docs/ONBOARDING.md) for details.
+
 Filter by tags:
 
 ```bash
@@ -77,6 +94,7 @@ python -m sts_test_framework.cli --quiet --report reports/
 | `tests/test_manual/` | Manual tests (e.g. root, consistency) |
 | `tests/test_generated/` | Dynamic tests parametrized from generated cases |
 | `reports/` | Default output for timestamped report files (`report_YYYY-MM-DDTHH-MM-SS.json`, `.html`) |
+| `scripts/run_all_models.py` | Run CLI once per data model (CDS, CCDI, CCDI-DCC, ICDC, CTDC, C3DC, PSDC); reports in `reports/<model>/` |
 | `docs/ONBOARDING.md` | Full onboarding: concepts, structure, run, add tests, glossary |
 | `docs/FRAMEWORK.md` | Short summary and pointer to ONBOARDING |
 
