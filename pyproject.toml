@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sts-test-framework-agent"
+version = "0.1.0"
+description = "OpenAPI-driven end-to-end API test automation framework for STS v2 API"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pytest>=7.0.0",
+    "pytest-html>=3.0.0",
+    "PyYAML>=6.0",
+    "jsonschema>=4.0",
+]
+
+[project.optional-dependencies]
+contract = [
+    "openapi-spec-validator>=0.6",
+]
+
+[project.scripts]
+sts-test = "sts_test_framework.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-v"

@@ -1,0 +1,469 @@
+# STS v2 API Test Framework – Onboarding Guide
+
+This document explains what the framework does, how it works, how to run it, and how to maintain or extend it. Use it together with the [README](../README.md) for quick reference; this guide provides the full picture.
+
+---
+
+## Table of Contents
+
+1. [What is STS and the v2 API?](#1-what-is-sts-and-the-v2-api)
+2. [What does this framework do?](#2-what-does-this-framework-do)
+3. [Key concepts](#3-key-concepts)
+4. [Project structure](#4-project-structure)
+5. [How the framework was created (design decisions)](#5-how-the-framework-was-created-design-decisions)
+6. [How to run the framework](#6-how-to-run-the-framework)
+7. [How to add or change tests](#7-how-to-add-or-change-tests)
+8. [Reports and CI](#8-reports-and-ci)
+9. [Glossary](#9-glossary)
+10. [Troubleshooting and FAQ](#10-troubleshooting-and-faq)
+
+---
+
+## 1. What is STS and the v2 API?
+
+**STS** stands for **Simple Terminology Server**. It is a web API that exposes data models (e.g. for cancer research) in a consistent way. The data is stored in a graph database (Neo4j) and described as **nodes**, **properties**, **terms**, and **tags**. The API lets clients ask things like: “What models exist?”, “What nodes does this model have?”, “What are the allowed values (terms) for this property?”.
+
+The **v2 API** is the second version of this interface. It is **read-only**: all endpoints use the **GET** method. There is no login in the spec (no API keys or tokens for normal use). The API is documented in an **OpenAPI** specification file (`spec/v2.yaml`), which lists every URL path, its parameters, and the expected response shapes.
+
+**Why we test it:** Before releasing changes to STS, we need to confirm that every documented endpoint behaves as the spec says (right status codes, right response shape). This framework automates that checking.
+
+---
+
+## 2. What does this framework do?
+
+At a high level, the framework does four things:
+
+1. **Reads the API contract** – It loads the OpenAPI spec (`spec/v2.yaml`) so it knows every endpoint, its parameters, and expected responses.
+2. **Gets real data from the API** – It calls the live API once to “discover” real IDs and names (e.g. a model handle, a node handle, a tag). That discovery data is used to build valid requests for each endpoint.
+3. **Generates test cases** – For each endpoint in the spec, it creates at least one “positive” test (expects 200 OK) and, where the spec says so, one “negative” test (expects 404 or 422 for bad input).
+4. **Runs the tests and reports** – It sends HTTP requests for each generated case, checks status codes and basic response shape, and writes a **JSON** and **HTML** report with pass/fail and timing.
+
+So: **no hand-written test list per endpoint.** The spec is the source of truth; the framework turns it into executable tests and runs them. If the spec is updated, re-running the framework exercises the new or changed endpoints automatically.
+
+---
+
+## 3. Key concepts
+
+### 3.1 OpenAPI spec (the “spec”)
+
+The **OpenAPI** (formerly Swagger) specification is a standard way to describe a REST API. The file `spec/v2.yaml` (or `.json`) contains:
+
+- **Paths** – Each URL pattern (e.g. `/v2/models/`, `/v2/id/{id}`).
+- **Operations** – For each path, the HTTP method (here, only GET) and:
+  - **Parameters** – Path parameters like `{id}`, `{modelHandle}`, and query parameters like `skip`, `limit`.
+  - **Responses** – Documented status codes (200, 404, 422) and the **schema** of the response body (e.g. “array of Model”, “object with nanoid and handle”).
+
+The framework **loads** this file and uses it to decide which requests to send and what to expect. The spec is the single source of truth for “what the API is supposed to do.”
+
+### 3.2 Discovery
+
+Many endpoints need **real values** in the URL. For example, “get node by handle” requires a real `modelHandle`, `versionString`, and `nodeHandle`. We don’t hardcode those; we **discover** them by calling the API once at the start:
+
+1. GET `/models/` → take the first model’s `handle` and `version`.
+2. GET `/model/{handle}/version/{version}/nodes` → take the first node’s `handle`.
+3. GET that node’s properties → take the first property’s `handle`.
+4. GET that property’s terms → take a real `term` value.
+5. GET `/tags/` → take a real tag `key` and `value`.
+
+The result is a **test_data** dictionary (e.g. `model_handle`, `model_version`, `node_handle`, `prop_handle`, `term_value`, `tag_key`, `tag_value`, and various `nanoid`s). The **generator** uses this to fill in path and query parameters when building test cases.
+
+### 3.3 Test case generation
+
+The **generator** walks every path and method in the spec. For each operation it:
+
+- **Positive case:** Fills path and query parameters from the discovery data. If it can resolve all required parameters, it adds one case with `expected_status: 200`.
+- **Negative case:** Where the spec documents 404 or 422, it adds a case that uses an **invalid** value (e.g. `invalid_nonexistent_xyz`) for a path parameter, expecting 404 or 422.
+
+Each **case** is a small dictionary: `path`, `params`, `expected_status`, `operation_id`, `summary`, `tag`, and whether it’s negative. No test code is written by hand for these; they come from the spec + discovery.
+
+### 3.4 Runners and reporters
+
+- **Functional runner** – Takes the list of cases and, for each one, calls `client.get(path, params)`, then checks that the response status equals `expected_status`. For 200 responses it can also do a basic shape check (e.g. response is a list, dict, or integer). It records pass/fail and duration.
+- **Contract runner** (optional) – For 200 responses, can validate the JSON body against the OpenAPI response schema (e.g. required fields, types) using a library like `jsonschema`.
+- **Reporters** – Take the list of results and produce:
+  - A **summary** (total/passed/failed, by tag, by operation, P95 duration).
+  - A **JSON report** (machine-readable).
+  - An **HTML report** (table of endpoints, status, duration, errors).
+
+### 3.5 Base URL and path normalization
+
+The spec’s paths are written like `/v2/models/` or `/v2/id/{id}`. The **base URL** we use in tests is the full base including `/v2`, e.g. `https://sts.cancer.gov/v2`. So when we send a request, we don’t send the path `/v2/models/` again; we **normalize** it to `/models/` and the client does `base_url + path` → `https://sts.cancer.gov/v2/models/`. The **loader**’s `normalize_path_for_base()` does this stripping so that the same spec works whether the server is mounted at `/v2` or elsewhere.
+
+---
+
+## 4. Project structure
+
+```
+sts-test-framework-agent/
+├── README.md                 # Quick start and overview (complement to this doc)
+├── pyproject.toml            # Python package and dependencies (pytest, PyYAML, jsonschema)
+├── requirements.txt          # Same deps for pip install
+├── config/
+│   └── env.example           # Example env vars (STS_BASE_URL, STS_SSL_VERIFY, etc.)
+├── spec/
+│   └── v2.yaml               # OpenAPI spec for STS v2 (source of truth; do not edit by hand unless you own the API)
+├── src/sts_test_framework/   # Main framework code
+│   ├── __init__.py
+│   ├── loader.py              # Load spec file; get paths/schemas; normalize paths
+│   ├── client.py              # HTTP client (GET, base URL, timeout, SSL); APIResponse
+│   ├── discover.py            # Live discovery → test_data dict
+│   ├── generator.py           # spec + test_data → list of test cases
+│   ├── cli.py                 # Command-line entry (--spec, --base-url, --report, --tags)
+│   ├── runners/
+│   │   ├── functional.py      # Run cases, assert status (and optional shape)
+│   │   └── contract.py        # Optional: validate 200 responses against schema
+│   └── reporters/
+│       ├── report.py          # Aggregate results; write JSON report
+│       └── html_report.py     # Write HTML report
+├── tests/
+│   ├── conftest.py            # Pytest fixtures: spec, api_client, test_data, generated_cases
+│   ├── test_manual/           # Hand-written tests (e.g. root, consistency)
+│   │   └── test_root.py
+│   └── test_generated/        # Dynamic tests: one test per generated case
+│       └── test_from_spec.py   # Uses pytest_generate_tests to parametrize by case
+├── reports/                   # Default output for report.json and report.html
+└── docs/
+    ├── ONBOARDING.md          # This document
+    └── FRAMEWORK.md           # Short pointer to this doc
+```
+
+**Why this layout?**
+
+- **spec/** – Keeps the API contract in one place; the rest of the code only reads it.
+- **src/sts_test_framework/** – Reusable library: loader, client, discover, generator, runners, reporters. The CLI and pytest both use these.
+- **tests/conftest.py** – Shared fixtures so that both manual and generated tests get the same `api_client` and `test_data` without repeating setup.
+- **test_manual/** vs **test_generated/** – Manual tests are for things that don’t fit the “one endpoint, one positive/negative case” pattern (e.g. root health, cross-endpoint consistency). Generated tests are the bulk of coverage and come from the spec.
+
+---
+
+## 5. How the framework was created (design decisions)
+
+- **Spec-driven tests** – So that when the API spec changes, we don’t have to rewrite dozens of tests; we re-run the generator. The spec is the contract; the framework enforces it.
+- **Discovery instead of hardcoding** – Real model/node/property/tag IDs can differ between environments (dev, QA, prod). Discovery at runtime lets the same tests run against any environment that has data.
+- **Positive and negative cases** – We don’t only check “happy path.” Negative cases (invalid ID, bad param) ensure the API returns the documented error (404/422) instead of 500 or wrong data.
+- **Single HTTP client** – All requests go through one client (configurable base URL, timeout, SSL). Easy to point at different environments and to add logging or timing later.
+- **Two ways to run** – **pytest** for developers and CI (integrated with the rest of the test suite; fixtures and parametrization). **CLI** for “run everything and write reports” without pytest (e.g. scheduled runs, report-only use).
+- **JSON + HTML reports** – JSON for tooling and metrics; HTML for humans. Aligns with common “API test report” expectations and makes it easy to add to CI dashboards.
+
+---
+
+## 6. How to run the framework
+
+### 6.1 Prerequisites
+
+- **Python 3.9+**
+- Dependencies: `pytest`, `PyYAML`, `jsonschema` (and optionally `pytest-html`). Install the project so the framework is on your path:
+  ```bash
+  cd mdb/sts-test-framework-agent
+  pip install -e .
+  ```
+  Or use a virtual environment (recommended):
+  ```bash
+  python3 -m venv .venv
+  source .venv/bin/activate   # or .venv\Scripts\activate on Windows
+  pip install -e .
+  ```
+
+### 6.2 Configuration: the config folder and environment variables
+
+The framework does **not** read a config file by default. It reads **environment variables** (e.g. `os.getenv("STS_BASE_URL")`). So you control the base URL, SSL behavior, and report directory by **setting those variables** before you run pytest or the CLI.
+
+**What is `config/env.example`?**  
+It is a **template** that lists the variable names and shows example values (commented out). It is there so you know what you *can* set. The framework never loads `env.example` automatically. You use it as a reference when setting your own configuration.
+
+**How do I actually set the variables?** You have a few options:
+
+1. **Command line (one-off run)**
+  Set the variable only for that command (pytest or CLI):
+   Or use the CLI’s `--base-url` and skip the env var:
+2. **Shell session (current terminal)**
+  Export so every command in that terminal uses the value:
+3. **A real env file (e.g. `config/env` or `.env`)**
+  Copy `config/env.example` to a file like `config/env` or `.env` and put real values there (one per line, `NAME=value`). The framework does **not** load that file by itself. You either:
+  - **Source it** before running: `source config/env` (if you name the file `config/env` and use `export`-style lines), or  
+  - Use a tool that loads `.env` (e.g. `python-dotenv`) and run your tests through that, or  
+  - In CI, set the same variables in the job config (see below).
+   If you create `config/env`, add it to `.gitignore` so you don’t commit secrets or environment-specific URLs.
+4. **CI (e.g. GitHub Actions)**
+  Set the variables in the job’s `env` block so each run targets the right environment (see “Running against QA, stage, or prod” below).
+
+**Variable reference:**
+
+
+| Variable         | Meaning                                                                                        | Default                        |
+| ---------------- | ---------------------------------------------------------------------------------------------- | ------------------------------ |
+| `STS_BASE_URL`   | Base URL of the STS v2 API (used for all requests)                                             | `https://sts.cancer.gov/v2`    |
+| `STS_QA_URL`     | QA base URL (used only if you add code that switches to QA for certain tests)                  | `https://sts-qa.cancer.gov/v2` |
+| `STS_SSL_VERIFY` | Set to `false` to disable SSL certificate verification (e.g. local/dev with self-signed certs) | `true`                         |
+| `REPORT_DIR`     | Directory where the CLI writes `report.json` and `report.html`                                 | `reports`                      |
+
+
+If you don’t set these, the defaults are used. The framework needs **network access** to the STS server for discovery and for running the tests.
+
+#### Running against QA, stage, or prod
+
+The **same tests** run against any environment; only the **base URL** (and optionally SSL) changes. Set `STS_BASE_URL` to the v2 base URL of the environment you want to hit.
+
+**Examples (replace with your real URLs if different):**
+
+
+| Environment | Typical use                | Set `STS_BASE_URL` to (example)              |
+| ----------- | -------------------------- | -------------------------------------------- |
+| **Prod**    | Final validation           | `https://sts.cancer.gov/v2` (default)        |
+| **Stage**   | Pre-release checks         | `https://sts-stage.cancer.gov/v2`            |
+| **QA**      | Feature testing, debugging | `https://sts-qa.cancer.gov/v2`               |
+| **Local**   | Dev server                 | `http://localhost:8000/v2` (or your dev URL) |
+
+
+**From the command line:**
+
+```bash
+# Run against QA
+STS_BASE_URL=https://sts-qa.cancer.gov/v2 pytest tests/ -v
+
+# Run against QA and write reports
+STS_BASE_URL=https://sts-qa.cancer.gov/v2 python -m sts_test_framework.cli --report reports/
+
+# Or use --base-url (CLI only; overrides env var)
+python -m sts_test_framework.cli --base-url https://sts-qa.cancer.gov/v2 --report reports/
+```
+
+**In CI**, set the variable per job so each pipeline runs against the right environment:
+
+```yaml
+# Example: GitHub Actions – QA job
+- name: Run STS tests against QA
+  env:
+    STS_BASE_URL: https://sts-qa.cancer.gov/v2
+  run: python -m sts_test_framework.cli --report reports/
+
+# Example: Prod job (e.g. after deploy)
+- name: Run STS tests against prod
+  env:
+    STS_BASE_URL: https://sts.cancer.gov/v2
+  run: python -m sts_test_framework.cli --report reports/
+```
+
+**Local or dev with self-signed certificates:**  
+If your dev server uses HTTPS with a self-signed cert, set `STS_SSL_VERIFY=false` so the client doesn’t reject the certificate (use only in dev, not prod):
+
+```bash
+STS_BASE_URL=https://my-dev-server.local/v2 STS_SSL_VERIFY=false pytest tests/ -v
+```
+
+### 6.3 Two ways to run: pytest vs CLI
+
+The framework can be run in **two ways**. Both use the same spec, discovery, and generator—so the same test cases run either way. The difference is **how** you invoke them and **what you get**:
+
+
+|                | **pytest**                                                                                                                                                 | **CLI**                                                                                                                                |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **What it is** | Standard Python test runner; each generated case is one pytest test.                                                                                       | A standalone script that runs the framework and writes report files.                                                                   |
+| **Output**     | Pytest’s usual pass/fail output (and any pytest plugins, e.g. html). Does *not* write the framework’s `report.json` / `report.html` unless you add a hook. | Always writes `report.json` and `report.html` to the folder you choose.                                                                |
+| **Best for**   | Day-to-day development, debugging, running a single test or subset, IDE integration.                                                                       | Getting the framework’s reports every time, scripts/cron/CI, or using options like `--tags` / `--no-negative` without touching pytest. |
+
+
+**Use pytest when:** You want to run one test or a subset (e.g. only `test_manual`), use your IDE’s “Run Test” button, or integrate STS tests into a larger pytest suite. You don’t need the framework’s HTML/JSON reports for that run.
+
+**Use the CLI when:** You want `report.json` and `report.html` written after every run, you’re calling from a script or CI job, or you want to pass `--tags id,model` or `--no-negative` on the command line. The CLI exits with code 0 (all passed) or 1 (any failed), which is easy for CI to interpret.
+
+### 6.4 Run with pytest (recommended for day-to-day work)
+
+From the project root:
+
+```bash
+pytest tests/ -v
+```
+
+- **-v** = verbose (one line per test).
+- This runs both **manual** tests (e.g. `test_manual/test_root.py`) and **generated** tests (`test_generated/test_from_spec.py`). The generated tests are created at **collection time**: pytest calls the generator and gets one test per case.
+
+To run only manual or only generated:
+
+```bash
+pytest tests/test_manual/ -v
+pytest tests/test_generated/ -v
+```
+
+**Example:** You’re fixing a bug and want to run only the “models” tests. With pytest you can run `pytest tests/test_generated/ -v -k "models"` (if test ids include the tag) or add a pytest marker later. With the CLI you’d run `python -m sts_test_framework.cli --tags models`.
+
+### 6.5 Run with the CLI (for reports and scriptable runs)
+
+The CLI loads the spec, runs discovery, generates cases, runs them, and **always** writes JSON + HTML reports. It does **not** use pytest.
+
+```bash
+python -m sts_test_framework.cli
+```
+
+Defaults: spec = `spec/v2.yaml`, base URL = `STS_BASE_URL` or `https://sts.cancer.gov/v2`, report dir = `reports/`.
+
+**Example:** Your CI job runs after every deploy. You run `python -m sts_test_framework.cli --report reports/` and publish `reports/report.html` as an artifact so the team can open it and see which endpoints passed or failed. You don’t need pytest in that job—just the CLI and the report files.
+
+**Useful options:**
+
+```bash
+# Custom spec and base URL
+python -m sts_test_framework.cli --spec spec/v2.yaml --base-url https://sts.cancer.gov/v2
+
+# Write reports to a specific folder
+python -m sts_test_framework.cli --report reports/
+
+# Run only certain endpoint groups (by OpenAPI tag)
+python -m sts_test_framework.cli --tags id,model,models
+
+# Run only positive cases (skip negative 404/422 tests)
+python -m sts_test_framework.cli --no-negative
+```
+
+When any test fails, the CLI exits with code 1 so CI can detect failure.
+
+### 6.6 What happens when you run
+
+1. **Load spec** – Read `spec/v2.yaml` (or the path you gave).
+2. **Create client** – HTTP client with the chosen base URL.
+3. **Discovery** – GET models → nodes → properties → terms, GET tags; build `test_data`.
+4. **Generate cases** – For each GET operation in the spec, build positive (and optionally negative) cases using `test_data`.
+5. **Run** – For each case, GET the path (with params), compare status to expected, optionally check response shape.
+6. **Report** – Aggregate results, write `report.json` and `report.html` (if using CLI).
+
+---
+
+## 7. How to add or change tests
+
+### 7.1 Adding a manual test
+
+Manual tests are for behavior that isn’t “one endpoint, one status check.” Examples: root/health, or “models count equals length of models list.”
+
+1. Add a new file under `tests/test_manual/`, e.g. `test_consistency.py`.
+2. Write a function that starts with `test_` and accepts the fixtures you need (e.g. `api_client`, `test_data`).
+3. Use `api_client.get(path, params)` and assert on `response.status_code` and, if needed, `response.json()`.
+
+Example (already in the project):
+
+```python
+# tests/test_manual/test_root.py
+def test_root_returns_200(api_client):
+    response = api_client.get("/")
+    assert response.status_code == 200
+```
+
+You get `api_client` and `test_data` from `conftest.py`; no need to load the spec or run discovery yourself.
+
+### 7.2 Changing what gets discovered
+
+If a new endpoint needs a new kind of ID (e.g. a “study” id), you add the discovery logic in `**src/sts_test_framework/discover.py**`:
+
+1. Add one or more GET requests to obtain that ID (or list of IDs).
+2. Put the result in the `data` dict (e.g. `data["study_id"] = ...`).
+3. In `**generator.py**`, in `_resolve_path_params()` (and optionally `_resolve_query_params()`), add a branch for the new parameter name and set `values[name]` from `test_data` (e.g. `test_data["study_id"]`). If discovery didn’t find a value, return `None` for that endpoint so no positive case is generated until data exists.
+
+### 7.3 Changing how cases are generated
+
+- **New positive/negative rules** – Edit `generator.py`. For example, to add a negative case that sends an invalid query param (e.g. `skip=-1`) and expects 422, you’d add logic that builds a case with that param and `expected_status: 422`.
+- **Filter by tag** – When running, use `--tags id,model` (CLI) or, if you add a pytest option, filter the cases in the generator with `tag_filter`.
+- **Skip certain operations** – In `_iter_ops()` or in the loop in `generate_cases()`, skip path templates or operation IDs you don’t want to test.
+
+### 7.4 Adding or changing assertions (functional runner)
+
+In `**src/sts_test_framework/runners/functional.py`**, each case is run with `client.get(path, params)`. The current logic:
+
+- Asserts `response.status_code == expected_status`.
+- For 200, optionally runs `_check_basic_shape(response, case)` (e.g. object has expected keys for a given schema ref).
+
+To add stricter checks (e.g. “every item in the list has a `nanoid`”), extend `_check_basic_shape` or add a new helper and call it from `run_functional_tests` for 200 responses.
+
+### 7.5 Contract validation (optional)
+
+To validate 200 responses against the OpenAPI response schema:
+
+1. Ensure `jsonschema` (and optionally `openapi-spec-validator`) is installed.
+2. Call `run_contract_tests(client, cases, spec)` from `runners.contract` (e.g. from the CLI or a separate script).
+3. Merge or report contract results alongside functional results. The contract runner uses the spec’s `components.schemas` and the operation’s response schema to validate JSON bodies.
+
+---
+
+## 8. Reports and CI
+
+### 8.1 Report contents
+
+- **report.json** – Full summary (total/passed/failed, by tag, by operation, durations, errors) plus the list of all results (one per case) with status, duration, and error message if failed.
+- **report.html** – Human-readable table: operation ID, summary, path, status (Pass/Fail), expected/actual status, duration, error message.
+
+Use the JSON for metrics and automation; use the HTML for quick inspection.
+
+### 8.2 Running in CI (e.g. GitHub Actions)
+
+Example:
+
+```yaml
+- name: Run STS v2 API tests
+  env:
+    STS_BASE_URL: ${{ vars.STS_BASE_URL }}
+  run: |
+    pip install -e .
+    python -m sts_test_framework.cli --spec spec/v2.yaml --report reports/
+```
+
+Or run pytest and optionally run the CLI for reports:
+
+```yaml
+- run: pip install -e .
+- run: pytest tests/ -v --tb=short
+- run: python -m sts_test_framework.cli --report reports/
+```
+
+If any case fails, the CLI exits with code 1. You can also publish `reports/report.html` as an artifact so the team can open it after each run.
+
+---
+
+## 9. Glossary
+
+- **API** – Application Programming Interface; here, the HTTP API of the STS server.
+- **Base URL** – The root URL of the API (e.g. `https://sts.cancer.gov/v2`). All request paths are appended to this.
+- **Discovery** – The one-time process of calling the API to get real IDs and values (model handle, node handle, tag key/value, etc.) used to build test requests.
+- **Endpoint** – One path + method combination (e.g. GET `/v2/models/`).
+- **Fixture** – In pytest, a reusable piece of setup (e.g. `api_client`, `test_data`) provided to test functions by name.
+- **Generator** – The code that turns the OpenAPI spec plus discovery data into a list of **test cases** (path, params, expected status, etc.).
+- **Negative test** – A test that sends invalid or missing input and expects an error response (404 or 422).
+- **OpenAPI** – A standard format (YAML/JSON) for describing REST APIs (paths, parameters, responses, schemas).
+- **Operation** – One HTTP method on one path in the spec (e.g. GET `/v2/id/{id}`).
+- **Path parameter** – A part of the URL that varies (e.g. `{id}` in `/v2/id/{id}`). Values come from discovery or are faked for negative tests.
+- **Positive test** – A test that sends valid input and expects success (200).
+- **Query parameter** – Key-value in the URL after `?` (e.g. `skip=0`, `limit=10`).
+- **Schema** – In OpenAPI, the description of a response body (e.g. “object with fields nanoid, handle, version”). Used for contract validation.
+- **Spec** – The OpenAPI specification file (`spec/v2.yaml`); the “contract” of the API.
+- **Tag** – In OpenAPI, a label on an operation (e.g. `id`, `model`, `models`). Used to group endpoints and to filter which tests to run (`--tags`).
+- **test_data** – The dictionary produced by discovery (model_handle, node_handle, etc.) used to fill path and query parameters when generating cases.
+
+---
+
+## 10. Troubleshooting and FAQ
+
+**No test cases generated**
+
+- Discovery may have failed (e.g. no models, or network error). Check that `STS_BASE_URL` is correct and the server is reachable. Run with pytest or CLI and look for errors during discovery; add print/logging in `discover.py` if needed.
+- If you use `--tags`, ensure at least one operation has that tag in the spec.
+
+**Tests pass locally but fail in CI**
+
+- CI may use a different base URL or environment with different or no data. Set `STS_BASE_URL` (and optionally `STS_SSL_VERIFY`) in CI. If the CI environment has no data, discovery will return an empty dict and many positive cases will not be generated.
+
+**Root test expects 200 but gets 404**
+
+- The root path `/` may not be implemented on the server you’re hitting. The spec says it returns 200; if the server doesn’t, either fix the server or relax the test (e.g. accept 200 or 404) if that’s acceptable for your use.
+
+**Negative tests fail (e.g. expected 422, got 200)**
+
+- Some APIs return 200 with an empty or default result instead of 422 for invalid params. You can adjust the generator to not add a negative case for that operation, or change the expected status if the API behavior is documented that way.
+
+**How do I add a new endpoint that’s in the spec?**
+
+- If it’s a GET with path parameters, ensure discovery provides the needed values (add them in `discover.py`) and that `_resolve_path_params()` in `generator.py` maps those param names to `test_data` keys. No new test file is required; the generator will pick up the new path from the spec.
+
+**Where do I document our team’s conventions?**
+
+- Use this ONBOARDING.md for how the framework works and how to maintain it. Use the README for quick start and high-level purpose. You can add a short “Team conventions” section to the README or a separate CONTRIBUTING.md if needed.
+
+---
+
+For quick reference and install/run commands, see the [README](../README.md). For the original design and CI notes, the content above supersedes the previous FRAMEWORK.md and is the single place for full onboarding and maintenance guidance.
