@@ -132,6 +132,7 @@ See [data/data-models-yaml/README.md](data/data-models-yaml/README.md) and [repo
 | `data/data-models-yaml/` | Vendored property YAMLs for term-by-value CLIs |
 | `scripts/run_all_models.py` | Run CLI once per data model (CDS, CCDI, CCDI-DCC, ICDC, CTDC, C3DC, PSDC); reports in `reports/<model>/` |
 | `docs/ONBOARDING.md` | Full onboarding: concepts, structure, run, add tests, glossary |
+| `docs/RUNBOOK.md` | Command cheat sheet: pytest (generated, manual), CLI, term-verify, and which reports to open |
 | `docs/FRAMEWORK.md` | Short summary and pointer to ONBOARDING |
 
 ## Extending the framework

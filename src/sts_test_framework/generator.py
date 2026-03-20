@@ -14,10 +14,19 @@ Special case — property terms count (invalid path params):
 Special case — CDE PVs by id+version (invalid path params):
     GET ``.../terms/cde-pvs/{id}/{version}/pvs`` returns **200** with body **[]** for
     invalid id/version instead of 404; see ``_is_cde_pvs_by_id_pvs_path``.
+
+Special case — skip past end (huge ``skip`` query param):
+    Default ``__skip_oob`` expects **404** + ``{"detail": "Not found."}``. Exceptions:
+    ``GET .../terms/cde-pvs/.../pvs`` expects **200** + ``[]``; ``GET .../terms/model-pvs/...``
+    expects **200** + **non-empty** array of objects with empty ``permissibleValues``; see
+    ``_is_cde_pvs_by_id_pvs_path``, ``_is_terms_model_pvs_path``.
 """
 from urllib.parse import quote
 
 from .loader import get_paths, load_spec, normalize_path_for_base
+
+# Synthetic skip for "past end of paginated collection" (STS returns 404 + detail JSON).
+SKIP_OOB = 9_999_999
 
 
 def _path_params_from_spec(operation: dict) -> list[dict]:
@@ -124,19 +133,23 @@ def generate_cases(
 ) -> list[dict]:
     """
     Generate one positive GET case per operation (when discovery can fill path params),
-    plus optional negatives: bad ``skip``/``limit``, and invalid path params.
+    plus optional positives: ``__pagination_positive`` (``skip=0``, ``limit=1`` when both
+    params exist), optional negatives: bad ``skip``/``limit``, huge ``skip`` (``__skip_oob``),
+    and invalid path params.
 
     Args:
         spec: Parsed OpenAPI document.
         test_data: Keys from ``discover()`` (model_handle, node_handle, etc.).
         base_path: Prefix stripped from spec paths (default ``/v2``).
         tag_filter: If set, only operations whose tags overlap this list.
-        include_negative: If False, skip bad-query and invalid-path cases.
+        include_negative: If False, skip bad-query, skip-OOB, and invalid-path cases.
 
     Returns:
         List of case dicts, each with:
         ``path``, ``params``, ``expected_status``, ``operation_id``, ``summary``,
-        ``tag``, ``negative``, ``response_schema_ref``.
+        ``tag``, ``negative``, ``response_schema_ref``, optional ``expected_json``, and
+        optional ``skip_oob_assert`` (e.g. model-pvs empty permissible values), and
+        optional ``pagination_assert_max_items`` for ``__pagination_positive`` cases.
     """
     paths = get_paths(spec)
     cases = []
@@ -174,6 +187,28 @@ def generate_cases(
                 "response_schema_ref": schema_ref,
             })
 
+            # Positive pagination: explicit skip=0, limit=1; runner asserts len(list) <= limit
+            skip_limit_names_pos = _integer_skip_limit_names(query_params)
+            if (
+                200 in response_codes
+                and "skip" in skip_limit_names_pos
+                and "limit" in skip_limit_names_pos
+            ):
+                pag_q = dict(query_vals) if query_vals else {}
+                pag_q["skip"] = 0
+                pag_q["limit"] = 1
+                cases.append({
+                    "path": path_str,
+                    "params": pag_q,
+                    "expected_status": 200,
+                    "operation_id": f"{operation_id}__pagination_positive",
+                    "summary": f"{summary} (pagination: skip=0, limit=1)",
+                    "tag": tag,
+                    "negative": False,
+                    "response_schema_ref": schema_ref,
+                    "pagination_assert_max_items": 1,
+                })
+
             # Bad query param cases (422): valid path, invalid skip/limit
             if include_negative and 422 in response_codes and _has_integer_skip_or_limit(query_params):
                 base_q = dict(query_vals) if query_vals else {}
@@ -204,6 +239,50 @@ def generate_cases(
                         "negative": True,
                         "response_schema_ref": None,
                     })
+
+            # Huge skip (past end): default 404 + detail; /terms/model-pvs and /terms/cde-pvs/.../pvs → 200
+            if include_negative:
+                skip_limit_names_oob = _integer_skip_limit_names(query_params)
+                if "skip" in skip_limit_names_oob and (
+                    404 in response_codes
+                    or _is_terms_model_pvs_path(path_template)
+                    or _is_cde_pvs_by_id_pvs_path(path_template)
+                ):
+                    base_oob = dict(query_vals) if query_vals else {}
+                    oob_params = {**base_oob, "skip": SKIP_OOB}
+                    oob_common = {
+                        "path": path_str,
+                        "params": oob_params,
+                        "operation_id": f"{operation_id}__skip_oob",
+                        "tag": tag,
+                        "response_schema_ref": None,
+                    }
+                    if _is_cde_pvs_by_id_pvs_path(path_template):
+                        cases.append({
+                            **oob_common,
+                            "expected_status": 200,
+                            "summary": f"{summary} (skip past end: cde-pvs returns [])",
+                            "negative": False,
+                            "expected_json": [],
+                        })
+                    elif _is_terms_model_pvs_path(path_template):
+                        cases.append({
+                            **oob_common,
+                            "expected_status": 200,
+                            "summary": (
+                                f"{summary} (skip past end: model-pvs empty permissibleValues)"
+                            ),
+                            "negative": False,
+                            "skip_oob_assert": "model_pvs_empty_permissible_values",
+                        })
+                    elif 404 in response_codes:
+                        cases.append({
+                            **oob_common,
+                            "expected_status": 404,
+                            "summary": f"{summary} (skip past end: expect 404 Not found)",
+                            "negative": True,
+                            "expected_json": {"detail": "Not found."},
+                        })
 
         # --- Negative: invalid path parameters ---
         # Only emit when the op has path params; otherwise the "negative" URL equals the
@@ -271,6 +350,21 @@ def _is_cde_pvs_by_id_pvs_path(path_template: str) -> bool:
     """
     p = path_template.rstrip("/")
     return "terms/cde-pvs" in p and p.endswith("/pvs")
+
+
+def _is_terms_model_pvs_path(path_template: str) -> bool:
+    """
+    True for GET ``.../terms/model-pvs/{model}/{property}``.
+
+    With huge ``skip``, STS returns **200** with a JSON array of objects whose
+    ``permissibleValues`` are ``[]`` (not 404 + detail).
+    """
+    p = path_template.rstrip("/")
+    return (
+        "terms/model-pvs" in p
+        and "{model}" in path_template
+        and "{property}" in path_template
+    )
 
 
 def _iter_ops(spec: dict, tag_filter: list[str] | None):

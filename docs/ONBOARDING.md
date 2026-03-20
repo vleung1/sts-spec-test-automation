@@ -61,7 +61,7 @@ The framework **loads** this file and uses it to decide which requests to send a
 
 Many endpoints need **real values** in the URL. For example, “get node by handle” requires a real `modelHandle`, `versionString`, and `nodeHandle`. We don’t hardcode those; we **discover** them by calling the API once at the start:
 
-1. GET `/models/` → choose a model (by **`--model`** handle if provided, otherwise the first in the list). GET `/model/{handle}/versions` → choose a version: with **`--release`**, the latest **release** version (version string with no hyphen, e.g. `2.1.0`); otherwise the first version in the list (which may be a pre-release).
+1. GET `/models/` → choose a model (by `**--model`** handle if provided, otherwise the first in the list). GET `/model/{handle}/versions` → choose a version: with `**--release**`, the latest **release** version (version string with no hyphen, e.g. `2.1.0`); otherwise the first version in the list (which may be a pre-release).
 2. GET `/model/{handle}/version/{version}/nodes` → take the first node’s `handle`.
 3. GET that node’s properties → take the first property’s `handle`.
 4. GET that property’s terms → take a real `term` value.
@@ -76,8 +76,10 @@ The **generator** walks every path and method in the spec. For each operation it
 - **Positive case:** Fills path and query parameters from the discovery data. If it can resolve all required parameters, it adds one case with `expected_status: 200`.
 - **Negative case:** Where the spec documents 404 or 422, it adds a case that uses an **invalid** value (e.g. `invalid_nonexistent_xyz`) for a path parameter, expecting 404 or 422.
 - **Bad query (422):** For operations that document 422 and have integer `skip`/`limit` query parameters, the generator adds one or two extra cases (same valid path, invalid query: `skip=-1` and/or `limit=not_a_number`) with distinct `operation_id` suffixes (e.g. `__bad_query_skip`, `__bad_query_limit`) so pytest ids stay unique.
+- **Positive pagination (`__pagination_positive`):** For operations that document **200** and have **both** integer `skip` and `limit` query parameters, the generator adds one extra positive case with `skip=0`, `limit=1`, `operation_id` suffix `__pagination_positive`, and `pagination_assert_max_items: 1`. The functional runner checks that when the response body is a JSON **array**, `len(body) <= 1` (i.e. the API respects `limit`). Non-array JSON skips this check.
+- **Huge skip / past end (`__skip_oob`):** `skip` set to `9_999_999` (constant `SKIP_OOB` in `generator.py`), `operation_id` suffix `__skip_oob`. **Default:** for GETs with integer `skip` that document **404**, expect **404** + `expected_json: {"detail": "Not found."}` (`negative: true`). **Exceptions (always emitted when these routes have `skip`):** `GET .../terms/cde-pvs/{id}/{version}/pvs` expects **200** + `[]` (`expected_json`); `GET .../terms/model-pvs/{model}/{property}` expects **200** + a **non-empty** JSON array of objects each with `permissibleValues: []` (checked via `skip_oob_assert: model_pvs_empty_permissible_values`; an empty top-level `[]` fails with an error that asks to investigate). Those two use `negative: false`. The runner and pytest assert status and body per case.
 
-Each **case** is a small dictionary: `path`, `params`, `expected_status`, `operation_id`, `summary`, `tag`, and whether it’s negative. No test code is written by hand for these; they come from the spec + discovery.
+Each **case** is a small dictionary: `path`, `params`, `expected_status`, `operation_id`, `summary`, `tag`, whether it’s negative, optional `response_schema_ref`, optional `expected_json` for exact body matches, optional `pagination_assert_max_items` for `__pagination_positive`, and optional `skip_oob_assert` for model-pvs skip-OOB. No test code is written by hand for these; they come from the spec + discovery.
 
 **Sample generated cases** (the exact values depend on discovery; this is what one positive and one negative might look like in memory). Here, a **terms** endpoint shows how discovery data is used—the path is built from `model_handle`, `model_version`, `node_handle`, `prop_handle`, and `term_value` in `test_data`:
 
@@ -167,7 +169,7 @@ sts-test-framework-agent/
 - **spec/** – Keeps the API contract in one place; the rest of the code only reads it.
 - **src/sts_test_framework/** – Reusable library: loader, client, discover, generator, runners, reporters. The CLI and pytest both use these.
 - **tests/conftest.py** – Shared fixtures so that both manual and generated tests get the same `api_client` and `test_data` without repeating setup.
-- **test_manual/** vs **test_generated/** – Manual tests are for things that don’t fit the “one endpoint, one positive/negative case” pattern (e.g. `/id` by entity type, model-PVS duplicate checks). **Full term-by-value coverage per commons** (YAML → enrich → verify) is run via **`sts-ccdi-term-verify`**, **`sts-c3dc-term-verify`**, **`sts-ctdc-term-verify`**, **`sts-icdc-term-verify`**, **`sts-cds-term-verify`**, **`sts-ccdi-dcc-term-verify`**, etc., not pytest. Generated tests are the bulk of coverage and come from the spec.
+- **test_manual/** vs **test_generated/** – Manual tests are for things that don’t fit the “one endpoint, one positive/negative case” pattern (e.g. `/id` by entity type, model-PVS duplicate checks). **Full term-by-value coverage per commons** (YAML → enrich → verify) is run via `**sts-ccdi-term-verify`**, `**sts-c3dc-term-verify**`, `**sts-ctdc-term-verify**`, `**sts-icdc-term-verify**`, `**sts-cds-term-verify**`, `**sts-ccdi-dcc-term-verify**`, etc., not pytest. Generated tests are the bulk of coverage and come from the spec.
 
 ---
 
@@ -225,11 +227,11 @@ It is a **template** that lists the variable names and shows example values (com
 **Variable reference:**
 
 
-| Variable         | Meaning                                                                                        | Default                        |
-| ---------------- | ---------------------------------------------------------------------------------------------- | ------------------------------ |
-| `STS_BASE_URL`   | Base URL of the STS v2 API (used for all requests)                                             | `https://sts-qa.cancer.gov/v2` |
-| `STS_QA_URL`     | QA base URL (used only if you add code that switches to QA for certain tests)                  | `https://sts-qa.cancer.gov/v2` |
-| `STS_SSL_VERIFY` | Set to `false` to disable SSL certificate verification (e.g. local/dev with self-signed certs) | `true`                         |
+| Variable         | Meaning                                                                                                                | Default                        |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `STS_BASE_URL`   | Base URL of the STS v2 API (used for all requests)                                                                     | `https://sts-qa.cancer.gov/v2` |
+| `STS_QA_URL`     | QA base URL (used only if you add code that switches to QA for certain tests)                                          | `https://sts-qa.cancer.gov/v2` |
+| `STS_SSL_VERIFY` | Set to `false` to disable SSL certificate verification (e.g. local/dev with self-signed certs)                         | `true`                         |
 | `REPORT_DIR`     | Directory where the CLI writes timestamped `report_YYYY-MM-DDTHH-MM-SS.json` and `.html` (each run gets its own files) | `reports`                      |
 
 
@@ -291,11 +293,11 @@ STS_BASE_URL=https://my-dev-server.local/v2 STS_SSL_VERIFY=false pytest tests/ -
 The framework can be run in **two ways**. Both use the same spec, discovery, and generator—so the same test cases run either way. The difference is **how** you invoke them and **what you get**:
 
 
-|                | **pytest**                                                                                                                                                 | **CLI**                                                                                                                                |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **What it is** | Standard Python test runner; each generated case is one pytest test.                                                                                       | A standalone script that runs the framework and writes report files.                                                                   |
-| **Output**     | Pytest’s usual pass/fail output (and any pytest plugins, e.g. html). Does *not* write the framework’s report files unless you add a hook. | Always writes timestamped `report_*.json` and `report_*.html` to the folder you choose (each run gets its own pair).                    |
-| **Best for**   | Day-to-day development, debugging, running a single test or subset, IDE integration.                                                                       | Getting the framework’s reports every time, scripts/cron/CI, or using options like `--tags` / `--no-negative` without touching pytest. |
+|                | **pytest**                                                                                                                                | **CLI**                                                                                                                                |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **What it is** | Standard Python test runner; each generated case is one pytest test.                                                                      | A standalone script that runs the framework and writes report files.                                                                   |
+| **Output**     | Pytest’s usual pass/fail output (and any pytest plugins, e.g. html). Does *not* write the framework’s report files unless you add a hook. | Always writes timestamped `report_*.json` and `report_*.html` to the folder you choose (each run gets its own pair).                   |
+| **Best for**   | Day-to-day development, debugging, running a single test or subset, IDE integration.                                                      | Getting the framework’s reports every time, scripts/cron/CI, or using options like `--tags` / `--no-negative` without touching pytest. |
 
 
 **Use pytest when:** You want to run one test or a subset (e.g. only `test_manual`), use your IDE’s “Run Test” button, or integrate STS tests into a larger pytest suite. You don’t need the framework’s HTML/JSON reports for that run.
@@ -356,8 +358,8 @@ python -m sts_test_framework.cli --report reports/ --model PSDC
 python -m sts_test_framework.cli --report reports/ --model PSDC --release
 ```
 
-- **`--model <handle>`** – Model handle to test (e.g. `PSDC`, `C3DC`, `CDS`). Discovery uses this model and its version for all path parameters. If omitted, the first model returned by `/models/` is used.
-- **`--release`** – Use the latest **release** version from `/model/{handle}/versions`. A release version is one whose string has no hyphen (e.g. `2.1.0`). If the model has no release versions, the first available version is used. Without `--release`, the first version in the list (which may be a pre-release) is used.
+- `**--model <handle>**` – Model handle to test (e.g. `PSDC`, `C3DC`, `CDS`). Discovery uses this model and its version for all path parameters. If omitted, the first model returned by `/models/` is used.
+- `**--release**` – Use the latest **release** version from `/model/{handle}/versions`. A release version is one whose string has no hyphen (e.g. `2.1.0`). If the model has no release versions, the first available version is used. Without `--release`, the first version in the list (which may be a pre-release) is used.
 
 When any test fails, the CLI exits with code 1 so CI can detect failure.
 
@@ -373,15 +375,17 @@ python scripts/run_all_models.py
 **Behavior:**
 
 - Runs the CLI once per model with `--model <handle>` (and optionally `--release` if you add it to the script).
-- Writes reports to **`reports/<model>/`** (e.g. `reports/PSDC/report_2025-03-12T14-30-45.html` and `.json`). Each run gets timestamped files so previous reports are not overwritten.
+- Writes reports to `**reports/<model>/`** (e.g. `reports/PSDC/report_2025-03-12T14-30-45.html` and `.json`). Each run gets timestamped files so previous reports are not overwritten.
 - Exits with code **1** if any model run fails, so CI can detect failure.
 
 **Environment variables:**
 
-| Variable         | Meaning                                                                 | Default                         |
-| ---------------- | ----------------------------------------------------------------------- | ------------------------------- |
-| `STS_BASE_URL`   | Base URL of the STS v2 API (used for all model runs)                    | `https://sts-qa.cancer.gov/v2`  |
-| `STS_MODELS`     | Comma-separated list of model handles to run (e.g. `PSDC,CTDC`). If unset, all default models are run. | (all: CDS, CCDI, CCDI-DCC, ICDC, CTDC, C3DC, PSDC) |
+
+| Variable       | Meaning                                                                                                | Default                                            |
+| -------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------- |
+| `STS_BASE_URL` | Base URL of the STS v2 API (used for all model runs)                                                   | `https://sts-qa.cancer.gov/v2`                     |
+| `STS_MODELS`   | Comma-separated list of model handles to run (e.g. `PSDC,CTDC`). If unset, all default models are run. | (all: CDS, CCDI, CCDI-DCC, ICDC, CTDC, C3DC, PSDC) |
+
 
 **Example – run only PSDC and CTDC:**
 
@@ -435,8 +439,8 @@ A more detailed breakdown of each step is below.
 - **What happens:** The framework calls the live API once to collect real IDs and values. It does **not** use the spec for this; it follows a fixed sequence of requests:
   1. **GET** the models list (e.g. `/models/`). From the response it takes the **first** model’s `handle`, `version`, and `nanoid` and stores them in a `test_data` dict.
   2. **GET** the nodes for that model (path like `/model/{modelHandle}/version/{versionString}/nodes`). From the first few nodes it then:
-     - **GET** the properties for each node (path like `.../node/{nodeHandle}/properties`). It keeps the first property’s `handle` and `nanoid`, and the node’s `handle` and `nanoid`.
-     - For up to a few properties, **GET** the terms (path like `.../property/{propHandle}/terms`). When it finds a non-empty term list, it takes one term’s `value` and stores it (so we have a real value for the “get term by value” endpoint).
+    - **GET** the properties for each node (path like `.../node/{nodeHandle}/properties`). It keeps the first property’s `handle` and `nanoid`, and the node’s `handle` and `nanoid`.
+    - For up to a few properties, **GET** the terms (path like `.../property/{propHandle}/terms`). When it finds a non-empty term list, it takes one term’s `value` and stores it (so we have a real value for the “get term by value” endpoint).
   3. **GET** the tags list (`/tags/`). It takes the first tag’s `key`, `value`, and `nanoid`.
   4. Optionally **GET** the model-pvs endpoint for that model and property to mark that model-pvs data is available.
 - **Result:** A `test_data` dictionary with keys such as `model_handle`, `model_version`, `node_handle`, `prop_handle`, `term_value`, `tag_key`, `tag_value`, and various `*_nanoid` values. If any request fails or returns no data, the corresponding keys may be missing; the generator will then skip building positive cases for endpoints that need those values.
@@ -459,8 +463,8 @@ A more detailed breakdown of each step is below.
 #### Step 5: Run the cases (functional run)
 
 - **What happens:** For each case in the list, the runner:
-  1. Calls **`client.get(path, params)`**. The client sends a GET request to `base_url + path` with the given query string, and records the start time. When the response arrives, it parses the body as JSON (if possible) and stores status code, body, parsed JSON, and **duration** in an `APIResponse`.
-  2. Compares **`response.status_code`** to the case’s **`expected_status`**. If they match, the case is marked passed; otherwise it’s failed and an error message is stored (e.g. “Expected 200, got 404” plus a snippet of the body).
+  1. Calls `**client.get(path, params)`**. The client sends a GET request to `base_url + path` with the given query string, and records the start time. When the response arrives, it parses the body as JSON (if possible) and stores status code, body, parsed JSON, and **duration** in an `APIResponse`.
+  2. Compares `**response.status_code`** to the case’s `**expected_status**`. If they match, the case is marked passed; otherwise it’s failed and an error message is stored (e.g. “Expected 200, got 404” plus a snippet of the body).
   3. For **positive cases that expected 200** and have a non-null JSON body, the runner optionally runs a **basic shape check**: it looks at the case’s `response_schema_ref` (e.g. `Node`, `Model`) and verifies that the response is an object (or list/int where appropriate) and that expected top-level keys (e.g. `nanoid`) are present. If the shape check fails, the case is marked failed and the error message is updated.
   4. Appends a **result** dict to the list: `operation_id`, `path`, `expected_status`, `actual_status`, `passed`, `duration`, `error` (if any), `tag`, `negative`.
 - **Result:** A list of result dicts, one per case, each with pass/fail and timing. No files are written in this step.
@@ -489,7 +493,7 @@ When you run **pytest** only, step 6 does not run unless you add a pytest hook o
 Manual tests are for behavior that isn’t “one endpoint, one status check.” Examples: root/health, or “models count equals length of models list.”
 
 1. Add a new file under `tests/test_manual/`, e.g. `test_consistency.py`.
-2. Write a function that starts with `test_` and accepts the fixtures you need (e.g. `api_client`, `test_data`).
+2. Write a function that starts with `test`_ and accepts the fixtures you need (e.g. `api_client`, `test_data`).
 3. Use `api_client.get(path, params)` and assert on `response.status_code` and, if needed, `response.json()`.
 
 Example (already in the project):
@@ -516,7 +520,6 @@ If a new endpoint needs a new kind of ID (e.g. a “study” id), you add the di
 - **New positive/negative rules** – Edit `generator.py`. For example, to add a negative case that sends an invalid query param (e.g. `skip=-1`) and expects 422, you’d add logic that builds a case with that param and `expected_status: 422`.
 - **Filter by tag** – When running, use `--tags id,model` (CLI) or, if you add a pytest option, filter the cases in the generator with `tag_filter`.
 - **Skip certain operations** – In `_iter_ops()` or in the loop in `generate_cases()`, skip path templates or operation IDs you don’t want to test.
-
 - **Root and count endpoints** – The root endpoint (`/`) is intentionally excluded from the suite. For **count** endpoints (e.g. `.../nodes/count`, `.../properties/count`, `.../entities/count`), invalid path parameters yield **200 with body 0**; **422** is reserved for invalid query parameters (e.g. negative skip/limit).
 
 ### 7.4 Adding or changing assertions (functional runner)

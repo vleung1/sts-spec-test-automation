@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>STS v2 API Test Report</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 1rem 2rem; }
+        h1 { margin-bottom: 0.25rem; }
+        .meta { color: #666; margin-bottom: 0.5rem; }
+        .env { color: #444; margin-bottom: 0.5rem; font-size: 0.95rem; }
+        .env code { background: #f0f0f0; padding: 0.15rem 0.4rem; border-radius: 3px; }
+        .discovery, .cases-generated { color: #444; margin-bottom: 0.5rem; font-size: 0.9rem; font-family: ui-monospace, monospace; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        th { background: #f5f5f5; }
+        .status-pass { background: #d4edda; color: #155724; font-weight: 600; }
+        .status-fail { background: #f8d7da; color: #721c24; font-weight: 600; }
+        .summary { margin-bottom: 1.5rem; }
+        .summary span { margin-right: 1.5rem; }
+    </style>
+</head>
+<body>
+    <h1>STS v2 API Test Report</h1>
+    <p class="meta">Generated 2026-03-20 13:46 UTC</p>
+    <div class="env"><strong>Environment:</strong> QA &nbsp;|&nbsp; <strong>URL:</strong> <code>https://sts-qa.cancer.gov/v2</code> &nbsp;|&nbsp; <strong>Data model:</strong> CCDI-DCC / 1.0.0</div>
+    <div class="discovery"><strong>Discovery:</strong> model_handle='CCDI-DCC' model_version='1.0.0' node_handle='clinical_measure_...' prop_handle='file_mapping_level' term_value='Study' tag_key='mapping_source' tag_value='alternate_name'</div>
+    <div class="cases-generated"><strong>Generated cases:</strong> 68 total (23 positive, 45 negative).</div>
+    <div class="summary">
+        <span><strong>Total:</strong> 68</span>
+        <span><strong>Passed:</strong> 68</span>
+        <span><strong>Failed:</strong> 0</span>
+        <span><strong>P95 response:</strong> 313.4 ms</span>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Operation ID</th>
+                <th>Summary</th>
+                <th>Path</th>
+                <th>Status</th>
+                <th>Expected</th>
+                <th>Actual</th>
+                <th>Duration</th>
+                <th>Error</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        <tr>
+            <td>id_id_get_v2_id__id__get</td>
+            <td>Get MDB entity with specified nanoid</td>
+            <td><code>/id/a3DCyf</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>313 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>id_id_get_v2_id__id__get</td>
+            <td>Get MDB entity with specified nanoid (invalid param)</td>
+            <td><code>/id/invalid_nonexistent_xyz</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>341 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_versions_get_v2_model__modelHandle__versions_get</td>
+            <td>Get all versions for specified model</td>
+            <td><code>/model/CCDI-DCC/versions?skip=0&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>112 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_versions_get_v2_model__modelHandle__versions_get__bad_query_skip</td>
+            <td>Get all versions for specified model (bad query: skip=-1)</td>
+            <td><code>/model/CCDI-DCC/versions?skip=-1&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>103 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_versions_get_v2_model__modelHandle__versions_get__bad_query_limit</td>
+            <td>Get all versions for specified model (bad query: limit=not_a_number)</td>
+            <td><code>/model/CCDI-DCC/versions?skip=0&amp;limit=not_a_number</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>118 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_versions_get_v2_model__modelHandle__versions_get__skip_oob</td>
+            <td>Get all versions for specified model (skip past end: expect 404 Not found)</td>
+            <td><code>/model/CCDI-DCC/versions?skip=9999999&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>99 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_versions_get_v2_model__modelHandle__versions_get</td>
+            <td>Get all versions for specified model (invalid param)</td>
+            <td><code>/model/invalid_nonexistent_xyz/versions</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>97 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_latest_version_get_v2_model__modelHandle__latest_version_get</td>
+            <td>Get latest version of specified model</td>
+            <td><code>/model/CCDI-DCC/latest-version</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>112 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_latest_version_get_v2_model__modelHandle__latest_version_get</td>
+            <td>Get latest version of specified model (invalid param)</td>
+            <td><code>/model/invalid_nonexistent_xyz/latest-version</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>104 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_nodes_get_v2_model__modelHandle__version__versionString__nodes_get</td>
+            <td>Get all nodes for specified model</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/nodes?skip=0&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>115 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_nodes_get_v2_model__modelHandle__version__versionString__nodes_get__bad_query_skip</td>
+            <td>Get all nodes for specified model (bad query: skip=-1)</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/nodes?skip=-1&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>104 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_nodes_get_v2_model__modelHandle__version__versionString__nodes_get__bad_query_limit</td>
+            <td>Get all nodes for specified model (bad query: limit=not_a_number)</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/nodes?skip=0&amp;limit=not_a_number</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>98 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_nodes_get_v2_model__modelHandle__version__versionString__nodes_get__skip_oob</td>
+            <td>Get all nodes for specified model (skip past end: expect 404 Not found)</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/nodes?skip=9999999&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>105 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_nodes_get_v2_model__modelHandle__version__versionString__nodes_get</td>
+            <td>Get all nodes for specified model (invalid param)</td>
+            <td><code>/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/nodes</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>109 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_nodes_count_get_v2_model__modelHandle__version__versionString__nodes_count_get</td>
+            <td>Get number of nodes for specified model</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/nodes/count</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>107 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_nodes_count_get_v2_model__modelHandle__version__versionString__nodes_count_get</td>
+            <td>Get number of nodes for specified model (invalid param)</td>
+            <td><code>/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/nodes/count</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>100 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_get_v2_model__modelHandle__version__versionString__node__nodeHandle__get</td>
+            <td>Retrieve a specified node from a model</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>104 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_get_v2_model__modelHandle__version__versionString__node__nodeHandle__get</td>
+            <td>Retrieve a specified node from a model (invalid param)</td>
+            <td><code>/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>108 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_properties_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_get</td>
+            <td>Get all properties for specified node</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file/properties?skip=0&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>103 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_properties_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_get__bad_query_skip</td>
+            <td>Get all properties for specified node (bad query: skip=-1)</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file/properties?skip=-1&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>111 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_properties_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_get__bad_query_limit</td>
+            <td>Get all properties for specified node (bad query: limit=not_a_number)</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file/properties?skip=0&amp;limit=not_a_number</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>96 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_properties_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_get__skip_oob</td>
+            <td>Get all properties for specified node (skip past end: expect 404 Not found)</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file/properties?skip=9999999&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>100 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_properties_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_get</td>
+            <td>Get all properties for specified node (invalid param)</td>
+            <td><code>/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/properties</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>99 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_properties_count_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_count_get</td>
+            <td>Get number of properties for specified node</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file/properties/count</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>105 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_properties_count_get_v2_model__modelHandle__version__versionString__node__nodeHandle__properties_count_get</td>
+            <td>Get number of properties for specified node (invalid param)</td>
+            <td><code>/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/properties/count</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>101 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_property_prop_handle_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__get</td>
+            <td>Retrieve a specified property from a model</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file/property/file_mapping_level</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>105 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_property_prop_handle_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__get</td>
+            <td>Retrieve a specified property from a model (invalid param)</td>
+            <td><code>/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/property/invalid_nonexistent_xyz</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>106 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_property_prop_handle_terms_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_get</td>
+            <td>Get the terms (acceptable values) for specified property, if applicable to property.</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file/property/file_mapping_level/terms?skip=0&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>112 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_property_prop_handle_terms_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_get__bad_query_skip</td>
+            <td>Get the terms (acceptable values) for specified property, if applicable to property. (bad query: skip=-1)</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file/property/file_mapping_level/terms?skip=-1&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>99 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_property_prop_handle_terms_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_get__bad_query_limit</td>
+            <td>Get the terms (acceptable values) for specified property, if applicable to property. (bad query: limit=not_a_number)</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file/property/file_mapping_level/terms?skip=0&amp;limit=not_a_number</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>98 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_property_prop_handle_terms_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_get__skip_oob</td>
+            <td>Get the terms (acceptable values) for specified property, if applicable to property. (skip past end: expect 404 Not found)</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file/property/file_mapping_level/terms?skip=9999999&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>99 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_property_prop_handle_terms_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_get</td>
+            <td>Get the terms (acceptable values) for specified property, if applicable to property. (invalid param)</td>
+            <td><code>/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/property/invalid_nonexistent_xyz/terms</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>106 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_property_prop_handle_terms_count_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_count_get</td>
+            <td>Get number of terms for specified property</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file/property/file_mapping_level/terms/count</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>113 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_property_prop_handle_terms_count_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__terms_count_get</td>
+            <td>Get number of terms for specified property (invalid param)</td>
+            <td><code>/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/property/invalid_nonexistent_xyz/terms/count</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>101 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_property_prop_handle_term_term_value_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__term__termValue__get</td>
+            <td>Get a specific term value for specified property</td>
+            <td><code>/model/CCDI-DCC/version/1.0.0/node/clinical_measure_file/property/file_mapping_level/term/Study</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>113 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>model_model_handle_node_node_handle_property_prop_handle_term_term_value_get_v2_model__modelHandle__version__versionString__node__nodeHandle__property__propHandle__term__termValue__get</td>
+            <td>Get a specific term value for specified property (invalid param)</td>
+            <td><code>/model/invalid_nonexistent_xyz/version/invalid_nonexistent_xyz/node/invalid_nonexistent_xyz/property/invalid_nonexistent_xyz/term/invalid_nonexistent_xyz</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>104 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>models_get_v2_models__get</td>
+            <td>Get info on available models</td>
+            <td><code>/models/?skip=0&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>163 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>models_get_v2_models__get__bad_query_skip</td>
+            <td>Get info on available models (bad query: skip=-1)</td>
+            <td><code>/models/?skip=-1&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>99 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>models_get_v2_models__get__bad_query_limit</td>
+            <td>Get info on available models (bad query: limit=not_a_number)</td>
+            <td><code>/models/?skip=0&amp;limit=not_a_number</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>93 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>models_get_v2_models__get__skip_oob</td>
+            <td>Get info on available models (skip past end: expect 404 Not found)</td>
+            <td><code>/models/?skip=9999999&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>132 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>models_count_get_v2_models_count_get</td>
+            <td>Get number of available models</td>
+            <td><code>/models/count</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>120 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tag_key_values_get_v2_tag__key__values_get</td>
+            <td>Get list of tag values having specified tag key</td>
+            <td><code>/tag/mapping_source/values?skip=0&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>190 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tag_key_values_get_v2_tag__key__values_get__bad_query_skip</td>
+            <td>Get list of tag values having specified tag key (bad query: skip=-1)</td>
+            <td><code>/tag/mapping_source/values?skip=-1&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>101 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tag_key_values_get_v2_tag__key__values_get__bad_query_limit</td>
+            <td>Get list of tag values having specified tag key (bad query: limit=not_a_number)</td>
+            <td><code>/tag/mapping_source/values?skip=0&amp;limit=not_a_number</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>117 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tag_key_values_get_v2_tag__key__values_get__skip_oob</td>
+            <td>Get list of tag values having specified tag key (skip past end: expect 404 Not found)</td>
+            <td><code>/tag/mapping_source/values?skip=9999999&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>184 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tag_key_values_get_v2_tag__key__values_get</td>
+            <td>Get list of tag values having specified tag key (invalid param)</td>
+            <td><code>/tag/invalid_nonexistent_xyz/values</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>143 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tag_key_value_entities_get_v2_tag__key___value__entities_get</td>
+            <td>Get list of entities tagged by key:value</td>
+            <td><code>/tag/mapping_source/alternate_name/entities?skip=0&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>1377 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tag_key_value_entities_get_v2_tag__key___value__entities_get__bad_query_skip</td>
+            <td>Get list of entities tagged by key:value (bad query: skip=-1)</td>
+            <td><code>/tag/mapping_source/alternate_name/entities?skip=-1&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>105 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tag_key_value_entities_get_v2_tag__key___value__entities_get__bad_query_limit</td>
+            <td>Get list of entities tagged by key:value (bad query: limit=not_a_number)</td>
+            <td><code>/tag/mapping_source/alternate_name/entities?skip=0&amp;limit=not_a_number</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>94 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tag_key_value_entities_get_v2_tag__key___value__entities_get__skip_oob</td>
+            <td>Get list of entities tagged by key:value (skip past end: expect 404 Not found)</td>
+            <td><code>/tag/mapping_source/alternate_name/entities?skip=9999999&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>107 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tag_key_value_entities_get_v2_tag__key___value__entities_get</td>
+            <td>Get list of entities tagged by key:value (invalid param)</td>
+            <td><code>/tag/invalid_nonexistent_xyz/invalid_nonexistent_xyz/entities</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>121 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tag_key_value_entities_count_get_v2_tag__key___value__entities_count_get</td>
+            <td>Get number of entities tagged by key:value</td>
+            <td><code>/tag/mapping_source/alternate_name/entities/count</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>103 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tag_key_value_entities_count_get_v2_tag__key___value__entities_count_get</td>
+            <td>Get number of entities tagged by key:value (invalid param)</td>
+            <td><code>/tag/invalid_nonexistent_xyz/invalid_nonexistent_xyz/entities/count</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>102 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tags_get_v2_tags__get</td>
+            <td>Get all tag nodes in MDB</td>
+            <td><code>/tags/?skip=0&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>13736 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tags_get_v2_tags__get__bad_query_skip</td>
+            <td>Get all tag nodes in MDB (bad query: skip=-1)</td>
+            <td><code>/tags/?skip=-1&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>199 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tags_get_v2_tags__get__bad_query_limit</td>
+            <td>Get all tag nodes in MDB (bad query: limit=not_a_number)</td>
+            <td><code>/tags/?skip=0&amp;limit=not_a_number</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>97 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tags_get_v2_tags__get__skip_oob</td>
+            <td>Get all tag nodes in MDB (skip past end: expect 404 Not found)</td>
+            <td><code>/tags/?skip=9999999&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>110 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>tags_count_get_v2_tags_count_get</td>
+            <td>Get number of tags present in MDB</td>
+            <td><code>/tags/count</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>99 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>pvs_synonyms_model_version_get_v2_terms_model_pvs__model___property__get</td>
+            <td>Get Permissible Values and Synonyms for a model, optionally filtered by property and version.</td>
+            <td><code>/terms/model-pvs/CCDI-DCC/file_mapping_level?skip=0&amp;limit=0&amp;version=1.0.0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>133 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>pvs_synonyms_model_version_get_v2_terms_model_pvs__model___property__get__bad_query_skip</td>
+            <td>Get Permissible Values and Synonyms for a model, optionally filtered by property and version. (bad query: skip=-1)</td>
+            <td><code>/terms/model-pvs/CCDI-DCC/file_mapping_level?skip=-1&amp;limit=0&amp;version=1.0.0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>93 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>pvs_synonyms_model_version_get_v2_terms_model_pvs__model___property__get__bad_query_limit</td>
+            <td>Get Permissible Values and Synonyms for a model, optionally filtered by property and version. (bad query: limit=not_a_number)</td>
+            <td><code>/terms/model-pvs/CCDI-DCC/file_mapping_level?skip=0&amp;limit=not_a_number&amp;version=1.0.0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>99 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>pvs_synonyms_model_version_get_v2_terms_model_pvs__model___property__get__skip_oob</td>
+            <td>Get Permissible Values and Synonyms for a model, optionally filtered by property and version. (skip past end: model-pvs empty permissibleValues)</td>
+            <td><code>/terms/model-pvs/CCDI-DCC/file_mapping_level?skip=9999999&amp;limit=0&amp;version=1.0.0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>131 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>pvs_synonyms_model_version_get_v2_terms_model_pvs__model___property__get</td>
+            <td>Get Permissible Values and Synonyms for a model, optionally filtered by property and version. (invalid param)</td>
+            <td><code>/terms/model-pvs/invalid_nonexistent_xyz/invalid_nonexistent_xyz</code></td>
+            <td class="status-pass">Pass</td>
+            <td>404</td>
+            <td>404</td>
+            <td>108 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>cde_pvs_by_id_with_version_get_v2_terms_cde_pvs__id___version__pvs_get</td>
+            <td>Get PVs for a given CDE id and version.</td>
+            <td><code>/terms/cde-pvs/a3DCyf/1.0.0/pvs?use_null_cde=False&amp;skip=0&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>264 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>cde_pvs_by_id_with_version_get_v2_terms_cde_pvs__id___version__pvs_get__bad_query_skip</td>
+            <td>Get PVs for a given CDE id and version. (bad query: skip=-1)</td>
+            <td><code>/terms/cde-pvs/a3DCyf/1.0.0/pvs?use_null_cde=False&amp;skip=-1&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>106 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>cde_pvs_by_id_with_version_get_v2_terms_cde_pvs__id___version__pvs_get__bad_query_limit</td>
+            <td>Get PVs for a given CDE id and version. (bad query: limit=not_a_number)</td>
+            <td><code>/terms/cde-pvs/a3DCyf/1.0.0/pvs?use_null_cde=False&amp;skip=0&amp;limit=not_a_number</code></td>
+            <td class="status-pass">Pass</td>
+            <td>422</td>
+            <td>422</td>
+            <td>93 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>cde_pvs_by_id_with_version_get_v2_terms_cde_pvs__id___version__pvs_get__skip_oob</td>
+            <td>Get PVs for a given CDE id and version. (skip past end: cde-pvs returns [])</td>
+            <td><code>/terms/cde-pvs/a3DCyf/1.0.0/pvs?use_null_cde=False&amp;skip=9999999&amp;limit=0</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>266 ms</td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td>cde_pvs_by_id_with_version_get_v2_terms_cde_pvs__id___version__pvs_get</td>
+            <td>Get PVs for a given CDE id and version. (invalid param)</td>
+            <td><code>/terms/cde-pvs/invalid_nonexistent_xyz/invalid_nonexistent_xyz/pvs</code></td>
+            <td class="status-pass">Pass</td>
+            <td>200</td>
+            <td>200</td>
+            <td>264 ms</td>
+            <td></td>
+        </tr>
+        
+        </tbody>
+    </table>
+</body>
+</html>

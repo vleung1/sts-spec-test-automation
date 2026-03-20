@@ -24,7 +24,6 @@ study_type,Supportive Care Study,Supportive Care Study,A classification of the s
 study_type,Transcriptomics Research,Transcriptomics Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
 study_type,Treatment Study,Treatment Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
 study_age_group,https://cadsr.cancer.gov/onedata/Home.jsp,,The identifiable class of the study participant based upon their age.,CTDC,1.22.2-f107ddd,study
-study_biobank,https://cadsr.cancer.gov/onedata/Home.jsp,,The name of the biobank from which a study has sourced samples from.,CTDC,1.22.2-f107ddd,study
 image_type_included,CT,CT,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-f107ddd,image_collection
 image_type_included,DX,DX,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-f107ddd,image_collection
 image_type_included,MR,MR,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-f107ddd,image_collection
@@ -366,7 +365,62 @@ assessment_timepoint,Archival,Archival,"A specific point in the time continuum, 
 assessment_timepoint,Progression (Fresh),Progression (Fresh),"A specific point in the time continuum, including those established relative",CTDC,1.22.2-f107ddd,specimen
 assessment_timepoint,Post-Treatment (No progression),Post-Treatment (No progression),"A specific point in the time continuum, including those established relative",CTDC,1.22.2-f107ddd,specimen
 quality_of_specimen,https://cadsr.cancer.gov/onedata/Home.jsp,,The final state of a sample which is based on an evaluation of its quality.,CTDC,1.22.2-f107ddd,specimen
-tumor_tissue_total_area_percentage,https://cadsr.cancer.gov/onedata/Home.jsp,,The percentage of total tumorous tissue surface area within a specimen.,CTDC,1.22.2-f107ddd,specimen
+assay_type,Next Generation Sequencing,Next Generation Sequencing,The type of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_type,Immune,Immune,The type of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_type,Cell Based,Cell Based,The type of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,atacseq,atacseq,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,rnaseq,rnaseq,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,scrnaseq,scrnaseq,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,visium,visium,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,wes,wes,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,tcr,tcr,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,cytof,cytof,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,elisa,elisa,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,nulisa,nulisa,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,cdtdna,cdtdna,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,olink,olink,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,ihc,ihc,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,mibi,mibi,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,hande,hande,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+assay_subtype,microbiome,microbiome,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
+qc_status,pass,pass,Overall quality control flag based on predefined thresholds.,CTDC,1.22.2-f107ddd,assay
+qc_status,fail,fail,Overall quality control flag based on predefined thresholds.,CTDC,1.22.2-f107ddd,assay
+sequencing_platform,Illumina NovaSeq 6000,Illumina NovaSeq 6000,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+sequencing_platform,Illumina NextSeq 550,Illumina NextSeq 550,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+sequencing_platform,Illumina HiSeq 4000,Illumina HiSeq 4000,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+sequencing_platform,Illumina HiSeq 2500,Illumina HiSeq 2500,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+sequencing_platform,Illumina HiSeq X Ten,Illumina HiSeq X Ten,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+sequencing_platform,Illumina NextSeq 2000,Illumina NextSeq 2000,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+sequencing_platform,Illumina NovaSeq 500,Illumina NovaSeq 500,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+sequencing_platform,Illumina MiSeq,Illumina MiSeq,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+sequencing_platform,PacBio Sequel II,PacBio Sequel II,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+sequencing_platform,Oxford Nanopore PromethION,Oxford Nanopore PromethION,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+paired_end_sequencing,Yes,Yes,"Indicates whether the sequencing was performed using paired-end reads,",CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+paired_end_sequencing,No,No,"Indicates whether the sequencing was performed using paired-end reads,",CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human PBMC,Human PBMC,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Motor Cortex,Human Motor Cortex,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Mouse Motor Cortex,Mouse Motor Cortex,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Pancreas,Human Pancreas,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Fetal Development,Human Fetal Development,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Kidney,Human Kidney,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Bone Marrow,Human Bone Marrow,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Lung v2 (HLCA),Human Lung v2 (HLCA),The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Adipose,Human Adipose,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Heart,Human Heart,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Liver,Human Liver,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Tonsil v2,Human Tonsil v2,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,Mouse Pansci,Mouse Pansci,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+azimuth_reference_genome_version,None,None,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+tabula_sapiens_reference_genome_version,Tabula Sapiens v1.0,Tabula Sapiens v1.0,The version of the Tabula Sapiens reference genome used for aligning,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+tabula_sapiens_reference_genome_version,Tabula Sapiens v2.0,Tabula Sapiens v2.0,The version of the Tabula Sapiens reference genome used for aligning,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+tabula_sapiens_reference_genome_version,None,None,The version of the Tabula Sapiens reference genome used for aligning,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
+antigen_type,Protein,Protein,The type of antigen targeted in the immune assay.,CTDC,1.22.2-f107ddd,immune_assay
+antigen_type,Peptide,Peptide,The type of antigen targeted in the immune assay.,CTDC,1.22.2-f107ddd,immune_assay
+antigen_type,RNA,RNA,The type of antigen targeted in the immune assay.,CTDC,1.22.2-f107ddd,immune_assay
+antigen_type,Other,Other,The type of antigen targeted in the immune assay.,CTDC,1.22.2-f107ddd,immune_assay
+positive_cell_detection,Proprietary,Proprietary,The model used for positive cell detection used in the cell based assay.,CTDC,1.22.2-f107ddd,cell_based_assay
+positive_cell_detection,Random Forest Classifier,Random Forest Classifier,The model used for positive cell detection used in the cell based assay.,CTDC,1.22.2-f107ddd,cell_based_assay
+positive_cell_detection,Other,Other,The model used for positive cell detection used in the cell based assay.,CTDC,1.22.2-f107ddd,cell_based_assay
 data_file_type,Clinical Report,Clinical Report,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-f107ddd,file
 data_file_type,File Collection,File Collection,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-f107ddd,file
 data_file_type,Investigator Report,Investigator Report,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-f107ddd,file

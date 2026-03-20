@@ -31,7 +31,9 @@ def pytest_generate_tests(metafunc):
 
 
 def test_generated_case(api_client, case):
-    """Assert HTTP status matches case; for 200, JSON must be list, dict, or int."""
+    """Assert HTTP status matches case; run body checks like the CLI (200 shape or expected_json)."""
+    from sts_test_framework.runners.functional import check_response_body_for_case
+
     path = case.get("path", "")
     params = case.get("params")
     expected = case.get("expected_status", 200)
@@ -39,6 +41,11 @@ def test_generated_case(api_client, case):
     assert response.status_code == expected, (
         f"Expected {expected}, got {response.status_code}: {response.body[:200] if response.body else ''}"
     )
-    if expected == 200 and response.json() is not None:
-        data = response.json()
-        assert isinstance(data, (list, dict, int)), f"Unexpected type {type(data)}"
+    if (
+        expected == 200
+        or case.get("expected_json") is not None
+        or case.get("skip_oob_assert")
+        or case.get("pagination_assert_max_items") is not None
+    ):
+        ok, err = check_response_body_for_case(response, case)
+        assert ok, err

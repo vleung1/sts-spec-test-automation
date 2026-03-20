@@ -6,11 +6,11 @@
 
 **Input:** `ctdc_enum_terms_for_verification_enriched.csv`
 
-**Rows skipped (no API `term_value`):** 4 (YAML handle could not be resolved from paginated `/terms`; `/term/{termValue}` requires the Term **value**, not the handle.)
+**Rows skipped (no API `term_value`):** 2 (YAML handle could not be resolved from paginated `/terms`; `/term/{termValue}` requires the Term **value**, not the handle.)
 
-**Rows verified (HTTP):** 382
+**Rows verified (HTTP):** 438
 
-**Passed:** 382
+**Passed:** 438
 
 **Failed:** 0
 
