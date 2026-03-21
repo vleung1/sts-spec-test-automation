@@ -36,3 +36,6 @@ where = ["src"]
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "-v -s"
+markers = [
+    "nullcde: Null CDE / useNullCDE checks across models (manual STS; pytest -m nullcde)",
+]

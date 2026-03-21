@@ -17,7 +17,8 @@ Commands to run each kind of test in this repo, what they exercise, and which ar
 | Kind | What it is | Typical command | Needs live STS? |
 |------|------------|-----------------|-----------------|
 | **Auto-generated (pytest)** | One parametrized test per generated GET from `spec/v2.yaml` + discovery (includes `__pagination_positive` and `__pagination_pair` where applicable) | `pytest tests/test_generated/ -v` | Yes |
-| **Manual (pytest)** | Hand-written checks (e.g. model-pvs dedup, id-by-type) | `pytest tests/test_manual/ -v` | Yes |
+| **Manual (pytest)** | Hand-written checks (e.g. model-pvs dedup, id-by-type, null CDE) | `pytest tests/test_manual/ -v` | Yes |
+| **Null CDE (pytest)** | `test_null_cde_all_models.py`: model-pvs scan + CDS pin + `cde-pvs/11527735/1.00/pvs` with `use_null_cde` vs NCIt-filtered 16476366/1 reference | `pytest -m nullcde tests/test_manual/test_null_cde_all_models.py -v` | Yes |
 | **Unit (pytest)** | Runner helpers (`functional.py`) with mocked responses only | `pytest tests/unit/ -v` | No |
 | **CLI functional** | Same cases as generated pytest, run in one process; writes JSON + HTML reports | `python -m sts_test_framework.cli --report reports/` | Yes |
 | **Multi-model CLI** | Runs CLI once per data model | `python scripts/run_all_models.py` | Yes |
