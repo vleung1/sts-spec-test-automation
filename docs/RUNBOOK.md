@@ -8,7 +8,26 @@ Commands to run each kind of test in this repo, what they exercise, and which ar
 
 - From the project root: `pip install -e .` (or use `uv run` if you use uv).
 - Network access to STS for generated, manual, CLI, and term-verify runs.
-- Optional env vars: `STS_BASE_URL` (default `https://sts-qa.cancer.gov/v2`), `REPORT_DIR` (default `reports`), `STS_SSL_VERIFY` (`false` only for dev/self-signed).
+
+### Environment and base URL
+
+**Single source of truth:** [`sts_test_framework.config.sts_base_url()`](../src/sts_test_framework/config.py) reads **`STS_BASE_URL`**, defaulting to **`https://sts-qa.cancer.gov/v2`** (STS v2 root URL, include the `/v2` path).
+
+| What | How |
+|------|-----|
+| **Set the server** | Export or prefix: `export STS_BASE_URL=https://sts-qa.cancer.gov/v2` or `STS_BASE_URL=https://... pytest ...` |
+| **Verify before long runs** | Pytest prints a header line: `STS environment: https://...` — confirm it matches the instance you intend. |
+| **Pytest** | Uses **`STS_BASE_URL` only** (there is no `--base-url` flag for pytest). |
+| **CLI** | Same env, **or** pass `--base-url <url>` for that process (**overrides** `STS_BASE_URL` for the CLI). |
+| **`STS_SSL_VERIFY`** | Default certificate verification; set to `false` only for dev/self-signed (see [ONBOARDING.md §6.2](ONBOARDING.md#62-configuration-the-config-folder-and-environment-variables)). |
+| **`REPORT_DIR`** | Where the **CLI** writes `report_*.html` / `report_*.json` (default `reports`). Pytest does not use this for framework reports. |
+
+**Optional (scripts / specific tests):**
+
+- **`STS_MODELS`** — comma-separated handles for [`scripts/run_all_models.py`](../scripts/run_all_models.py) (e.g. `PSDC,CTDC`).
+- **`STS_DEDUP_LIMIT`** — caps parametrized cases in manual dedup tests ([`test_model_pvs_no_duplicates.py`](../tests/test_manual/test_model_pvs_no_duplicates.py)); default `14`.
+
+Full variable list and copy/paste examples: [ONBOARDING.md §6.2](ONBOARDING.md#62-configuration-the-config-folder-and-environment-variables).
 
 ---
 

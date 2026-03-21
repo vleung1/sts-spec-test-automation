@@ -215,29 +215,50 @@ It is a **template** that lists the variable names and shows example values (com
 
 **How do I actually set the variables?** You have a few options:
 
-1. **Command line (one-off run)**
-  Set the variable only for that command (pytest or CLI):
-   Or use the CLI’s `--base-url` and skip the env var:
-2. **Shell session (current terminal)**
-  Export so every command in that terminal uses the value:
-3. **A real env file (e.g. `config/env` or `.env`)**
-  Copy `config/env.example` to a file like `config/env` or `.env` and put real values there (one per line, `NAME=value`). The framework does **not** load that file by itself. You either:
-  - **Source it** before running: `source config/env` (if you name the file `config/env` and use `export`-style lines), or  
-  - Use a tool that loads `.env` (e.g. `python-dotenv`) and run your tests through that, or  
-  - In CI, set the same variables in the job config (see below).
+1. **Command line (one-off run)**  
+   Prefix the variable for a single command (pytest or CLI):
+   ```bash
+   STS_BASE_URL=https://sts-qa.cancer.gov/v2 pytest tests/ -v
+   STS_BASE_URL=https://sts-qa.cancer.gov/v2 python -m sts_test_framework.cli --report reports/
+   ```
+   For the **CLI only**, you can instead pass `--base-url` (overrides `STS_BASE_URL` for that invocation):
+   ```bash
+   python -m sts_test_framework.cli --base-url https://sts-qa.cancer.gov/v2 --report reports/
+   ```
+   Pytest has **no** `--base-url` flag; it always uses `STS_BASE_URL` from the environment (or the default QA URL).
+
+2. **Shell session (current terminal)**  
+   Export so every command in that session uses the value:
+   ```bash
+   export STS_BASE_URL=https://sts-qa.cancer.gov/v2
+   pytest tests/ -v
+   python -m sts_test_framework.cli --report reports/
+   ```
+
+3. **A real env file (e.g. `config/env` or `.env`)**  
+   Copy `config/env.example` to a file like `config/env` or `.env` and put real values there (one per line, `NAME=value`). The framework does **not** load that file by itself. You either:
+   - **Source it** before running: `source config/env` (if you name the file `config/env` and use `export`-style lines), or  
+   - Use a tool that loads `.env` (e.g. `python-dotenv`) and run your tests through that, or  
+   - In CI, set the same variables in the job config (see below).  
    If you create `config/env`, add it to `.gitignore` so you don’t commit secrets or environment-specific URLs.
-4. **CI (e.g. GitHub Actions)**
-  Set the variables in the job’s `env` block so each run targets the right environment (see “Running against QA, stage, or prod” below).
+
+4. **CI (e.g. GitHub Actions)**  
+   Set the variables in the job’s `env` block so each run targets the right environment (see “Running against QA, stage, or prod” below).
 
 **Variable reference:**
+
+Implementation detail: base URL resolution lives in [`sts_test_framework.config.sts_base_url()`](../src/sts_test_framework/config.py) (`STS_BASE_URL` or default QA). Pytest prints `STS environment: <url>` at the start of each run (see `tests/conftest.py`).
 
 
 | Variable         | Meaning                                                                                                                | Default                        |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| `STS_BASE_URL`   | Base URL of the STS v2 API (used for all requests)                                                                     | `https://sts-qa.cancer.gov/v2` |
-| `STS_QA_URL`     | QA base URL (used only if you add code that switches to QA for certain tests)                                          | `https://sts-qa.cancer.gov/v2` |
+| `STS_BASE_URL`   | Base URL of the STS v2 API (pytest, CLI, and `APIClient`; include `/v2`)                                                | `https://sts-qa.cancer.gov/v2` |
 | `STS_SSL_VERIFY` | Set to `false` to disable SSL certificate verification (e.g. local/dev with self-signed certs)                         | `true`                         |
 | `REPORT_DIR`     | Directory where the CLI writes timestamped `report_YYYY-MM-DDTHH-MM-SS.json` and `.html` (each run gets its own files) | `reports`                      |
+| `STS_MODELS`     | Comma-separated model handles for `scripts/run_all_models.py` only (subset of models)                                   | (all models in script)         |
+| `STS_DEDUP_LIMIT` | Integer cap on parametrized dedup test cases in `tests/test_manual/test_model_pvs_no_duplicates.py`                   | `14`                           |
+
+`STS_QA_URL` may appear in `config/env.example` as a **comment** for human reference; the framework does **not** read it—use **`STS_BASE_URL`** for QA (or any environment).
 
 
 If you don’t set these, the defaults are used. The framework needs **network access** to the STS server for discovery and for running the tests.
