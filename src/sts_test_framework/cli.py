@@ -18,9 +18,16 @@ def main() -> None:
     Environment: ``STS_BASE_URL``, ``REPORT_DIR``, ``STS_SSL_VERIFY`` (via client).
     """
     import argparse
+
+    from .config import DEFAULT_STS_BASE_URL, bundled_spec_path, sts_base_url
+
     parser = argparse.ArgumentParser(description="STS v2 API Test Framework")
     parser.add_argument("--spec", default=None, help="Path to OpenAPI spec (v2.yaml)")
-    parser.add_argument("--base-url", default=None, help="STS base URL (default: STS_BASE_URL or https://sts-qa.cancer.gov/v2)")
+    parser.add_argument(
+        "--base-url",
+        default=None,
+        help=f"STS base URL (default: STS_BASE_URL or {DEFAULT_STS_BASE_URL})",
+    )
     parser.add_argument("--report", default=None, help="Report output directory (default: REPORT_DIR or reports/)")
     parser.add_argument("--tags", default=None, help="Comma-separated tags to run (default: all)")
     parser.add_argument("--no-negative", action="store_true", help="Skip negative test cases")
@@ -29,11 +36,11 @@ def main() -> None:
     parser.add_argument("--release", action="store_true", help="Use latest release version (no hyphen) for the model; otherwise first version.")
     args = parser.parse_args()
 
-    base_url = args.base_url or os.getenv("STS_BASE_URL", "https://sts-qa.cancer.gov/v2")
+    base_url = args.base_url or sts_base_url()
     report_dir = args.report or os.getenv("REPORT_DIR", "reports")
     spec_path = args.spec
     if not spec_path:
-        spec_path = Path(__file__).resolve().parent.parent.parent / "spec" / "v2.yaml"
+        spec_path = bundled_spec_path()
     spec_path = Path(spec_path)
     if not spec_path.exists():
         print(f"Spec not found: {spec_path}", file=sys.stderr)

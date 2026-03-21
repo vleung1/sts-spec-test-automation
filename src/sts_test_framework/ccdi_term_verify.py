@@ -629,7 +629,8 @@ def main() -> None:
     ``--base-url`` (must include ``/v2``).
     """
     import argparse
-    import os
+
+    from .config import DEFAULT_STS_BASE_URL, sts_base_url
 
     parser = argparse.ArgumentParser(
         description=(
@@ -652,7 +653,7 @@ def main() -> None:
     parser.add_argument(
         "--base-url",
         default=None,
-        help="STS base URL including /v2 (default: STS_BASE_URL or https://sts-qa.cancer.gov/v2)",
+        help=f"STS base URL including /v2 (default: STS_BASE_URL or {DEFAULT_STS_BASE_URL})",
     )
     parser.add_argument(
         "--limit",
@@ -679,10 +680,7 @@ def main() -> None:
 
     yaml_path = Path(args.yaml) if args.yaml else default_yaml_path()
     out_dir = Path(args.out_dir) if args.out_dir else default_report_dir()
-    base_url = (
-        args.base_url
-        or os.getenv("STS_BASE_URL", "https://sts-qa.cancer.gov/v2")
-    ).rstrip("/")
+    base_url = (args.base_url or sts_base_url()).rstrip("/")
 
     out_dir.mkdir(parents=True, exist_ok=True)
     query_csv = out_dir / "ccdi_enum_terms_for_verification.csv"

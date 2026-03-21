@@ -1,9 +1,9 @@
 """
 Parametrized tests: one pytest case per generated GET (collection-time case generation).
 """
-import os
 import pytest
-from pathlib import Path
+
+from sts_test_framework.config import bundled_spec_path, sts_base_url
 
 
 def _get_generated_cases():
@@ -12,12 +12,11 @@ def _get_generated_cases():
     from sts_test_framework.discover import discover
     from sts_test_framework.generator import generate_cases
     from sts_test_framework.client import APIClient
-    spec_path = Path(__file__).resolve().parent.parent / "spec" / "v2.yaml"
+    spec_path = bundled_spec_path()
     if not spec_path.exists():
         return []
     spec = load_spec(spec_path)
-    base_url = os.getenv("STS_BASE_URL", "https://sts.cancer.gov/v2")
-    client = APIClient(base_url)
+    client = APIClient(sts_base_url())
     test_data = discover(client)
     return generate_cases(spec, test_data, include_negative=True)
 

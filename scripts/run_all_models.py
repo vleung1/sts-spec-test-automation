@@ -14,6 +14,16 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Allow `python scripts/run_all_models.py` from repo root without editable install
+_repo_root = Path(__file__).resolve().parent.parent
+_src = _repo_root / "src"
+if _src.is_dir():
+    src_str = str(_src)
+    if src_str not in sys.path:
+        sys.path.insert(0, src_str)
+
+from sts_test_framework.config import sts_base_url
+
 # Default list of data models to test
 DEFAULT_MODELS = [
     "CDS",
@@ -30,9 +40,6 @@ DEFAULT_MODELS = [
     "CRDCSubmission"
 ]
 
-# Base URL for STS API (override with STS_BASE_URL env)
-DEFAULT_BASE_URL = "https://sts-qa.cancer.gov/v2"
-
 # Base directory for reports; each model gets a subdir reports/<model>/
 REPORT_BASE = "reports"
 
@@ -44,7 +51,7 @@ def main() -> None:
     else:
         model_list = DEFAULT_MODELS
 
-    base_url = os.getenv("STS_BASE_URL", DEFAULT_BASE_URL)
+    base_url = sts_base_url()
     project_root = Path(__file__).resolve().parent.parent
 
     failed = []
