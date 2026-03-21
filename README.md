@@ -20,12 +20,18 @@ pip install -e .
 
 ### Configure (optional)
 
-Copy `config/env.example` and set:
+The framework reads **environment variables** (no `.env` auto-load). Primary variable:
 
-- `STS_BASE_URL` – STS v2 base URL (default: `https://sts-qa.cancer.gov/v2`)
-- `STS_QA_URL` – QA base URL if needed
-- `STS_SSL_VERIFY` – Set to `false` to disable SSL verification
-- `REPORT_DIR` – Report output directory (default: `reports/`)
+- **`STS_BASE_URL`** – STS v2 API root including `/v2` (default: `https://sts-qa.cancer.gov/v2`), resolved by [`sts_test_framework.config.sts_base_url()`](src/sts_test_framework/config.py). Used by pytest and the CLI.
+
+Also common:
+
+- **`STS_SSL_VERIFY`** – Set to `false` to disable SSL verification (dev/self-signed only).
+- **`REPORT_DIR`** – Where the **CLI** writes HTML/JSON reports (default: `reports/`).
+
+Copy [`config/env.example`](config/env.example) as a template; see [docs/ONBOARDING.md](docs/ONBOARDING.md#62-configuration-the-config-folder-and-environment-variables) for full list (`STS_MODELS`, `STS_DEDUP_LIMIT`, etc.).
+
+**Tip:** When you run `pytest`, the first lines include `STS environment: https://...` — confirm that URL before long runs.
 
 ### Run tests
 
