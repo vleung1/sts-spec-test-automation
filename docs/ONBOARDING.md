@@ -515,9 +515,9 @@ These wrap common workflows from the project root. See also **[RUNBOOK.md](RUNBO
 
 **`scripts/run_all_term_verify.sh`**
 
-- Runs every `tests/term_verify/*_term_verify.py` in sequence.
+- Runs every `tests/term_verify/*_term_verify.py` with **limited parallelism** (default **2** concurrent commons pipelines via `STS_TERM_VERIFY_WORKERS`; set to `1` for strictly sequential runs).
 - Sets `PYTHONPATH` to include `src/` so `from sts_test_framework...` imports resolve.
-- Forwards all arguments to each script (e.g. `--warn-only`, `--limit 50`).
+- Forwards all arguments to each script (e.g. `--warn-only`, `--limit 50`). Log lines from parallel jobs may interleave in the terminal.
 - For per-commons scripts, outputs, and flags, see [§6.9 Term-by-value](#69-term-by-value-yaml--sts) below.
 
 **`scripts/run_full_suite.sh`**
