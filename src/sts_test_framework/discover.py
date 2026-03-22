@@ -30,6 +30,33 @@ def _latest_release_version(versions: list[str]) -> str | None:
     return max(release, key=version_key)
 
 
+def get_latest_version(client: APIClient, model_handle: str) -> str | None:
+    """
+    Prefer latest release version (no hyphen) from ``GET /model/{handle}/versions``;
+    fall back to ``GET /model/{handle}/latest-version`` (may return pre-release).
+    """
+    path = f"/model/{quote(model_handle, safe='')}/versions"
+    response = client.get(path)
+    if response.status_code != 200:
+        return None
+    versions = response.json()
+    if not isinstance(versions, list):
+        return None
+    chosen = _latest_release_version(versions)
+    if chosen is not None:
+        return chosen
+    latest_path = f"/model/{quote(model_handle, safe='')}/latest-version"
+    latest_res = client.get(latest_path)
+    if latest_res.status_code != 200:
+        return None
+    data = latest_res.json()
+    if isinstance(data, dict):
+        ver = data.get("version")
+        if isinstance(ver, str) and ver.strip():
+            return ver.strip()
+    return None
+
+
 def discover(
     client: APIClient,
     base_path: str = "/v2",

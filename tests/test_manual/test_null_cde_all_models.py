@@ -92,19 +92,14 @@ https://sts-qa.cancer.gov/v2/terms/model-pvs/CDS/?version=11.0.3
 from __future__ import annotations
 
 import logging
-from urllib.parse import quote, urlencode
+from urllib.parse import quote
 
 import pytest
 
+from sts_test_framework.client import full_url
+
 logger = logging.getLogger(__name__)
 
-
-def _full_url(base_url: str, path: str, params: dict | None = None) -> str:
-    """Readable GET URL for logs (same shape as ``APIClient``)."""
-    u = base_url.rstrip("/") + (path if path.startswith("/") else "/" + path)
-    if params:
-        u += "?" + urlencode(params)
-    return u
 
 # Null CDE term used by the CDS model configuration (same as legacy qa_vs_prod_nullcde script).
 NULL_CDE_ID = "16476366"
@@ -295,11 +290,10 @@ def test_no_models_except_cds_11_have_full_null_cde_pattern(api_client, null_cde
         handles.append(h)
 
     unexpected: list[str] = []
-    base = api_client.base_url
 
     for model_handle in handles:
         lv_path = f"/model/{quote(model_handle, safe='')}/latest-version"
-        lv_url = _full_url(base, lv_path)
+        lv_url = full_url(api_client, lv_path)
         lv_res = api_client.get(lv_path)
         if lv_res.status_code != 200:
             print(
@@ -320,7 +314,7 @@ def test_no_models_except_cds_11_have_full_null_cde_pattern(api_client, null_cde
 
         mp_path = f"/terms/model-pvs/{quote(model_handle, safe='')}/"
         mp_params = {"version": version}
-        mp_url = _full_url(base, mp_path, mp_params)
+        mp_url = full_url(api_client, mp_path, mp_params)
         mp_res = api_client.get(mp_path, params=mp_params)
         if mp_res.status_code != 200:
             print(
@@ -398,7 +392,7 @@ def test_cds_pinned_release_has_full_null_cde_pattern(api_client, null_cde_value
             f"all {n_null} distinct NCIt-filtered null CDE values (16476366/1). "
             f"Verify useNullCDE / CDS pinned release content manually if needed."
         )
-    pinned_url = _full_url(api_client.base_url, path, {"version": CDS_PINNED_VERSION})
+    pinned_url = full_url(api_client, path, {"version": CDS_PINNED_VERSION})
     prop_list = ", ".join(repr(h["property"]) for h in hits)
     print(
         f"PASS: GET {pinned_url}  — {len(hits)} propert(ies) with full NCIt-filtered null CDE set:\n"

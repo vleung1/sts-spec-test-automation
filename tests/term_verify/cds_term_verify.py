@@ -20,8 +20,9 @@ import sys
 from pathlib import Path
 from urllib.parse import quote
 
-from ccdi_term_verify import get_latest_version, verify_row
+from ccdi_term_verify import verify_row
 from sts_test_framework.client import APIClient
+from sts_test_framework.discover import get_latest_version
 
 MODEL_HANDLE = "CDS"
 

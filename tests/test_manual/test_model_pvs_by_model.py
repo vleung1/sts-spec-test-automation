@@ -31,22 +31,15 @@ CDS). Session-cached **once per model**; no ``discover()`` walks.
 if you want to hide it).
 """
 import logging
-from urllib.parse import quote, urlencode
+from urllib.parse import quote
 
 import pytest
 
+from sts_test_framework.client import full_url
+
+from .conftest import MAJOR_MODELS
+
 logger = logging.getLogger(__name__)
-
-# Same set as test_model_pvs_no_duplicates.py — major commons / data models on STS.
-MAJOR_MODELS = ["C3DC", "CCDI", "CCDI-DCC", "ICDC", "CTDC", "CDS", "PSDC"]
-
-
-def _full_url(base_url: str, path: str, params: dict | None = None) -> str:
-    """Build the same URL shape the client uses, for readable logs (GET only)."""
-    u = base_url.rstrip("/") + (path if path.startswith("/") else "/" + path)
-    if params:
-        u += "?" + urlencode(params)
-    return u
 
 
 def _print_test_header(name: str, api_client, td: dict) -> None:
@@ -356,10 +349,10 @@ def test_model_pvs_by_model_latest(api_client, model_handle, model_pvs_pin_conte
     # Ground truth for “latest” from the dedicated model endpoint (same as e.g. get_latest_version
     # fallback in test_model_pvs_no_duplicates.py).
     latest_path = f"/model/{quote(model_handle, safe='')}/latest-version"
-    print(f"  GET (latest ground truth): {_full_url(api_client.base_url, latest_path)}")
+    print(f"  GET (latest ground truth): {full_url(api_client, latest_path)}")
     logger.info(
         "model-pvs-by-model latest: GET %s",
-        _full_url(api_client.base_url, latest_path),
+        full_url(api_client, latest_path),
     )
     latest_res = api_client.get(latest_path)
     assert latest_res.status_code == 200, (
@@ -376,10 +369,10 @@ def test_model_pvs_by_model_latest(api_client, model_handle, model_pvs_pin_conte
     print(f"  latest-version -> version: {expected_latest!r}")
 
     path = f"/terms/model-pvs/{quote(model_handle, safe='')}/"
-    print(f"  GET (no version query): {_full_url(api_client.base_url, path)}")
+    print(f"  GET (no version query): {full_url(api_client, path)}")
     logger.info(
         "model-pvs-by-model latest: GET %s (expect rows version == %s)",
-        _full_url(api_client.base_url, path),
+        full_url(api_client, path),
         expected_latest,
     )
     response = api_client.get(path)
@@ -457,14 +450,14 @@ def test_model_pvs_by_model_specific_version(api_client, model_handle, model_pvs
     # Note: OpenAPI / STS use the query name ``version``, not ``model_version``.
     params = {"version": model_version}
     print(
-        f"  GET (pinned version): {_full_url(api_client.base_url, path, params=params)}"
+        f"  GET (pinned version): {full_url(api_client, path, params=params)}"
     )
     print(
         "  Note: query param is ``version``; ``model_version`` is not used by STS for this route."
     )
     logger.info(
         "model-pvs-by-model specific: GET %s",
-        _full_url(api_client.base_url, path, params=params),
+        full_url(api_client, path, params=params),
     )
     response = api_client.get(path, params=params)
     assert response.status_code == 200, (
@@ -518,7 +511,7 @@ def test_model_pvs_by_model_unversioned_matches_explicit_latest_version(
     )
 
     path = f"/terms/model-pvs/{quote(model_handle, safe='')}/"
-    print(f"  GET (1) unversioned: {_full_url(api_client.base_url, path)}")
+    print(f"  GET (1) unversioned: {full_url(api_client, path)}")
     r1 = api_client.get(path)
     assert r1.status_code == 200
     unversioned = r1.json()
@@ -530,7 +523,7 @@ def test_model_pvs_by_model_unversioned_matches_explicit_latest_version(
     r2 = api_client.get(path, params={"version": latest_ver})
     print(
         f"  GET (2) explicit same version: "
-        f"{_full_url(api_client.base_url, path, params={'version': latest_ver})}"
+        f"{full_url(api_client, path, params={'version': latest_ver})}"
     )
     logger.info(
         "model-pvs-by-model equivalence: compare unversioned vs version=%s",
@@ -591,7 +584,7 @@ def test_terms_model_pvs_property_latest(
     )
 
     latest_path = f"/model/{quote(model_handle, safe='')}/latest-version"
-    print(f"  GET (latest ground truth): {_full_url(api_client.base_url, latest_path)}")
+    print(f"  GET (latest ground truth): {full_url(api_client, latest_path)}")
     latest_res = api_client.get(latest_path)
     assert latest_res.status_code == 200, (
         f"GET {latest_path}: expected 200, got {latest_res.status_code}"
@@ -605,7 +598,7 @@ def test_terms_model_pvs_property_latest(
         f"/terms/model-pvs/{quote(model_handle, safe='')}/"
         f"{quote(property_handle, safe='')}"
     )
-    print(f"  GET (no version query): {_full_url(api_client.base_url, path)}")
+    print(f"  GET (no version query): {full_url(api_client, path)}")
     response = api_client.get(path)
     if response.status_code != 200:
         pytest.skip(
@@ -650,7 +643,7 @@ def test_terms_model_pvs_property_pinned_version(
         f"{quote(property_handle, safe='')}"
     )
     params = {"version": model_version}
-    print(f"  GET (pinned): {_full_url(api_client.base_url, path, params=params)}")
+    print(f"  GET (pinned): {full_url(api_client, path, params=params)}")
     print("  Note: query param is ``version`` (not ``model_version``) on STS.")
     response = api_client.get(path, params=params)
     if response.status_code != 200:
