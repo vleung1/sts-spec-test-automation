@@ -18,12 +18,9 @@ import sys
 from pathlib import Path
 from urllib.parse import quote
 
-from ccdi_term_verify import (
-    get_latest_version,
-    strip_inline_yaml_comment,
-    verify_row,
-)
+from ccdi_term_verify import strip_inline_yaml_comment, verify_row
 from sts_test_framework.client import APIClient
+from sts_test_framework.discover import get_latest_version
 
 MODEL_HANDLE = "C3DC"
 

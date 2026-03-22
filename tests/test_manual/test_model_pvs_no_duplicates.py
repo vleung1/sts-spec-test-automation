@@ -10,12 +10,13 @@ Second test covers explicit model/property/version pairs from the original bug t
 """
 import json
 import os
-import re
 import pytest
 from collections import Counter
 from urllib.parse import quote
 
-MAJOR_MODELS = ["C3DC", "CCDI", "CCDI-DCC", "ICDC", "CTDC", "CDS", "PSDC"]
+from sts_test_framework.discover import get_latest_version
+
+from .conftest import MAJOR_MODELS
 
 # Original bug ticket: regression coverage for specific model-pvs endpoints
 BUG_TICKET_MODEL_PVS_CASES = [
@@ -23,8 +24,6 @@ BUG_TICKET_MODEL_PVS_CASES = [
     {"model": "CCDI-DCC", "property": "medical_history_condition", "version": "1.0.0"},
     {"model": "CDS", "property": "file_type", "version": "11.0.0"},
 ]
-
-RELEASE_VERSION = re.compile(r"^\d+\.\d+\.\d+$")
 
 # Limit cases for default run (14 = 7 models × 2 props); override with STS_DEDUP_LIMIT (e.g. 14 or 60)
 def _dedup_limit():
@@ -60,39 +59,6 @@ def item_signature(item):
     if not isinstance(item, dict):
         return None
     return (item.get("model"), item.get("property"), item.get("version"))
-
-
-def _parse_version(v):
-    if not RELEASE_VERSION.match(v):
-        return (0, 0, 0)
-    parts = v.split(".")
-    return (int(parts[0]), int(parts[1]), int(parts[2])) if len(parts) == 3 else (0, 0, 0)
-
-
-def get_latest_version(client, model_handle):
-    """Return latest release version if any; else version from latest-version endpoint (e.g. pre-release).
-    GET /model/{handle}/versions for release-only; if no release, GET /model/{handle}/latest-version."""
-    path = f"/model/{quote(model_handle, safe='')}/versions"
-    response = client.get(path)
-    if response.status_code != 200:
-        return None
-    versions = response.json()
-    if not isinstance(versions, list):
-        return None
-    release = [v for v in versions if isinstance(v, str) and RELEASE_VERSION.match(v)]
-    if release:
-        return max(release, key=_parse_version)
-    # No release version: fall back to latest-version endpoint (may return pre-release).
-    latest_path = f"/model/{quote(model_handle, safe='')}/latest-version"
-    latest_res = client.get(latest_path)
-    if latest_res.status_code != 200:
-        return None
-    data = latest_res.json()
-    if isinstance(data, dict):
-        ver = data.get("version")
-        if isinstance(ver, str) and ver.strip():
-            return ver.strip()
-    return None
 
 
 def discover_model_pvs_cases(client, major_models, limit=12, max_per_model=2):

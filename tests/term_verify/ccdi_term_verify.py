@@ -29,6 +29,7 @@ import sys
 from pathlib import Path
 from urllib.parse import quote
 from sts_test_framework.client import APIClient
+from sts_test_framework.discover import get_latest_version
 
 MODEL_HANDLE = "CCDI"
 
@@ -226,40 +227,6 @@ def run_extract(yaml_path: Path, out_dir: Path) -> tuple[Path, Path]:
 
 
 # --- enrich (APIClient) ---
-
-RELEASE_VERSION = re.compile(r"^\d+\.\d+\.\d+$")
-
-
-def _parse_semver_tuple(v: str) -> tuple[int, int, int]:
-    """Parse ``major.minor.patch`` for comparing release version strings (internal helper)."""
-    if not RELEASE_VERSION.match(v):
-        return (0, 0, 0)
-    parts = v.split(".")
-    return (int(parts[0]), int(parts[1]), int(parts[2])) if len(parts) == 3 else (0, 0, 0)
-
-
-def get_latest_version(client: APIClient, model_handle: str) -> str | None:
-    """Prefer latest release from /versions; else /latest-version (e.g. pre-release)."""
-    path = f"/model/{quote(model_handle, safe='')}/versions"
-    response = client.get(path)
-    if response.status_code != 200:
-        return None
-    versions = response.json()
-    if not isinstance(versions, list):
-        return None
-    release = [v for v in versions if isinstance(v, str) and RELEASE_VERSION.match(v)]
-    if release:
-        return max(release, key=_parse_semver_tuple)
-    latest_path = f"/model/{quote(model_handle, safe='')}/latest-version"
-    latest_res = client.get(latest_path)
-    if latest_res.status_code != 200:
-        return None
-    data = latest_res.json()
-    if isinstance(data, dict):
-        ver = data.get("version")
-        if isinstance(ver, str) and ver.strip():
-            return ver.strip()
-    return None
 
 
 def discover_ccdi_version(client: APIClient) -> str | None:
