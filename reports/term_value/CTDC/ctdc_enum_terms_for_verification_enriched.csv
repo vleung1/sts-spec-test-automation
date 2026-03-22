@@ -1,441 +1,441 @@
 prop_handle,enum_value,term_value,description,model_handle,version_string,node_handle
-study_type,Adverse Effect Mitigation Study,Adverse Effect Mitigation Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Ancillary Study,Ancillary Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Basic Science Research,Basic Science Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Correlative Study,Correlative Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Cure Study,Cure Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Device Feasibility Study,Device Feasibility Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Diagnosis Study,Diagnosis Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Disease Modifying Treatment Study,Disease Modifying Treatment Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Early Detection Study,Early Detection Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Education Training Clinical Study,Education Training Clinical Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Epidemiology Research,Epidemiology Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Genomics Research,Genomics Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Health Services Research,Health Services Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Imaging Research,Imaging Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Interventional,Interventional,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Observational Study,Observational Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Outcomes Research,Outcomes Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Prevention Study,Prevention Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Proteomic Research,Proteomic Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Rehabilitation Clinical Study,Rehabilitation Clinical Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Screening Study,Screening Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Supportive Care Study,Supportive Care Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Transcriptomics Research,Transcriptomics Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_type,Treatment Study,Treatment Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-f107ddd,study
-study_age_group,https://cadsr.cancer.gov/onedata/Home.jsp,,The identifiable class of the study participant based upon their age.,CTDC,1.22.2-f107ddd,study
-image_type_included,CT,CT,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-f107ddd,image_collection
-image_type_included,DX,DX,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-f107ddd,image_collection
-image_type_included,MR,MR,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-f107ddd,image_collection
-image_type_included,NM,NM,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-f107ddd,image_collection
-image_type_included,PT,PT,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-f107ddd,image_collection
-image_type_included,US,US,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-f107ddd,image_collection
-collection_access,Cloud,Cloud,The methods by which a user can obtain an image set. Indicator as to whether,CTDC,1.22.2-f107ddd,image_collection
-collection_access,Download,Download,The methods by which a user can obtain an image set. Indicator as to whether,CTDC,1.22.2-f107ddd,image_collection
-collection_access,Unrestricted,Unrestricted,The methods by which a user can obtain an image set. Indicator as to whether,CTDC,1.22.2-f107ddd,image_collection
-biomarker_results_available,Yes,Yes,An indicator as to whether any biomarker results relating to the,CTDC,1.22.2-f107ddd,participant
-biomarker_results_available,No,No,An indicator as to whether any biomarker results relating to the,CTDC,1.22.2-f107ddd,participant
-biomarker_results_available,Unknown,Unknown,An indicator as to whether any biomarker results relating to the,CTDC,1.22.2-f107ddd,participant
-radiology_report_available,Yes,Yes,An indicator as to whether any radiology reports results,CTDC,1.22.2-f107ddd,participant
-radiology_report_available,No,No,An indicator as to whether any radiology reports results,CTDC,1.22.2-f107ddd,participant
-radiology_report_available,Unknown,Unknown,An indicator as to whether any radiology reports results,CTDC,1.22.2-f107ddd,participant
-radiology_images_available,Yes,Yes,An indicator as to whether any radiology images relating,CTDC,1.22.2-f107ddd,participant
-radiology_images_available,No,No,An indicator as to whether any radiology images relating,CTDC,1.22.2-f107ddd,participant
-radiology_images_available,Unknown,Unknown,An indicator as to whether any radiology images relating,CTDC,1.22.2-f107ddd,participant
-histology_images_available,Yes,Yes,An indicator as to whether any histology images relating,CTDC,1.22.2-f107ddd,participant
-histology_images_available,No,No,An indicator as to whether any histology images relating,CTDC,1.22.2-f107ddd,participant
-histology_images_available,Unknown,Unknown,An indicator as to whether any histology images relating,CTDC,1.22.2-f107ddd,participant
-race,American Indian or Alaska Native,American Indian or Alaska Native,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-f107ddd,demographic
-race,Asian,Asian,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-f107ddd,demographic
-race,Black or African American,Black or African American,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-f107ddd,demographic
-race,Native Hawaiian or other Pacific Islander,Native Hawaiian or other Pacific Islander,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-f107ddd,demographic
-race,White,White,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-f107ddd,demographic
-race,Not Reported,Not Reported,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-f107ddd,demographic
-race,Unknown,Unknown,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-f107ddd,demographic
-ethnicity,Hispanic or Latino,Hispanic or Latino,The text for reporting information about ethnicity based on the Office,CTDC,1.22.2-f107ddd,demographic
-ethnicity,Not Hispanic or Latino,Not Hispanic or Latino,The text for reporting information about ethnicity based on the Office,CTDC,1.22.2-f107ddd,demographic
-ethnicity,Not reported,Not reported,The text for reporting information about ethnicity based on the Office,CTDC,1.22.2-f107ddd,demographic
-ethnicity,Unknown,Unknown,The text for reporting information about ethnicity based on the Office,CTDC,1.22.2-f107ddd,demographic
-sex,Female,Female,A textual description of a person's sex at birth. CDE ID = 7572817,CTDC,1.22.2-f107ddd,demographic
-sex,Intersex,Intersex,A textual description of a person's sex at birth. CDE ID = 7572817,CTDC,1.22.2-f107ddd,demographic
-sex,Male,Male,A textual description of a person's sex at birth. CDE ID = 7572817,CTDC,1.22.2-f107ddd,demographic
-sex,Unknown,Unknown,A textual description of a person's sex at birth. CDE ID = 7572817,CTDC,1.22.2-f107ddd,demographic
-highest_level_of_education,No formal education,No formal education,An indication as to the highest level of education attained by,CTDC,1.22.2-f107ddd,demographic
-highest_level_of_education,Grade school,Grade school,An indication as to the highest level of education attained by,CTDC,1.22.2-f107ddd,demographic
-highest_level_of_education,Not high school graduate,Not high school graduate,An indication as to the highest level of education attained by,CTDC,1.22.2-f107ddd,demographic
-highest_level_of_education,High school graduate (including equivalency),High school graduate (including equivalency),An indication as to the highest level of education attained by,CTDC,1.22.2-f107ddd,demographic
-highest_level_of_education,Some college or Associate degree,Some college or Associate degree,An indication as to the highest level of education attained by,CTDC,1.22.2-f107ddd,demographic
-highest_level_of_education,Bachelor's degree,Bachelor's degree,An indication as to the highest level of education attained by,CTDC,1.22.2-f107ddd,demographic
-highest_level_of_education,Master's degree,Master's degree,An indication as to the highest level of education attained by,CTDC,1.22.2-f107ddd,demographic
-highest_level_of_education,Doctoral or professional degree,Doctoral or professional degree,An indication as to the highest level of education attained by,CTDC,1.22.2-f107ddd,demographic
-highest_level_of_education,Declined to answer,Declined to answer,An indication as to the highest level of education attained by,CTDC,1.22.2-f107ddd,demographic
-highest_level_of_education,NA,NA,An indication as to the highest level of education attained by,CTDC,1.22.2-f107ddd,demographic
-environmental_exposure_type,Asbestos Exposure,Asbestos Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-f107ddd,exposure
-environmental_exposure_type,Chemical Exposure,Chemical Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-f107ddd,exposure
-environmental_exposure_type,Marijuana Smoke Exposure,Marijuana Smoke Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-f107ddd,exposure
-environmental_exposure_type,Radiation Exposure,Radiation Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-f107ddd,exposure
-environmental_exposure_type,Radon Exposure,Radon Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-f107ddd,exposure
-environmental_exposure_type,Respirable Crystalline Silica Exposure,Respirable Crystalline Silica Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-f107ddd,exposure
-environmental_exposure_type,Smoke Exposure,Smoke Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-f107ddd,exposure
-environmental_exposure_type,Smokeless Tobacco Exposure,Smokeless Tobacco Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-f107ddd,exposure
-environmental_exposure_type,Tobacco Related Exposure,Tobacco Related Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-f107ddd,exposure
-environmental_exposure_type,Wood Dust Exposure,Wood Dust Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-f107ddd,exposure
-carcinogen_exposure,Yes,Yes,An indication of whether the participant was exposed to environmental/workplace,CTDC,1.22.2-f107ddd,exposure
-carcinogen_exposure,No,No,An indication of whether the participant was exposed to environmental/workplace,CTDC,1.22.2-f107ddd,exposure
-carcinogen_exposure,Unknown,Unknown,An indication of whether the participant was exposed to environmental/workplace,CTDC,1.22.2-f107ddd,exposure
-carcinogen_exposure,NA,NA,An indication of whether the participant was exposed to environmental/workplace,CTDC,1.22.2-f107ddd,exposure
-diagnosis_classification_system,NCI Thesaurus,NCI Thesaurus,The standard or agency upon which the specific term used as the diagnosis value was obtained.,CTDC,1.22.2-f107ddd,diagnosis
-diagnosis_classification_system,MedDRA,MedDRA,The standard or agency upon which the specific term used as the diagnosis value was obtained.,CTDC,1.22.2-f107ddd,diagnosis
-diagnosis_classification_system,ICD-O-3,ICD-O-3,The standard or agency upon which the specific term used as the diagnosis value was obtained.,CTDC,1.22.2-f107ddd,diagnosis
-diagnosis_classification_system,ICD-10-CM,ICD-10-CM,The standard or agency upon which the specific term used as the diagnosis value was obtained.,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,"Colorectal cancer, NOS","Colorectal cancer, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,"Acute myeloid leukemia, NOS","Acute myeloid leukemia, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,Adenocarcinoma of the gastroesophageal junction,Adenocarcinoma of the gastroesophageal junction,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,Melanoma,Melanoma,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,"Myeloma, NOS","Myeloma, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,"Non-small cell lung cancer, NOS","Non-small cell lung cancer, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,"Prostate cancer, NOS","Prostate cancer, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,Small cell lung cancer,Small cell lung cancer,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,Invasive breast carcinoma,Invasive breast carcinoma,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,Fallopian tube carcinoma,Fallopian tube carcinoma,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,"Gastric cancer, NOS","Gastric cancer, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,Primary peritoneal carcinoma,Primary peritoneal carcinoma,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,"Esophageal cancer, NOS","Esophageal cancer, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-primary_diagnosis_disease_group,Ovarian epithelial cancer,Ovarian epithelial cancer,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Acute Myeloid Leukemia Not Otherwise Specified,Acute Myeloid Leukemia Not Otherwise Specified,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Adenocarcinoma of the Gastroesophageal Junction,Adenocarcinoma of the Gastroesophageal Junction,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Colorectal Carcinoma,Colorectal Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Gastric Carcinoma,Gastric Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Invasive Breast Carcinoma,Invasive Breast Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Melanoma,Melanoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Non-Small Cell Lung Carcinoma,Non-Small Cell Lung Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Ovarian Carcinoma,Ovarian Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Plasma Cell Myeloma,Plasma Cell Myeloma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Prostate Carcinoma,Prostate Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Small Cell Lung Carcinoma,Small Cell Lung Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Esophageal Carcinoma,Esophageal Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-ctep_disease_term,Fallopian Tube Carcinoma,Fallopian Tube Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10000884,10000884,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10066354,10066354,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10010029,10010029,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10006190,10006190,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10053571,10053571,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10029514,10029514,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10033159,10033159,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10028566,10028566,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10036910,10036910,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10041071,10041071,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10017760,10017760,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10030157,10030157,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-meddra_disease_code,10016180,10016180,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Acute Myeloid Leukemia,Acute Myeloid Leukemia,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Acute Myeloid Leukemia with Myelodysplasia-Related Changes,Acute Myeloid Leukemia with Myelodysplasia-Related Changes,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Acute Myeloid Leukemia Arising from Previous Myelodysplastic Syndrome,Acute Myeloid Leukemia Arising from Previous Myelodysplastic Syndrome,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Adenocarcinoma,Adenocarcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Amelanotic Melanoma,Amelanotic Melanoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Breast Carcinoma,Breast Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Colon Adenoma,Colon Adenoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Colon Carcinoma,Colon Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Colorectal Adenocarcinoma,Colorectal Adenocarcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Cutaneous Melanoma,Cutaneous Melanoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Epithelioid Cell Melanoma,Epithelioid Cell Melanoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Esophageal Adenocarcinoma,Esophageal Adenocarcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Esophageal Carcinoma,Esophageal Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Fallopian Tube Carcinoma,Fallopian Tube Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Gastric Adenocarcinoma,Gastric Adenocarcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,"Invasive Ductal Carcinoma, Not Otherwise Specified","Invasive Ductal Carcinoma, Not Otherwise Specified",Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Invasive Lobular Breast Carcinoma,Invasive Lobular Breast Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Lung Carcinoma,Lung Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Lung Papillary Adenoma,Lung Papillary Adenoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Lung Adenocarcinoma,Lung Adenocarcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Malignant neoplasm of ovary,Malignant neoplasm of ovary,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Melanoma,Melanoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Mucinous Adenocarcinoma,Mucinous Adenocarcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Multiple myeloma,Multiple myeloma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Multiple myeloma and immunoproliferative disease,Multiple myeloma and immunoproliferative disease,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Neuroendocrine Carcinoma,Neuroendocrine Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Nodular Melanoma,Nodular Melanoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Non-Small Cell Lung Carcinoma,Non-Small Cell Lung Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Ovarian Carcinoma,Ovarian Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Plasma Cell Leukemia,Plasma Cell Leukemia,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Plasma Cell Myeloma,Plasma Cell Myeloma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Prostate Adenocarcinoma,Prostate Adenocarcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Prostate Carcinoma,Prostate Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Rectal Adenoma,Rectal Adenoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Rectal Carcinoma,Rectal Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Small Cell Carcinoma,Small Cell Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Small Cell Lung Carcinoma,Small Cell Lung Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Squamous Cell Carcinoma,Squamous Cell Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Squamous Cell Lung Carcinoma,Squamous Cell Lung Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Superficial Spreading Melanoma,Superficial Spreading Melanoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Triple-Negative Breast Carcinoma,Triple-Negative Breast Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Anal Carcinoma,Anal Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Invasive Ductal Carcinoma,Invasive Ductal Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Mixed Lobular and Ductal Breast Carcinoma,Mixed Lobular and Ductal Breast Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_term,Female Breast Carcinoma,Female Breast Carcinoma,Description pending,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,17788007,17788007,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,445448008,445448008,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,128827005,128827005,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,35917007,35917007,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,443961001,443961001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,70594002,70594002,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,254838004,254838004,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,428054006,428054006,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,269533000,269533000,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,408645001,408645001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,93655004,93655004,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,37138001,37138001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,276803003,276803003,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,372138000,372138000,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,276870001,276870001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,408647009,408647009,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,408643008,408643008,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,89740008,89740008,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,254626006,254626006,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,448993007,448993007,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,24482001,24482001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,254849005,254849005,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,2092003,2092003,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,372244006,372244006,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,72495009,72495009,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,55921005a,55921005a,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,55921005,55921005,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,188717001,188717001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,253000007,253000007,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,2142002,2142002,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,254731001,254731001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,254637007,254637007,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,128922003,128922003,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,109989006,109989006,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,55921005b,55921005b,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,399490008,399490008,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,254900004,254900004,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,399068003,399068003,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,399730005,399730005,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,254582000,254582000,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,74364000,74364000,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,254632001,254632001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,254633006,254633006,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,28899001,28899001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,402815007,402815007,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,254634000,254634000,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,254730000,254730000,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,706970001,706970001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,255084004,255084004,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,444604002,444604002,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-snomed_disease_code,447782002,447782002,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-f107ddd,diagnosis
-stage_of_disease,Stage III,Stage III,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-f107ddd,diagnosis
-stage_of_disease,Stage IIIA,Stage IIIA,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-f107ddd,diagnosis
-stage_of_disease,Stage IIIB,Stage IIIB,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-f107ddd,diagnosis
-stage_of_disease,Stage IIIC,Stage IIIC,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-f107ddd,diagnosis
-stage_of_disease,Stage IV,Stage IV,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-f107ddd,diagnosis
-stage_of_disease,Stage IVA,Stage IVA,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-f107ddd,diagnosis
-stage_of_disease,Stage IVB,Stage IVB,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-f107ddd,diagnosis
-stage_of_disease,Stage IVC,Stage IVC,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-f107ddd,diagnosis
-stage_of_disease,NA,NA,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-f107ddd,diagnosis
-tumor_grade,Grade cannot be assessed,Grade cannot be assessed,A text term to express the degree of abnormality of cancer cells as a measure,CTDC,1.22.2-f107ddd,diagnosis
-tumor_grade,Borderline malignancy,Borderline malignancy,A text term to express the degree of abnormality of cancer cells as a measure,CTDC,1.22.2-f107ddd,diagnosis
-tumor_grade,Well Differentiated,Well Differentiated,A text term to express the degree of abnormality of cancer cells as a measure,CTDC,1.22.2-f107ddd,diagnosis
-tumor_grade,Moderately Differentiated,Moderately Differentiated,A text term to express the degree of abnormality of cancer cells as a measure,CTDC,1.22.2-f107ddd,diagnosis
-tumor_grade,Poorly Differentiated,Poorly Differentiated,A text term to express the degree of abnormality of cancer cells as a measure,CTDC,1.22.2-f107ddd,diagnosis
-tumor_grade,Undifferentiated grade,Undifferentiated grade,A text term to express the degree of abnormality of cancer cells as a measure,CTDC,1.22.2-f107ddd,diagnosis
-best_response_to_targeted_therapy,Complete Response,Complete Response,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,targeted_therapy
-best_response_to_targeted_therapy,Partial Response,Partial Response,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,targeted_therapy
-best_response_to_targeted_therapy,Less than partial response,Less than partial response,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,targeted_therapy
-best_response_to_targeted_therapy,Stable Disease,Stable Disease,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,targeted_therapy
-best_response_to_targeted_therapy,Progressive Disease,Progressive Disease,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,targeted_therapy
-best_response_to_targeted_therapy,Not Assessed,Not Assessed,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,targeted_therapy
-best_response_to_targeted_therapy,Too Early,Too Early,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,targeted_therapy
-best_response_to_targeted_therapy,Not Evaluable,Not Evaluable,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,targeted_therapy
-best_response_to_targeted_therapy,Unknown,Unknown,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,targeted_therapy
-best_response_to_non_targeted_therapy,Complete Response,Complete Response,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,non_targeted_therapy
-best_response_to_non_targeted_therapy,Partial Response,Partial Response,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,non_targeted_therapy
-best_response_to_non_targeted_therapy,Less than partial response,Less than partial response,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,non_targeted_therapy
-best_response_to_non_targeted_therapy,Stable Disease,Stable Disease,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,non_targeted_therapy
-best_response_to_non_targeted_therapy,Progressive Disease,Progressive Disease,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,non_targeted_therapy
-best_response_to_non_targeted_therapy,Not Assessed,Not Assessed,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,non_targeted_therapy
-best_response_to_non_targeted_therapy,Too Early,Too Early,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,non_targeted_therapy
-best_response_to_non_targeted_therapy,Not Evaluable,Not Evaluable,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,non_targeted_therapy
-best_response_to_non_targeted_therapy,Unknown,Unknown,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,non_targeted_therapy
-surgical_procedure_therapeutic,Yes,Yes,A response which indicates whether the administration of a therapeutic,CTDC,1.22.2-f107ddd,surgery
-surgical_procedure_therapeutic,No,No,A response which indicates whether the administration of a therapeutic,CTDC,1.22.2-f107ddd,surgery
-best_response_to_radiotherapy,Complete Response,Complete Response,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,radiotherapy
-best_response_to_radiotherapy,Partial Response,Partial Response,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,radiotherapy
-best_response_to_radiotherapy,Less than partial response,Less than partial response,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,radiotherapy
-best_response_to_radiotherapy,Stable Disease,Stable Disease,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,radiotherapy
-best_response_to_radiotherapy,Progressive Disease,Progressive Disease,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,radiotherapy
-best_response_to_radiotherapy,Not Assessed,Not Assessed,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,radiotherapy
-best_response_to_radiotherapy,Too Early,Too Early,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,radiotherapy
-best_response_to_radiotherapy,Not Evaluable,Not Evaluable,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,radiotherapy
-best_response_to_radiotherapy,Unknown,Unknown,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-f107ddd,radiotherapy
-survival_status,ALIVE,ALIVE,The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-f107ddd,participant_status
-survival_status,DEAD,DEAD,The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-f107ddd,participant_status
-survival_status,UNKNOWN,UNKNOWN,The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-f107ddd,participant_status
-survival_status,Alive with Disease,Alive with Disease,The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-f107ddd,participant_status
-survival_status,Alive with No Evidence of Disease,Alive with No Evidence of Disease,The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-f107ddd,participant_status
-survival_status,"Alive, Disease Status Unknown","Alive, Disease Status Unknown",The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-f107ddd,participant_status
-survival_status,Dead,Dead,The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-f107ddd,participant_status
-off_study,Yes,Yes,A response that indicates whether or not an individual is receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study,No,No,A response that indicates whether or not an individual is receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study,Unknown,Unknown,A response that indicates whether or not an individual is receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,ADVERSE EVENT,ADVERSE EVENT,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,APPROVED DRUG AVAILABLE FOR INDICATION,APPROVED DRUG AVAILABLE FOR INDICATION,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,COMPLETED,COMPLETED,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,DEATH,DEATH,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,DISEASE RELAPSE,DISEASE RELAPSE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,FAILURE TO MEET CONTINUATION CRITERIA,FAILURE TO MEET CONTINUATION CRITERIA,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,FAILURE TO MEET RANDOMIZATION CRITERIA,FAILURE TO MEET RANDOMIZATION CRITERIA,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,LACK OF EFFICACY,LACK OF EFFICACY,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,LOGISTICAL PROBLEM,LOGISTICAL PROBLEM,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,LOST TO FOLLOW-UP,LOST TO FOLLOW-UP,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,MET ELIGIBILITY CRITERIA BUT NOT NEEDED,MET ELIGIBILITY CRITERIA BUT NOT NEEDED,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,NEVER DOSED,NEVER DOSED,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,NO LONGER CLINICALLY BENEFITING,NO LONGER CLINICALLY BENEFITING,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,NON-COMPLIANCE WITH NON-STUDY DEVICE,NON-COMPLIANCE WITH NON-STUDY DEVICE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,NON-COMPLIANCE WITH STUDY DEVICE,NON-COMPLIANCE WITH STUDY DEVICE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,NON-COMPLIANCE WITH STUDY DRUG,NON-COMPLIANCE WITH STUDY DRUG,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,NON-COMPLIANCE WITH STUDY SCHEDULE,NON-COMPLIANCE WITH STUDY SCHEDULE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,OTHER,OTHER,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,PARTNER PREGNANCY,PARTNER PREGNANCY,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,PHYSICIAN DECISION,PHYSICIAN DECISION,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,PREGNANCY,PREGNANCY,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,PROGRESSIVE DISEASE,PROGRESSIVE DISEASE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,PROTOCOL DEVIATION,PROTOCOL DEVIATION,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,PROTOCOL VIOLATION,PROTOCOL VIOLATION,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,PROTOCOL-SPECIFIED WITHDRAWAL CRITERION MET,PROTOCOL-SPECIFIED WITHDRAWAL CRITERION MET,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,RANDOMIZED BY MISTAKE,RANDOMIZED BY MISTAKE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,RANDOMIZED BY MISTAKE WITH STUDY TREATMENT,RANDOMIZED BY MISTAKE WITH STUDY TREATMENT,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,RANDOMIZED BY MISTAKE WITHOUT STUDY TREATMENT,RANDOMIZED BY MISTAKE WITHOUT STUDY TREATMENT,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,RECOVERY,RECOVERY,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,REQUIRES PROHIBITED MEDICATION,REQUIRES PROHIBITED MEDICATION,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,SCREEN FAILURE,SCREEN FAILURE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,SCREENING NOT COMPLETED,SCREENING NOT COMPLETED,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,SITE TERMINATED BY SPONSOR,SITE TERMINATED BY SPONSOR,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,SPONSOR REQUEST,SPONSOR REQUEST,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,STUDY TERMINATED BY SPONSOR,STUDY TERMINATED BY SPONSOR,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,TECHNICAL PROBLEMS,TECHNICAL PROBLEMS,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,WITHDRAWAL BY PARENT/GUARDIAN,WITHDRAWAL BY PARENT/GUARDIAN,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,WITHDRAWAL BY SUBJECT,WITHDRAWAL BY SUBJECT,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,WITHDRAWAL OF ASSENT,WITHDRAWAL OF ASSENT,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-off_study_reason,WITHDRAWAL OF CONSENT,WITHDRAWAL OF CONSENT,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-f107ddd,participant_status
-specimen_type,Bone Marrow Aspirate,Bone Marrow Aspirate,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,Cell Block,Cell Block,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,EDTA Blood,EDTA Blood,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,FFPE Block,FFPE Block,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,Formalin Bone Marrow Biopsy,Formalin Bone Marrow Biopsy,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,Formalin Fixed Tissue,Formalin Fixed Tissue,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,FORMALIN FIXED TISSUE,FORMALIN FIXED TISSUE,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,Snap Frozen Tissue,Snap Frozen Tissue,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,Stained Bone Marrow Aspirate Slide,Stained Bone Marrow Aspirate Slide,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,Streck Blood,Streck Blood,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,Streck Blood to VARI,Streck Blood to VARI,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,Unstained Bone Marrow Aspirate Slide,Unstained Bone Marrow Aspirate Slide,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,Unstained Slide,Unstained Slide,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,Fresh Tissue in Media to PDMR,Fresh Tissue in Media to PDMR,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_type,Streck Blood to PDMR,Streck Blood to PDMR,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-f107ddd,specimen
-specimen_category,BLOOD,BLOOD,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,Blood,Blood,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,BONE MARROW,BONE MARROW,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,Bone Marrow,Bone Marrow,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,BUCCAL CELL SAMPLE,BUCCAL CELL SAMPLE,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,CEREBROSPINAL FLUID,CEREBROSPINAL FLUID,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,FORMALIN FIXED PARAFFIN EMBEDDED TISSUE,FORMALIN FIXED PARAFFIN EMBEDDED TISSUE,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,Formalin Fixed Paraffin Embedded Tissue,Formalin Fixed Paraffin Embedded Tissue,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,FORMALIN FIXED TISSUE,FORMALIN FIXED TISSUE,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,Formalin Fixed Tissue,Formalin Fixed Tissue,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,FRESH TISSUE,FRESH TISSUE,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,Fresh Tissue,Fresh Tissue,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,FROZEN TISSUE,FROZEN TISSUE,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,Frozen Tissue,Frozen Tissue,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,OTHER BODILY FLUIDs,OTHER BODILY FLUIDs,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,SALIVA,SALIVA,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,STOOL,STOOL,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-specimen_category,URINE,URINE,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-f107ddd,specimen
-tissue_category,Metastatic,Metastatic,A text term based on categorization of cytologic atypia found in cellular,CTDC,1.22.2-f107ddd,specimen
-tissue_category,Normal,Normal,A text term based on categorization of cytologic atypia found in cellular,CTDC,1.22.2-f107ddd,specimen
-tissue_category,Primary,Primary,A text term based on categorization of cytologic atypia found in cellular,CTDC,1.22.2-f107ddd,specimen
-tissue_category,Adjacent Non-Tumor,Adjacent Non-Tumor,A text term based on categorization of cytologic atypia found in cellular,CTDC,1.22.2-f107ddd,specimen
-assessment_timepoint,ARCHIVAL,ARCHIVAL,"A specific point in the time continuum, including those established relative",CTDC,1.22.2-f107ddd,specimen
-assessment_timepoint,BASELINE,BASELINE,"A specific point in the time continuum, including those established relative",CTDC,1.22.2-f107ddd,specimen
-assessment_timepoint,ON TREATMENT,ON TREATMENT,"A specific point in the time continuum, including those established relative",CTDC,1.22.2-f107ddd,specimen
-assessment_timepoint,PROGRESSION,PROGRESSION,"A specific point in the time continuum, including those established relative",CTDC,1.22.2-f107ddd,specimen
-assessment_timepoint,Baseline (Fresh),Baseline (Fresh),"A specific point in the time continuum, including those established relative",CTDC,1.22.2-f107ddd,specimen
-assessment_timepoint,On Treatment (Fresh),On Treatment (Fresh),"A specific point in the time continuum, including those established relative",CTDC,1.22.2-f107ddd,specimen
-assessment_timepoint,Archival,Archival,"A specific point in the time continuum, including those established relative",CTDC,1.22.2-f107ddd,specimen
-assessment_timepoint,Progression (Fresh),Progression (Fresh),"A specific point in the time continuum, including those established relative",CTDC,1.22.2-f107ddd,specimen
-assessment_timepoint,Post-Treatment (No progression),Post-Treatment (No progression),"A specific point in the time continuum, including those established relative",CTDC,1.22.2-f107ddd,specimen
-quality_of_specimen,https://cadsr.cancer.gov/onedata/Home.jsp,,The final state of a sample which is based on an evaluation of its quality.,CTDC,1.22.2-f107ddd,specimen
-assay_type,Next Generation Sequencing,Next Generation Sequencing,The type of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_type,Immune,Immune,The type of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_type,Cell Based,Cell Based,The type of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,atacseq,atacseq,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,rnaseq,rnaseq,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,scrnaseq,scrnaseq,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,visium,visium,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,wes,wes,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,tcr,tcr,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,cytof,cytof,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,elisa,elisa,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,nulisa,nulisa,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,cdtdna,cdtdna,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,olink,olink,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,ihc,ihc,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,mibi,mibi,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,hande,hande,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-assay_subtype,microbiome,microbiome,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-f107ddd,assay
-qc_status,pass,pass,Overall quality control flag based on predefined thresholds.,CTDC,1.22.2-f107ddd,assay
-qc_status,fail,fail,Overall quality control flag based on predefined thresholds.,CTDC,1.22.2-f107ddd,assay
-sequencing_platform,Illumina NovaSeq 6000,Illumina NovaSeq 6000,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-sequencing_platform,Illumina NextSeq 550,Illumina NextSeq 550,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-sequencing_platform,Illumina HiSeq 4000,Illumina HiSeq 4000,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-sequencing_platform,Illumina HiSeq 2500,Illumina HiSeq 2500,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-sequencing_platform,Illumina HiSeq X Ten,Illumina HiSeq X Ten,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-sequencing_platform,Illumina NextSeq 2000,Illumina NextSeq 2000,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-sequencing_platform,Illumina NovaSeq 500,Illumina NovaSeq 500,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-sequencing_platform,Illumina MiSeq,Illumina MiSeq,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-sequencing_platform,PacBio Sequel II,PacBio Sequel II,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-sequencing_platform,Oxford Nanopore PromethION,Oxford Nanopore PromethION,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-paired_end_sequencing,Yes,Yes,"Indicates whether the sequencing was performed using paired-end reads,",CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-paired_end_sequencing,No,No,"Indicates whether the sequencing was performed using paired-end reads,",CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Human PBMC,Human PBMC,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Human Motor Cortex,Human Motor Cortex,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Mouse Motor Cortex,Mouse Motor Cortex,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Human Pancreas,Human Pancreas,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Human Fetal Development,Human Fetal Development,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Human Kidney,Human Kidney,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Human Bone Marrow,Human Bone Marrow,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Human Lung v2 (HLCA),Human Lung v2 (HLCA),The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Human Adipose,Human Adipose,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Human Heart,Human Heart,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Human Liver,Human Liver,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Human Tonsil v2,Human Tonsil v2,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,Mouse Pansci,Mouse Pansci,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-azimuth_reference_genome_version,None,None,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-tabula_sapiens_reference_genome_version,Tabula Sapiens v1.0,Tabula Sapiens v1.0,The version of the Tabula Sapiens reference genome used for aligning,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-tabula_sapiens_reference_genome_version,Tabula Sapiens v2.0,Tabula Sapiens v2.0,The version of the Tabula Sapiens reference genome used for aligning,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-tabula_sapiens_reference_genome_version,None,None,The version of the Tabula Sapiens reference genome used for aligning,CTDC,1.22.2-f107ddd,next_generation_sequencing_assay
-antigen_type,Protein,Protein,The type of antigen targeted in the immune assay.,CTDC,1.22.2-f107ddd,immune_assay
-antigen_type,Peptide,Peptide,The type of antigen targeted in the immune assay.,CTDC,1.22.2-f107ddd,immune_assay
-antigen_type,RNA,RNA,The type of antigen targeted in the immune assay.,CTDC,1.22.2-f107ddd,immune_assay
-antigen_type,Other,Other,The type of antigen targeted in the immune assay.,CTDC,1.22.2-f107ddd,immune_assay
-positive_cell_detection,Proprietary,Proprietary,The model used for positive cell detection used in the cell based assay.,CTDC,1.22.2-f107ddd,cell_based_assay
-positive_cell_detection,Random Forest Classifier,Random Forest Classifier,The model used for positive cell detection used in the cell based assay.,CTDC,1.22.2-f107ddd,cell_based_assay
-positive_cell_detection,Other,Other,The model used for positive cell detection used in the cell based assay.,CTDC,1.22.2-f107ddd,cell_based_assay
-data_file_type,Clinical Report,Clinical Report,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-f107ddd,file
-data_file_type,File Collection,File Collection,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-f107ddd,file
-data_file_type,Investigator Report,Investigator Report,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-f107ddd,file
-data_file_type,Variant Call File,Variant Call File,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-f107ddd,file
-data_file_type,Variant Report,Variant Report,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-f107ddd,file
-data_file_type,Radiology Images,Radiology Images,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-f107ddd,file
-data_file_format,docx,docx,A defined organization or layout representing and structuring data in a,CTDC,1.22.2-f107ddd,file
-data_file_format,gz,gz,A defined organization or layout representing and structuring data in a,CTDC,1.22.2-f107ddd,file
-data_file_format,pdf,pdf,A defined organization or layout representing and structuring data in a,CTDC,1.22.2-f107ddd,file
-data_file_format,vcf,vcf,A defined organization or layout representing and structuring data in a,CTDC,1.22.2-f107ddd,file
-data_file_format,zip,zip,A defined organization or layout representing and structuring data in a,CTDC,1.22.2-f107ddd,file
-data_file_format,dcm,dcm,A defined organization or layout representing and structuring data in a,CTDC,1.22.2-f107ddd,file
-data_file_checksum_type,md5sum,md5sum,The method by which the file checksum was calculated. <br>CDE ID = 11475057,CTDC,1.22.2-f107ddd,file
-data_file_checksum_type,sha1,sha1,The method by which the file checksum was calculated. <br>CDE ID = 11475057,CTDC,1.22.2-f107ddd,file
-data_file_checksum_type,sha256,sha256,The method by which the file checksum was calculated. <br>CDE ID = 11475057,CTDC,1.22.2-f107ddd,file
-data_file_compression_status,Compressed,Compressed,The state of data when saved to storage space or during data transmission.,CTDC,1.22.2-f107ddd,file
-data_file_compression_status,Uncompressed,Uncompressed,The state of data when saved to storage space or during data transmission.,CTDC,1.22.2-f107ddd,file
-data_file_compression_status,Unknown,Unknown,The state of data when saved to storage space or during data transmission.,CTDC,1.22.2-f107ddd,file
+study_type,Adverse Effect Mitigation Study,Adverse Effect Mitigation Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Ancillary Study,Ancillary Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Basic Science Research,Basic Science Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Correlative Study,Correlative Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Cure Study,Cure Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Device Feasibility Study,Device Feasibility Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Diagnosis Study,Diagnosis Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Disease Modifying Treatment Study,Disease Modifying Treatment Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Early Detection Study,Early Detection Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Education Training Clinical Study,Education Training Clinical Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Epidemiology Research,Epidemiology Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Genomics Research,Genomics Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Health Services Research,Health Services Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Imaging Research,Imaging Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Interventional,Interventional,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Observational Study,Observational Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Outcomes Research,Outcomes Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Prevention Study,Prevention Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Proteomic Research,Proteomic Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Rehabilitation Clinical Study,Rehabilitation Clinical Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Screening Study,Screening Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Supportive Care Study,Supportive Care Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Transcriptomics Research,Transcriptomics Research,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_type,Treatment Study,Treatment Study,A classification of the study based upon the primary intent of the study's,CTDC,1.22.2-5c0d1c3,study
+study_age_group,https://cadsr.cancer.gov/onedata/Home.jsp,,The identifiable class of the study participant based upon their age.,CTDC,1.22.2-5c0d1c3,study
+image_type_included,CT,CT,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-5c0d1c3,image_collection
+image_type_included,DX,DX,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-5c0d1c3,image_collection
+image_type_included,MR,MR,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-5c0d1c3,image_collection
+image_type_included,NM,NM,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-5c0d1c3,image_collection
+image_type_included,PT,PT,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-5c0d1c3,image_collection
+image_type_included,US,US,"A system of categories for representing a specific manner, characteristic,",CTDC,1.22.2-5c0d1c3,image_collection
+collection_access,Cloud,Cloud,The methods by which a user can obtain an image set. Indicator as to whether,CTDC,1.22.2-5c0d1c3,image_collection
+collection_access,Download,Download,The methods by which a user can obtain an image set. Indicator as to whether,CTDC,1.22.2-5c0d1c3,image_collection
+collection_access,Unrestricted,Unrestricted,The methods by which a user can obtain an image set. Indicator as to whether,CTDC,1.22.2-5c0d1c3,image_collection
+biomarker_results_available,Yes,Yes,An indicator as to whether any biomarker results relating to the,CTDC,1.22.2-5c0d1c3,participant
+biomarker_results_available,No,No,An indicator as to whether any biomarker results relating to the,CTDC,1.22.2-5c0d1c3,participant
+biomarker_results_available,Unknown,Unknown,An indicator as to whether any biomarker results relating to the,CTDC,1.22.2-5c0d1c3,participant
+radiology_report_available,Yes,Yes,An indicator as to whether any radiology reports results,CTDC,1.22.2-5c0d1c3,participant
+radiology_report_available,No,No,An indicator as to whether any radiology reports results,CTDC,1.22.2-5c0d1c3,participant
+radiology_report_available,Unknown,Unknown,An indicator as to whether any radiology reports results,CTDC,1.22.2-5c0d1c3,participant
+radiology_images_available,Yes,Yes,An indicator as to whether any radiology images relating,CTDC,1.22.2-5c0d1c3,participant
+radiology_images_available,No,No,An indicator as to whether any radiology images relating,CTDC,1.22.2-5c0d1c3,participant
+radiology_images_available,Unknown,Unknown,An indicator as to whether any radiology images relating,CTDC,1.22.2-5c0d1c3,participant
+histology_images_available,Yes,Yes,An indicator as to whether any histology images relating,CTDC,1.22.2-5c0d1c3,participant
+histology_images_available,No,No,An indicator as to whether any histology images relating,CTDC,1.22.2-5c0d1c3,participant
+histology_images_available,Unknown,Unknown,An indicator as to whether any histology images relating,CTDC,1.22.2-5c0d1c3,participant
+race,American Indian or Alaska Native,American Indian or Alaska Native,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-5c0d1c3,demographic
+race,Asian,Asian,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-5c0d1c3,demographic
+race,Black or African American,Black or African American,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-5c0d1c3,demographic
+race,Native Hawaiian or other Pacific Islander,Native Hawaiian or other Pacific Islander,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-5c0d1c3,demographic
+race,White,White,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-5c0d1c3,demographic
+race,Not Reported,Not Reported,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-5c0d1c3,demographic
+race,Unknown,Unknown,The text for reporting information about race based on the Office of Management,CTDC,1.22.2-5c0d1c3,demographic
+ethnicity,Hispanic or Latino,Hispanic or Latino,The text for reporting information about ethnicity based on the Office,CTDC,1.22.2-5c0d1c3,demographic
+ethnicity,Not Hispanic or Latino,Not Hispanic or Latino,The text for reporting information about ethnicity based on the Office,CTDC,1.22.2-5c0d1c3,demographic
+ethnicity,Not reported,Not reported,The text for reporting information about ethnicity based on the Office,CTDC,1.22.2-5c0d1c3,demographic
+ethnicity,Unknown,Unknown,The text for reporting information about ethnicity based on the Office,CTDC,1.22.2-5c0d1c3,demographic
+sex,Female,Female,A textual description of a person's sex at birth. CDE ID = 7572817,CTDC,1.22.2-5c0d1c3,demographic
+sex,Intersex,Intersex,A textual description of a person's sex at birth. CDE ID = 7572817,CTDC,1.22.2-5c0d1c3,demographic
+sex,Male,Male,A textual description of a person's sex at birth. CDE ID = 7572817,CTDC,1.22.2-5c0d1c3,demographic
+sex,Unknown,Unknown,A textual description of a person's sex at birth. CDE ID = 7572817,CTDC,1.22.2-5c0d1c3,demographic
+highest_level_of_education,No formal education,No formal education,An indication as to the highest level of education attained by,CTDC,1.22.2-5c0d1c3,demographic
+highest_level_of_education,Grade school,Grade school,An indication as to the highest level of education attained by,CTDC,1.22.2-5c0d1c3,demographic
+highest_level_of_education,Not high school graduate,Not high school graduate,An indication as to the highest level of education attained by,CTDC,1.22.2-5c0d1c3,demographic
+highest_level_of_education,High school graduate (including equivalency),High school graduate (including equivalency),An indication as to the highest level of education attained by,CTDC,1.22.2-5c0d1c3,demographic
+highest_level_of_education,Some college or Associate degree,Some college or Associate degree,An indication as to the highest level of education attained by,CTDC,1.22.2-5c0d1c3,demographic
+highest_level_of_education,Bachelor's degree,Bachelor's degree,An indication as to the highest level of education attained by,CTDC,1.22.2-5c0d1c3,demographic
+highest_level_of_education,Master's degree,Master's degree,An indication as to the highest level of education attained by,CTDC,1.22.2-5c0d1c3,demographic
+highest_level_of_education,Doctoral or professional degree,Doctoral or professional degree,An indication as to the highest level of education attained by,CTDC,1.22.2-5c0d1c3,demographic
+highest_level_of_education,Declined to answer,Declined to answer,An indication as to the highest level of education attained by,CTDC,1.22.2-5c0d1c3,demographic
+highest_level_of_education,NA,NA,An indication as to the highest level of education attained by,CTDC,1.22.2-5c0d1c3,demographic
+environmental_exposure_type,Asbestos Exposure,Asbestos Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-5c0d1c3,exposure
+environmental_exposure_type,Chemical Exposure,Chemical Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-5c0d1c3,exposure
+environmental_exposure_type,Marijuana Smoke Exposure,Marijuana Smoke Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-5c0d1c3,exposure
+environmental_exposure_type,Radiation Exposure,Radiation Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-5c0d1c3,exposure
+environmental_exposure_type,Radon Exposure,Radon Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-5c0d1c3,exposure
+environmental_exposure_type,Respirable Crystalline Silica Exposure,Respirable Crystalline Silica Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-5c0d1c3,exposure
+environmental_exposure_type,Smoke Exposure,Smoke Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-5c0d1c3,exposure
+environmental_exposure_type,Smokeless Tobacco Exposure,Smokeless Tobacco Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-5c0d1c3,exposure
+environmental_exposure_type,Tobacco Related Exposure,Tobacco Related Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-5c0d1c3,exposure
+environmental_exposure_type,Wood Dust Exposure,Wood Dust Exposure,"The category related to contact with chemical, biological, or physical",CTDC,1.22.2-5c0d1c3,exposure
+carcinogen_exposure,Yes,Yes,An indication of whether the participant was exposed to environmental/workplace,CTDC,1.22.2-5c0d1c3,exposure
+carcinogen_exposure,No,No,An indication of whether the participant was exposed to environmental/workplace,CTDC,1.22.2-5c0d1c3,exposure
+carcinogen_exposure,Unknown,Unknown,An indication of whether the participant was exposed to environmental/workplace,CTDC,1.22.2-5c0d1c3,exposure
+carcinogen_exposure,NA,NA,An indication of whether the participant was exposed to environmental/workplace,CTDC,1.22.2-5c0d1c3,exposure
+diagnosis_classification_system,NCI Thesaurus,NCI Thesaurus,The standard or agency upon which the specific term used as the diagnosis value was obtained.,CTDC,1.22.2-5c0d1c3,diagnosis
+diagnosis_classification_system,MedDRA,MedDRA,The standard or agency upon which the specific term used as the diagnosis value was obtained.,CTDC,1.22.2-5c0d1c3,diagnosis
+diagnosis_classification_system,ICD-O-3,ICD-O-3,The standard or agency upon which the specific term used as the diagnosis value was obtained.,CTDC,1.22.2-5c0d1c3,diagnosis
+diagnosis_classification_system,ICD-10-CM,ICD-10-CM,The standard or agency upon which the specific term used as the diagnosis value was obtained.,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,"Colorectal cancer, NOS","Colorectal cancer, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,"Acute myeloid leukemia, NOS","Acute myeloid leukemia, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,Adenocarcinoma of the gastroesophageal junction,Adenocarcinoma of the gastroesophageal junction,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,Melanoma,Melanoma,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,"Myeloma, NOS","Myeloma, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,"Non-small cell lung cancer, NOS","Non-small cell lung cancer, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,"Prostate cancer, NOS","Prostate cancer, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,Small cell lung cancer,Small cell lung cancer,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,Invasive breast carcinoma,Invasive breast carcinoma,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,Fallopian tube carcinoma,Fallopian tube carcinoma,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,"Gastric cancer, NOS","Gastric cancer, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,Primary peritoneal carcinoma,Primary peritoneal carcinoma,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,"Esophageal cancer, NOS","Esophageal cancer, NOS",A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+primary_diagnosis_disease_group,Ovarian epithelial cancer,Ovarian epithelial cancer,A term describing the main condition for evaluation and treatment as captured,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Acute Myeloid Leukemia Not Otherwise Specified,Acute Myeloid Leukemia Not Otherwise Specified,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Adenocarcinoma of the Gastroesophageal Junction,Adenocarcinoma of the Gastroesophageal Junction,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Colorectal Carcinoma,Colorectal Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Gastric Carcinoma,Gastric Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Invasive Breast Carcinoma,Invasive Breast Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Melanoma,Melanoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Non-Small Cell Lung Carcinoma,Non-Small Cell Lung Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Ovarian Carcinoma,Ovarian Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Plasma Cell Myeloma,Plasma Cell Myeloma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Prostate Carcinoma,Prostate Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Small Cell Lung Carcinoma,Small Cell Lung Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Esophageal Carcinoma,Esophageal Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+ctep_disease_term,Fallopian Tube Carcinoma,Fallopian Tube Carcinoma,The coded response indicating the MedDRA code Version 10 used in the NCI Simplified Disease Classification (SDC) Terminology for diagnoses. <br> CDE ID 4723846,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10000884,10000884,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10066354,10066354,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10010029,10010029,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10006190,10006190,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10053571,10053571,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10029514,10029514,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10033159,10033159,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10028566,10028566,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10036910,10036910,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10041071,10041071,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10017760,10017760,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10030157,10030157,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+meddra_disease_code,10016180,10016180,The MedDRA code describing a medical condition and/or anatomic location.,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Acute Myeloid Leukemia,Acute Myeloid Leukemia,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Acute Myeloid Leukemia with Myelodysplasia-Related Changes,Acute Myeloid Leukemia with Myelodysplasia-Related Changes,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Acute Myeloid Leukemia Arising from Previous Myelodysplastic Syndrome,Acute Myeloid Leukemia Arising from Previous Myelodysplastic Syndrome,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Adenocarcinoma,Adenocarcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Amelanotic Melanoma,Amelanotic Melanoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Breast Carcinoma,Breast Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Colon Adenoma,Colon Adenoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Colon Carcinoma,Colon Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Colorectal Adenocarcinoma,Colorectal Adenocarcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Cutaneous Melanoma,Cutaneous Melanoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Epithelioid Cell Melanoma,Epithelioid Cell Melanoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Esophageal Adenocarcinoma,Esophageal Adenocarcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Esophageal Carcinoma,Esophageal Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Fallopian Tube Carcinoma,Fallopian Tube Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Gastric Adenocarcinoma,Gastric Adenocarcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,"Invasive Ductal Carcinoma, Not Otherwise Specified","Invasive Ductal Carcinoma, Not Otherwise Specified",Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Invasive Lobular Breast Carcinoma,Invasive Lobular Breast Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Lung Carcinoma,Lung Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Lung Papillary Adenoma,Lung Papillary Adenoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Lung Adenocarcinoma,Lung Adenocarcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Malignant neoplasm of ovary,Malignant neoplasm of ovary,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Melanoma,Melanoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Mucinous Adenocarcinoma,Mucinous Adenocarcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Multiple myeloma,Multiple myeloma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Multiple myeloma and immunoproliferative disease,Multiple myeloma and immunoproliferative disease,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Neuroendocrine Carcinoma,Neuroendocrine Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Nodular Melanoma,Nodular Melanoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Non-Small Cell Lung Carcinoma,Non-Small Cell Lung Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Ovarian Carcinoma,Ovarian Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Plasma Cell Leukemia,Plasma Cell Leukemia,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Plasma Cell Myeloma,Plasma Cell Myeloma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Prostate Adenocarcinoma,Prostate Adenocarcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Prostate Carcinoma,Prostate Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Rectal Adenoma,Rectal Adenoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Rectal Carcinoma,Rectal Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Small Cell Carcinoma,Small Cell Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Small Cell Lung Carcinoma,Small Cell Lung Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Squamous Cell Carcinoma,Squamous Cell Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Squamous Cell Lung Carcinoma,Squamous Cell Lung Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Superficial Spreading Melanoma,Superficial Spreading Melanoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Triple-Negative Breast Carcinoma,Triple-Negative Breast Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Anal Carcinoma,Anal Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Invasive Ductal Carcinoma,Invasive Ductal Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Mixed Lobular and Ductal Breast Carcinoma,Mixed Lobular and Ductal Breast Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_term,Female Breast Carcinoma,Female Breast Carcinoma,Description pending,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,17788007,17788007,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,445448008,445448008,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,128827005,128827005,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,35917007,35917007,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,443961001,443961001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,70594002,70594002,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,254838004,254838004,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,428054006,428054006,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,269533000,269533000,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,408645001,408645001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,93655004,93655004,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,37138001,37138001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,276803003,276803003,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,372138000,372138000,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,276870001,276870001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,408647009,408647009,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,408643008,408643008,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,89740008,89740008,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,254626006,254626006,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,448993007,448993007,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,24482001,24482001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,254849005,254849005,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,2092003,2092003,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,372244006,372244006,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,72495009,72495009,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,55921005a,55921005a,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,55921005,55921005,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,188717001,188717001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,253000007,253000007,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,2142002,2142002,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,254731001,254731001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,254637007,254637007,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,128922003,128922003,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,109989006,109989006,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,55921005b,55921005b,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,399490008,399490008,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,254900004,254900004,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,399068003,399068003,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,399730005,399730005,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,254582000,254582000,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,74364000,74364000,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,254632001,254632001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,254633006,254633006,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,28899001,28899001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,402815007,402815007,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,254634000,254634000,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,254730000,254730000,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,706970001,706970001,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,255084004,255084004,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,444604002,444604002,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+snomed_disease_code,447782002,447782002,A 9-digit numerical code for the primary disease with which the participant,CTDC,1.22.2-5c0d1c3,diagnosis
+stage_of_disease,Stage III,Stage III,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-5c0d1c3,diagnosis
+stage_of_disease,Stage IIIA,Stage IIIA,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-5c0d1c3,diagnosis
+stage_of_disease,Stage IIIB,Stage IIIB,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-5c0d1c3,diagnosis
+stage_of_disease,Stage IIIC,Stage IIIC,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-5c0d1c3,diagnosis
+stage_of_disease,Stage IV,Stage IV,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-5c0d1c3,diagnosis
+stage_of_disease,Stage IVA,Stage IVA,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-5c0d1c3,diagnosis
+stage_of_disease,Stage IVB,Stage IVB,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-5c0d1c3,diagnosis
+stage_of_disease,Stage IVC,Stage IVC,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-5c0d1c3,diagnosis
+stage_of_disease,NA,NA,"Stage group determined from clinical information on the tumor (T), regional",CTDC,1.22.2-5c0d1c3,diagnosis
+tumor_grade,Grade cannot be assessed,Grade cannot be assessed,A text term to express the degree of abnormality of cancer cells as a measure,CTDC,1.22.2-5c0d1c3,diagnosis
+tumor_grade,Borderline malignancy,Borderline malignancy,A text term to express the degree of abnormality of cancer cells as a measure,CTDC,1.22.2-5c0d1c3,diagnosis
+tumor_grade,Well Differentiated,Well Differentiated,A text term to express the degree of abnormality of cancer cells as a measure,CTDC,1.22.2-5c0d1c3,diagnosis
+tumor_grade,Moderately Differentiated,Moderately Differentiated,A text term to express the degree of abnormality of cancer cells as a measure,CTDC,1.22.2-5c0d1c3,diagnosis
+tumor_grade,Poorly Differentiated,Poorly Differentiated,A text term to express the degree of abnormality of cancer cells as a measure,CTDC,1.22.2-5c0d1c3,diagnosis
+tumor_grade,Undifferentiated grade,Undifferentiated grade,A text term to express the degree of abnormality of cancer cells as a measure,CTDC,1.22.2-5c0d1c3,diagnosis
+best_response_to_targeted_therapy,Complete Response,Complete Response,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,targeted_therapy
+best_response_to_targeted_therapy,Partial Response,Partial Response,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,targeted_therapy
+best_response_to_targeted_therapy,Less than partial response,Less than partial response,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,targeted_therapy
+best_response_to_targeted_therapy,Stable Disease,Stable Disease,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,targeted_therapy
+best_response_to_targeted_therapy,Progressive Disease,Progressive Disease,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,targeted_therapy
+best_response_to_targeted_therapy,Not Assessed,Not Assessed,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,targeted_therapy
+best_response_to_targeted_therapy,Too Early,Too Early,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,targeted_therapy
+best_response_to_targeted_therapy,Not Evaluable,Not Evaluable,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,targeted_therapy
+best_response_to_targeted_therapy,Unknown,Unknown,The result of an evaluation to determine the most clinically favorable response to treatment.. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,targeted_therapy
+best_response_to_non_targeted_therapy,Complete Response,Complete Response,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,non_targeted_therapy
+best_response_to_non_targeted_therapy,Partial Response,Partial Response,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,non_targeted_therapy
+best_response_to_non_targeted_therapy,Less than partial response,Less than partial response,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,non_targeted_therapy
+best_response_to_non_targeted_therapy,Stable Disease,Stable Disease,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,non_targeted_therapy
+best_response_to_non_targeted_therapy,Progressive Disease,Progressive Disease,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,non_targeted_therapy
+best_response_to_non_targeted_therapy,Not Assessed,Not Assessed,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,non_targeted_therapy
+best_response_to_non_targeted_therapy,Too Early,Too Early,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,non_targeted_therapy
+best_response_to_non_targeted_therapy,Not Evaluable,Not Evaluable,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,non_targeted_therapy
+best_response_to_non_targeted_therapy,Unknown,Unknown,The result of an evaluation to determine the most clinically favorable response to treatment. <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,non_targeted_therapy
+surgical_procedure_therapeutic,Yes,Yes,A response which indicates whether the administration of a therapeutic,CTDC,1.22.2-5c0d1c3,surgery
+surgical_procedure_therapeutic,No,No,A response which indicates whether the administration of a therapeutic,CTDC,1.22.2-5c0d1c3,surgery
+best_response_to_radiotherapy,Complete Response,Complete Response,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,radiotherapy
+best_response_to_radiotherapy,Partial Response,Partial Response,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,radiotherapy
+best_response_to_radiotherapy,Less than partial response,Less than partial response,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,radiotherapy
+best_response_to_radiotherapy,Stable Disease,Stable Disease,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,radiotherapy
+best_response_to_radiotherapy,Progressive Disease,Progressive Disease,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,radiotherapy
+best_response_to_radiotherapy,Not Assessed,Not Assessed,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,radiotherapy
+best_response_to_radiotherapy,Too Early,Too Early,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,radiotherapy
+best_response_to_radiotherapy,Not Evaluable,Not Evaluable,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,radiotherapy
+best_response_to_radiotherapy,Unknown,Unknown,The result of an evaluation to determine the most clinically favorable response to treatment.  <br>CDE ID = 15179918,CTDC,1.22.2-5c0d1c3,radiotherapy
+survival_status,ALIVE,ALIVE,The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-5c0d1c3,participant_status
+survival_status,DEAD,DEAD,The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-5c0d1c3,participant_status
+survival_status,UNKNOWN,UNKNOWN,The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-5c0d1c3,participant_status
+survival_status,Alive with Disease,Alive with Disease,The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-5c0d1c3,participant_status
+survival_status,Alive with No Evidence of Disease,Alive with No Evidence of Disease,The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-5c0d1c3,participant_status
+survival_status,"Alive, Disease Status Unknown","Alive, Disease Status Unknown",The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-5c0d1c3,participant_status
+survival_status,Dead,Dead,The participant's survival state as being living or deceased. <br>CDE,CTDC,1.22.2-5c0d1c3,participant_status
+off_study,Yes,Yes,A response that indicates whether or not an individual is receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study,No,No,A response that indicates whether or not an individual is receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study,Unknown,Unknown,A response that indicates whether or not an individual is receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,ADVERSE EVENT,ADVERSE EVENT,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,APPROVED DRUG AVAILABLE FOR INDICATION,APPROVED DRUG AVAILABLE FOR INDICATION,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,COMPLETED,COMPLETED,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,DEATH,DEATH,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,DISEASE RELAPSE,DISEASE RELAPSE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,FAILURE TO MEET CONTINUATION CRITERIA,FAILURE TO MEET CONTINUATION CRITERIA,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,FAILURE TO MEET RANDOMIZATION CRITERIA,FAILURE TO MEET RANDOMIZATION CRITERIA,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,LACK OF EFFICACY,LACK OF EFFICACY,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,LOGISTICAL PROBLEM,LOGISTICAL PROBLEM,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,LOST TO FOLLOW-UP,LOST TO FOLLOW-UP,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,MET ELIGIBILITY CRITERIA BUT NOT NEEDED,MET ELIGIBILITY CRITERIA BUT NOT NEEDED,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,NEVER DOSED,NEVER DOSED,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,NO LONGER CLINICALLY BENEFITING,NO LONGER CLINICALLY BENEFITING,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,NON-COMPLIANCE WITH NON-STUDY DEVICE,NON-COMPLIANCE WITH NON-STUDY DEVICE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,NON-COMPLIANCE WITH STUDY DEVICE,NON-COMPLIANCE WITH STUDY DEVICE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,NON-COMPLIANCE WITH STUDY DRUG,NON-COMPLIANCE WITH STUDY DRUG,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,NON-COMPLIANCE WITH STUDY SCHEDULE,NON-COMPLIANCE WITH STUDY SCHEDULE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,OTHER,OTHER,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,PARTNER PREGNANCY,PARTNER PREGNANCY,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,PHYSICIAN DECISION,PHYSICIAN DECISION,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,PREGNANCY,PREGNANCY,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,PROGRESSIVE DISEASE,PROGRESSIVE DISEASE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,PROTOCOL DEVIATION,PROTOCOL DEVIATION,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,PROTOCOL VIOLATION,PROTOCOL VIOLATION,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,PROTOCOL-SPECIFIED WITHDRAWAL CRITERION MET,PROTOCOL-SPECIFIED WITHDRAWAL CRITERION MET,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,RANDOMIZED BY MISTAKE,RANDOMIZED BY MISTAKE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,RANDOMIZED BY MISTAKE WITH STUDY TREATMENT,RANDOMIZED BY MISTAKE WITH STUDY TREATMENT,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,RANDOMIZED BY MISTAKE WITHOUT STUDY TREATMENT,RANDOMIZED BY MISTAKE WITHOUT STUDY TREATMENT,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,RECOVERY,RECOVERY,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,REQUIRES PROHIBITED MEDICATION,REQUIRES PROHIBITED MEDICATION,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,SCREEN FAILURE,SCREEN FAILURE,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,SCREENING NOT COMPLETED,SCREENING NOT COMPLETED,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,SITE TERMINATED BY SPONSOR,SITE TERMINATED BY SPONSOR,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,SPONSOR REQUEST,SPONSOR REQUEST,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,STUDY TERMINATED BY SPONSOR,STUDY TERMINATED BY SPONSOR,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,TECHNICAL PROBLEMS,TECHNICAL PROBLEMS,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,WITHDRAWAL BY PARENT/GUARDIAN,WITHDRAWAL BY PARENT/GUARDIAN,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,WITHDRAWAL BY SUBJECT,WITHDRAWAL BY SUBJECT,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,WITHDRAWAL OF ASSENT,WITHDRAWAL OF ASSENT,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+off_study_reason,WITHDRAWAL OF CONSENT,WITHDRAWAL OF CONSENT,An explanation describing why an individual is no longer receiving protocol,CTDC,1.22.2-5c0d1c3,participant_status
+specimen_type,Bone Marrow Aspirate,Bone Marrow Aspirate,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,Cell Block,Cell Block,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,EDTA Blood,EDTA Blood,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,FFPE Block,FFPE Block,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,Formalin Bone Marrow Biopsy,Formalin Bone Marrow Biopsy,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,Formalin Fixed Tissue,Formalin Fixed Tissue,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,FORMALIN FIXED TISSUE,FORMALIN FIXED TISSUE,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,Snap Frozen Tissue,Snap Frozen Tissue,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,Stained Bone Marrow Aspirate Slide,Stained Bone Marrow Aspirate Slide,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,Streck Blood,Streck Blood,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,Streck Blood to VARI,Streck Blood to VARI,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,Unstained Bone Marrow Aspirate Slide,Unstained Bone Marrow Aspirate Slide,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,Unstained Slide,Unstained Slide,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,Fresh Tissue in Media to PDMR,Fresh Tissue in Media to PDMR,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_type,Streck Blood to PDMR,Streck Blood to PDMR,The kind of material that forms the parent sample as captured in the Ontology,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,BLOOD,BLOOD,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,Blood,Blood,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,BONE MARROW,BONE MARROW,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,Bone Marrow,Bone Marrow,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,BUCCAL CELL SAMPLE,BUCCAL CELL SAMPLE,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,CEREBROSPINAL FLUID,CEREBROSPINAL FLUID,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,FORMALIN FIXED PARAFFIN EMBEDDED TISSUE,FORMALIN FIXED PARAFFIN EMBEDDED TISSUE,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,Formalin Fixed Paraffin Embedded Tissue,Formalin Fixed Paraffin Embedded Tissue,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,FORMALIN FIXED TISSUE,FORMALIN FIXED TISSUE,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,Formalin Fixed Tissue,Formalin Fixed Tissue,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,FRESH TISSUE,FRESH TISSUE,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,Fresh Tissue,Fresh Tissue,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,FROZEN TISSUE,FROZEN TISSUE,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,Frozen Tissue,Frozen Tissue,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,OTHER BODILY FLUIDs,OTHER BODILY FLUIDs,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,SALIVA,SALIVA,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,STOOL,STOOL,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+specimen_category,URINE,URINE,The biospecimen grouping that describes the kind of material that forms,CTDC,1.22.2-5c0d1c3,specimen
+tissue_category,Metastatic,Metastatic,A text term based on categorization of cytologic atypia found in cellular,CTDC,1.22.2-5c0d1c3,specimen
+tissue_category,Normal,Normal,A text term based on categorization of cytologic atypia found in cellular,CTDC,1.22.2-5c0d1c3,specimen
+tissue_category,Primary,Primary,A text term based on categorization of cytologic atypia found in cellular,CTDC,1.22.2-5c0d1c3,specimen
+tissue_category,Adjacent Non-Tumor,Adjacent Non-Tumor,A text term based on categorization of cytologic atypia found in cellular,CTDC,1.22.2-5c0d1c3,specimen
+assessment_timepoint,ARCHIVAL,ARCHIVAL,"A specific point in the time continuum, including those established relative",CTDC,1.22.2-5c0d1c3,specimen
+assessment_timepoint,BASELINE,BASELINE,"A specific point in the time continuum, including those established relative",CTDC,1.22.2-5c0d1c3,specimen
+assessment_timepoint,ON TREATMENT,ON TREATMENT,"A specific point in the time continuum, including those established relative",CTDC,1.22.2-5c0d1c3,specimen
+assessment_timepoint,PROGRESSION,PROGRESSION,"A specific point in the time continuum, including those established relative",CTDC,1.22.2-5c0d1c3,specimen
+assessment_timepoint,Baseline (Fresh),Baseline (Fresh),"A specific point in the time continuum, including those established relative",CTDC,1.22.2-5c0d1c3,specimen
+assessment_timepoint,On Treatment (Fresh),On Treatment (Fresh),"A specific point in the time continuum, including those established relative",CTDC,1.22.2-5c0d1c3,specimen
+assessment_timepoint,Archival,Archival,"A specific point in the time continuum, including those established relative",CTDC,1.22.2-5c0d1c3,specimen
+assessment_timepoint,Progression (Fresh),Progression (Fresh),"A specific point in the time continuum, including those established relative",CTDC,1.22.2-5c0d1c3,specimen
+assessment_timepoint,Post-Treatment (No progression),Post-Treatment (No progression),"A specific point in the time continuum, including those established relative",CTDC,1.22.2-5c0d1c3,specimen
+quality_of_specimen,https://cadsr.cancer.gov/onedata/Home.jsp,,The final state of a sample which is based on an evaluation of its quality.,CTDC,1.22.2-5c0d1c3,specimen
+assay_type,Next Generation Sequencing,Next Generation Sequencing,The type of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_type,Immune,Immune,The type of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_type,Cell Based,Cell Based,The type of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,atacseq,atacseq,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,rnaseq,rnaseq,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,scrnaseq,scrnaseq,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,visium,visium,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,wes,wes,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,tcr,tcr,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,cytof,cytof,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,elisa,elisa,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,nulisa,nulisa,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,cdtdna,cdtdna,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,olink,olink,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,ihc,ihc,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,mibi,mibi,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,hande,hande,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+assay_subtype,microbiome,microbiome,The subtype of assay performed on the biospecimen.,CTDC,1.22.2-5c0d1c3,assay
+qc_status,pass,pass,Overall quality control flag based on predefined thresholds.,CTDC,1.22.2-5c0d1c3,assay
+qc_status,fail,fail,Overall quality control flag based on predefined thresholds.,CTDC,1.22.2-5c0d1c3,assay
+sequencing_platform,Illumina NovaSeq 6000,Illumina NovaSeq 6000,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+sequencing_platform,Illumina NextSeq 550,Illumina NextSeq 550,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+sequencing_platform,Illumina HiSeq 4000,Illumina HiSeq 4000,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+sequencing_platform,Illumina HiSeq 2500,Illumina HiSeq 2500,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+sequencing_platform,Illumina HiSeq X Ten,Illumina HiSeq X Ten,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+sequencing_platform,Illumina NextSeq 2000,Illumina NextSeq 2000,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+sequencing_platform,Illumina NovaSeq 500,Illumina NovaSeq 500,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+sequencing_platform,Illumina MiSeq,Illumina MiSeq,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+sequencing_platform,PacBio Sequel II,PacBio Sequel II,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+sequencing_platform,Oxford Nanopore PromethION,Oxford Nanopore PromethION,The sequencing technology platform used to generate the sequencing data.,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+paired_end_sequencing,Yes,Yes,"Indicates whether the sequencing was performed using paired-end reads,",CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+paired_end_sequencing,No,No,"Indicates whether the sequencing was performed using paired-end reads,",CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human PBMC,Human PBMC,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Motor Cortex,Human Motor Cortex,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Mouse Motor Cortex,Mouse Motor Cortex,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Pancreas,Human Pancreas,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Fetal Development,Human Fetal Development,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Kidney,Human Kidney,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Bone Marrow,Human Bone Marrow,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Lung v2 (HLCA),Human Lung v2 (HLCA),The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Adipose,Human Adipose,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Heart,Human Heart,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Liver,Human Liver,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Human Tonsil v2,Human Tonsil v2,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,Mouse Pansci,Mouse Pansci,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+azimuth_reference_genome_version,None,None,The version of the reference genome used for aligning sequencing reads,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+tabula_sapiens_reference_genome_version,Tabula Sapiens v1.0,Tabula Sapiens v1.0,The version of the Tabula Sapiens reference genome used for aligning,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+tabula_sapiens_reference_genome_version,Tabula Sapiens v2.0,Tabula Sapiens v2.0,The version of the Tabula Sapiens reference genome used for aligning,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+tabula_sapiens_reference_genome_version,None,None,The version of the Tabula Sapiens reference genome used for aligning,CTDC,1.22.2-5c0d1c3,next_generation_sequencing_assay
+antigen_type,Protein,Protein,The type of antigen targeted in the immune assay.,CTDC,1.22.2-5c0d1c3,immune_assay
+antigen_type,Peptide,Peptide,The type of antigen targeted in the immune assay.,CTDC,1.22.2-5c0d1c3,immune_assay
+antigen_type,RNA,RNA,The type of antigen targeted in the immune assay.,CTDC,1.22.2-5c0d1c3,immune_assay
+antigen_type,Other,Other,The type of antigen targeted in the immune assay.,CTDC,1.22.2-5c0d1c3,immune_assay
+positive_cell_detection,Proprietary,Proprietary,The model used for positive cell detection used in the cell based assay.,CTDC,1.22.2-5c0d1c3,cell_based_assay
+positive_cell_detection,Random Forest Classifier,Random Forest Classifier,The model used for positive cell detection used in the cell based assay.,CTDC,1.22.2-5c0d1c3,cell_based_assay
+positive_cell_detection,Other,Other,The model used for positive cell detection used in the cell based assay.,CTDC,1.22.2-5c0d1c3,cell_based_assay
+data_file_type,Clinical Report,Clinical Report,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-5c0d1c3,file
+data_file_type,File Collection,File Collection,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-5c0d1c3,file
+data_file_type,Investigator Report,Investigator Report,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-5c0d1c3,file
+data_file_type,Variant Call File,Variant Call File,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-5c0d1c3,file
+data_file_type,Variant Report,Variant Report,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-5c0d1c3,file
+data_file_type,Radiology Images,Radiology Images,The type of information contained in an electronic record. A curated indicator,CTDC,1.22.2-5c0d1c3,file
+data_file_format,docx,docx,A defined organization or layout representing and structuring data in a,CTDC,1.22.2-5c0d1c3,file
+data_file_format,gz,gz,A defined organization or layout representing and structuring data in a,CTDC,1.22.2-5c0d1c3,file
+data_file_format,pdf,pdf,A defined organization or layout representing and structuring data in a,CTDC,1.22.2-5c0d1c3,file
+data_file_format,vcf,vcf,A defined organization or layout representing and structuring data in a,CTDC,1.22.2-5c0d1c3,file
+data_file_format,zip,zip,A defined organization or layout representing and structuring data in a,CTDC,1.22.2-5c0d1c3,file
+data_file_format,dcm,dcm,A defined organization or layout representing and structuring data in a,CTDC,1.22.2-5c0d1c3,file
+data_file_checksum_type,md5sum,md5sum,The method by which the file checksum was calculated. <br>CDE ID = 11475057,CTDC,1.22.2-5c0d1c3,file
+data_file_checksum_type,sha1,sha1,The method by which the file checksum was calculated. <br>CDE ID = 11475057,CTDC,1.22.2-5c0d1c3,file
+data_file_checksum_type,sha256,sha256,The method by which the file checksum was calculated. <br>CDE ID = 11475057,CTDC,1.22.2-5c0d1c3,file
+data_file_compression_status,Compressed,Compressed,The state of data when saved to storage space or during data transmission.,CTDC,1.22.2-5c0d1c3,file
+data_file_compression_status,Uncompressed,Uncompressed,The state of data when saved to storage space or during data transmission.,CTDC,1.22.2-5c0d1c3,file
+data_file_compression_status,Unknown,Unknown,The state of data when saved to storage space or during data transmission.,CTDC,1.22.2-5c0d1c3,file

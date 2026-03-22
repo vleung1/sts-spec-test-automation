@@ -20,8 +20,8 @@ import sys
 from pathlib import Path
 from urllib.parse import quote
 
-from .ccdi_term_verify import get_latest_version, verify_row
-from .client import APIClient
+from ccdi_term_verify import get_latest_version, verify_row
+from sts_test_framework.client import APIClient
 
 MODEL_HANDLE = "CDS"
 
@@ -372,7 +372,7 @@ def run_verify(
 def main() -> None:
     """CLI for ``sts-cds-term-verify`` (``--yaml``, ``--out-dir``, ``--skip-*``, ``--warn-only``, etc.)."""
     import argparse
-    from .config import DEFAULT_STS_BASE_URL, sts_base_url
+    from sts_test_framework.config import DEFAULT_STS_BASE_URL, sts_base_url
 
     parser = argparse.ArgumentParser(
         description=(

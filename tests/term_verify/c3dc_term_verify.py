@@ -1,11 +1,14 @@
 """
-CTDC term-by-value verification pipeline driven by vendored ``ctdc_model_properties_file-2.yaml``.
+C3DC term-by-value verification pipeline driven by vendored ``c3dc-model-props.yml``.
 
-**Behavior** is the same as :mod:`c3dc_term_verify` (same extract/enrich/verify structure and
-``strip_inline_yaml_comment`` + ``_strip_quotes`` parsing), but with ``MODEL_HANDLE == "CTDC"`` and
-CTDC-specific CSV filenames under ``reports/term_value/CTDC/``.
+**Behavior** matches :mod:`ccdi_term_verify` (extract → enrich → verify) with C3DC-specific YAML
+parsing: ``Enum`` blocks use :func:`strip_inline_yaml_comment` plus :func:`_strip_quotes` per
+``extract_c3dc_enum_properties.py``.
 
-CLI: ``sts-ctdc-term-verify`` (see pyproject ``[project.scripts]``).
+**Differences from CCDI** — Property/enum line patterns use ``ENUM_HEADER_PATTERN`` (flexible
+``Enum`` key) instead of a fixed ``Enum:`` string.
+
+CLI: ``sts-c3dc-term-verify`` (see pyproject ``[project.scripts]``).
 """
 from __future__ import annotations
 
@@ -15,14 +18,14 @@ import sys
 from pathlib import Path
 from urllib.parse import quote
 
-from .ccdi_term_verify import (
+from ccdi_term_verify import (
     get_latest_version,
     strip_inline_yaml_comment,
     verify_row,
 )
-from .client import APIClient
+from sts_test_framework.client import APIClient
 
-MODEL_HANDLE = "CTDC"
+MODEL_HANDLE = "C3DC"
 
 
 def _repo_root() -> Path:
@@ -31,18 +34,16 @@ def _repo_root() -> Path:
 
 
 def default_yaml_path() -> Path:
-    """Default vendored CTDC YAML (override with ``--yaml``)."""
-    #return _repo_root() / "data" / "data-models-yaml" / "ctdc_model_properties_file-2.yaml"
-    return _repo_root() / "data" / "data-models-yaml" / "ctdc_model_properties_file-v1.22.1.yaml"
-
+    """Default vendored C3DC YAML (override with ``--yaml``)."""
+    return _repo_root() / "data" / "data-models-yaml" / "c3dc-model-props.yml"
 
 
 def default_report_dir() -> Path:
-    """Default output directory for pipeline artifacts (override with ``--out-dir``)."""
-    return _repo_root() / "reports" / "term_value" / "CTDC"
+    """Default output directory for all pipeline artifacts (override with ``--out-dir``)."""
+    return _repo_root() / "reports" / "term_value" / "C3DC"
 
 
-# --- extract (matches extract_ctdc_enum_properties.py + comment strip) ---
+# --- extract (matches extract_c3dc_enum_properties.py + comment strip) ---
 
 PROP_PATTERN = re.compile(r"^  ([a-zA-Z0-9_]+):\s*$")
 DESC_PATTERN = re.compile(r"^    Desc:\s*(.*)$")
@@ -52,7 +53,7 @@ ENUM_END_PATTERN = re.compile(r"^    [A-Za-z_]\w*\s*:")
 
 
 def _strip_quotes(val: str) -> str:
-    """Remove surrounding quotes from a YAML list item after comment stripping."""
+    """Remove surrounding single/double quotes from a YAML scalar after comment stripping."""
     val = val.strip()
     if len(val) >= 2:
         if (val.startswith('"') and val.endswith('"')) or (
@@ -62,9 +63,11 @@ def _strip_quotes(val: str) -> str:
     return val.strip()
 
 
-def parse_ctdc_yaml_props(path: Path) -> list[tuple[str, str, list[str]]]:
+def parse_c3dc_yaml_props(path: Path) -> list[tuple[str, str, list[str]]]:
     """
-    Line-parse CTDC property YAML into ``(prop_handle, description, enum_handles)`` (see C3DC).
+    Line-parse C3DC property YAML: collect ``(prop_handle, description, enum_values)`` per property.
+
+    ``enum_values`` entries are term **handles** (for ``/terms`` lookup during enrich).
     """
     with open(path, "r", encoding="utf-8") as f:
         lines = f.readlines()
@@ -121,15 +124,20 @@ def parse_ctdc_yaml_props(path: Path) -> list[tuple[str, str, list[str]]]:
 
 
 def run_extract(yaml_path: Path, out_dir: Path) -> tuple[Path, Path]:
-    """Write ``ctdc_enum_*.csv`` summary + query files; returns ``(summary_path, query_path)``."""
+    """
+    Write ``c3dc_enum_properties_summary.csv`` and ``c3dc_enum_terms_for_verification.csv``.
+
+    Returns:
+        ``(summary_csv_path, query_csv_path)``.
+    """
     if not yaml_path.exists():
         raise FileNotFoundError(f"YAML not found: {yaml_path}")
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    summary_csv = out_dir / "ctdc_enum_properties_summary.csv"
-    query_csv = out_dir / "ctdc_enum_terms_for_verification.csv"
+    summary_csv = out_dir / "c3dc_enum_properties_summary.csv"
+    query_csv = out_dir / "c3dc_enum_terms_for_verification.csv"
 
-    parsed = parse_ctdc_yaml_props(yaml_path)
+    parsed = parse_c3dc_yaml_props(yaml_path)
     summary_rows: list[dict] = []
     query_rows: list[dict] = []
 
@@ -179,8 +187,8 @@ def run_extract(yaml_path: Path, out_dir: Path) -> tuple[Path, Path]:
     return summary_csv, query_csv
 
 
-def discover_ctdc_version(client: APIClient) -> str | None:
-    """Resolve latest CTDC version string from ``/models`` or :func:`get_latest_version`."""
+def discover_c3dc_version(client: APIClient) -> str | None:
+    """Latest C3DC version from ``GET /models`` (``is_latest_version``) or :func:`get_latest_version`."""
     r = client.get("/models/", params={"limit": 500})
     if r.status_code == 200:
         models = r.json()
@@ -196,7 +204,7 @@ def discover_ctdc_version(client: APIClient) -> str | None:
 
 
 def build_prop_to_node_map(client: APIClient, version_string: str) -> dict[str, str]:
-    """Map each property handle to the first CTDC node that exposes it."""
+    """Map property handle → first node handle that lists that property (see CCDI docstring)."""
     nodes_path = f"/model/{quote(MODEL_HANDLE, safe='')}/version/{quote(version_string, safe='')}/nodes"
     nr = client.get(nodes_path, params={"limit": 500})
     if nr.status_code != 200:
@@ -234,7 +242,7 @@ def fetch_handle_to_value_all(
     *,
     page_size: int = 500,
 ) -> dict[str, str]:
-    """Paginated ``GET .../terms`` for one property; returns handle → display value."""
+    """Paginated ``GET .../terms``: full dict of term **handle** → **value** for one property on a node."""
     path = (
         f"/model/{quote(MODEL_HANDLE, safe='')}/version/{quote(version_string, safe='')}"
         f"/node/{quote(node_handle, safe='')}/property/{quote(prop_handle, safe='')}/terms"
@@ -262,19 +270,19 @@ def fetch_handle_to_value_all(
 
 def run_enrich(client: APIClient, query_csv: Path, out_dir: Path) -> tuple[str, Path]:
     """
-    Discover version + nodes, resolve ``term_value`` via paginated ``/terms``, write enriched CSV.
+    Fill discovery columns and ``term_value`` from STS; write ``c3dc_enum_terms_for_verification_enriched.csv``.
 
-    Returns:
-        ``(version_string, enriched_csv_path)``.
+    Same logic as CCDI enrich: version → prop_to_node → paginated ``/terms`` per ``(node, prop)`` →
+    map each row's ``enum_value`` handle to API value in ``term_value``.
     """
     out_dir.mkdir(parents=True, exist_ok=True)
-    enriched_csv = out_dir / "ctdc_enum_terms_for_verification_enriched.csv"
+    enriched_csv = out_dir / "c3dc_enum_terms_for_verification_enriched.csv"
 
-    version_string = discover_ctdc_version(client)
+    version_string = discover_c3dc_version(client)
     if not version_string:
-        raise RuntimeError("Could not discover CTDC version from STS")
+        raise RuntimeError("Could not discover C3DC version from STS")
 
-    print(f"Enrich: CTDC version {version_string!r}")
+    print(f"Enrich: C3DC version {version_string!r}")
 
     prop_to_node = build_prop_to_node_map(client, version_string)
     print(f"Enrich: mapped {len(prop_to_node)} properties to nodes")
@@ -340,10 +348,15 @@ def run_verify(
     *,
     limit: int = 0,
 ) -> tuple[Path, Path, int, int]:
-    """HTTP-verify each non-empty ``term_value`` row; emit CTDC CSV + Markdown reports."""
+    """
+    Call :func:`verify_row` per enriched row (using ``term_value`` only); write C3DC report CSV/MD.
+
+    Returns:
+        ``(report_csv, report_md, passed_count, total)``.
+    """
     out_dir.mkdir(parents=True, exist_ok=True)
-    report_csv = out_dir / "ctdc_term_endpoint_verification_report.csv"
-    report_md = out_dir / "ctdc_term_endpoint_verification_report.md"
+    report_csv = out_dir / "c3dc_term_endpoint_verification_report.csv"
+    report_md = out_dir / "c3dc_term_endpoint_verification_report.md"
 
     with open(enriched_csv, "r", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
@@ -407,7 +420,7 @@ def run_verify(
     failed = [r for r in report_rows if not r["passed"]]
 
     with open(report_md, "w", encoding="utf-8") as f:
-        f.write("# CTDC term endpoint verification report\n\n")
+        f.write("# C3DC term endpoint verification report\n\n")
         f.write(
             f"**Base URL:** `{base_url}`\n\n"
             f"**Endpoint:** `GET {{base}}/model/{{modelHandle}}/version/{{versionString}}/"
@@ -448,21 +461,21 @@ def run_verify(
 
 
 def main() -> None:
-    """CLI for ``sts-ctdc-term-verify`` — same flags as :func:`ccdi_term_verify.main`."""
+    """CLI for ``sts-c3dc-term-verify`` — same flags as CCDI (see :func:`ccdi_term_verify.main`)."""
     import argparse
-    from .config import DEFAULT_STS_BASE_URL, sts_base_url
+    from sts_test_framework.config import DEFAULT_STS_BASE_URL, sts_base_url
 
     parser = argparse.ArgumentParser(
         description=(
-            "CTDC term-by-value pipeline: extract from YAML, enrich via STS, verify /term/{value}, "
-            "write CSV + Markdown under reports/term_value/CTDC/"
+            "C3DC term-by-value pipeline: extract from YAML, enrich via STS, verify /term/{value}, "
+            "write CSV + Markdown under reports/term_value/C3DC/"
         )
     )
     parser.add_argument(
         "--yaml",
         type=Path,
         default=None,
-        help=f"Path to CTDC properties YAML (default: {default_yaml_path().name})",
+        help=f"Path to c3dc-model-props.yml (default: {default_yaml_path()})",
     )
     parser.add_argument(
         "--out-dir",
@@ -484,12 +497,12 @@ def main() -> None:
     parser.add_argument(
         "--skip-extract",
         action="store_true",
-        help="Skip extract; expect ctdc_enum_terms_for_verification.csv in out-dir",
+        help="Skip extract; expect c3dc_enum_terms_for_verification.csv in out-dir",
     )
     parser.add_argument(
         "--skip-enrich",
         action="store_true",
-        help="Skip enrich; expect ctdc_enum_terms_for_verification_enriched.csv in out-dir",
+        help="Skip enrich; expect c3dc_enum_terms_for_verification_enriched.csv in out-dir",
     )
     parser.add_argument(
         "--warn-only",
@@ -505,8 +518,8 @@ def main() -> None:
     ).rstrip("/")
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    query_csv = out_dir / "ctdc_enum_terms_for_verification.csv"
-    enriched_csv = out_dir / "ctdc_enum_terms_for_verification_enriched.csv"
+    query_csv = out_dir / "c3dc_enum_terms_for_verification.csv"
+    enriched_csv = out_dir / "c3dc_enum_terms_for_verification_enriched.csv"
 
     if not args.skip_extract:
         run_extract(yaml_path, out_dir)

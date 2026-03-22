@@ -22,12 +22,6 @@ contract = [
 
 [project.scripts]
 sts-test = "sts_test_framework.cli:main"
-sts-ccdi-term-verify = "sts_test_framework.ccdi_term_verify:main"
-sts-c3dc-term-verify = "sts_test_framework.c3dc_term_verify:main"
-sts-ctdc-term-verify = "sts_test_framework.ctdc_term_verify:main"
-sts-icdc-term-verify = "sts_test_framework.icdc_term_verify:main"
-sts-cds-term-verify = "sts_test_framework.cds_term_verify:main"
-sts-ccdi-dcc-term-verify = "sts_test_framework.ccdi_dcc_term_verify:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

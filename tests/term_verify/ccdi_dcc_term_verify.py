@@ -1,38 +1,33 @@
 """
-CCDI term-by-value verification pipeline driven by vendored ``ccdi-model-props.yml``.
+CCDI-DCC term-by-value verification driven by vendored ``ccdi-dcc-model-props-3.yml``.
 
-**Pipeline (ports ``termValue_verification_scripts`` for CCDI)**
+**Ports** (under ``mdb/termValue_verification_scripts/``):
 
-1. **extract** — Scan the property YAML (line-based, no PyYAML) for ``Enum:`` lists under each
-   property. Each list item is a **term handle** in STS (stored as ``enum_value`` in CSV).
-   Writes a per-property summary CSV and a flat “query” CSV (one row per handle).
+- **extract** — Inline enums plus optional **http(s) URLs** pointing at remote PropDefinitions YAML
+  (CBIIT); values are merged into the same enum list as local items.
+- **enrich** — ``GET /models`` may return handle ``CCDI-DCC`` or ``CCDI_DCC``; paginated
+  ``/terms`` fills ``term_value`` (handle → API value).
+- **verify** — Uses :func:`verify_row`; URL value = ``(term_value or '') or (enum_value or '')``
+  per legacy sheet (non-empty after ``strip``).
 
-2. **enrich** — Call STS to find the latest CCDI model version, map each property handle to a
-   **node** (first node that declares the property), then for each ``(node, property)`` pair
-   paginate ``GET .../terms`` to build **handle → display value**. Copy that value into
-   ``term_value``. The **URL** for ``/term/{termValue}`` must use this API **value**, not the
-   handle.
-
-3. **verify** — For each enriched row with a non-empty ``term_value``, ``GET`` the term-by-value
-   endpoint and assert the JSON array contains an object whose ``value`` equals ``term_value``.
-
-**Shared API** — :func:`verify_row` is imported by other ``*_term_verify`` modules so all models use
-the same HTTP check.
-
-CLI: ``sts-ccdi-term-verify`` (see pyproject ``[project.scripts]``).
+CLI: ``sts-ccdi-dcc-term-verify`` (see pyproject ``[project.scripts]``).
 """
 from __future__ import annotations
 
 import csv
 import re
 import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 from urllib.parse import quote
-from .client import APIClient
 
-MODEL_HANDLE = "CCDI"
+from ccdi_term_verify import get_latest_version, strip_inline_yaml_comment, verify_row
+from sts_test_framework.client import APIClient
 
-# --- repo paths ---
+# Preferred display name for reports; API may return CCDI-DCC or CCDI_DCC
+MODEL_LABEL = "CCDI-DCC"
+
 
 def _repo_root() -> Path:
     """Project root (parent of ``src/``)."""
@@ -40,66 +35,125 @@ def _repo_root() -> Path:
 
 
 def default_yaml_path() -> Path:
-    """Vendored CCDI property YAML under the repo ``data/`` tree (override with ``--yaml``)."""
-    return _repo_root() / "data" / "data-models-yaml" / "ccdi-model-props.yml"
+    """Default vendored CCDI-DCC YAML (override with ``--yaml``)."""
+    return _repo_root() / "data" / "data-models-yaml" / "ccdi-dcc-model-props-3.yml"
 
 
 def default_report_dir() -> Path:
-    """Default directory for extract/enrich/verify CSV + Markdown (override with ``--out-dir``)."""
-    return _repo_root() / "reports" / "term_value" / "CCDI"
+    """Default directory ``reports/term_value/CCDI-DCC/`` for all pipeline artifacts."""
+    return _repo_root() / "reports" / "term_value" / "CCDI-DCC"
 
 
-# --- extract (regex parse; matches extract_ccdi_enum_properties.py) ---
+# --- extract (matches extract_ccdi_dcc_enum_properties.py) ---
 
 PROP_PATTERN = re.compile(r"^  ([a-zA-Z0-9_]+):\s*$")
 DESC_PATTERN = re.compile(r"^    Desc:\s*(.*)$")
-ENUM_HEADER = "    Enum:"
+ENUM_HEADER_PATTERN = re.compile(r"^\s{4,}Enum\s*:")
 ENUM_ITEM_PATTERN = re.compile(r"^\s+-\s+(.*)$")
 ENUM_END_PATTERN = re.compile(r"^    [A-Za-z_]\w*\s*:")
 
 
-def strip_inline_yaml_comment(raw: str) -> str:
+def clean_enum_value(val: str) -> str:
     """
-    Drop YAML ``# comment`` suffix when the ``#`` starts a comment, not when it is inside quotes.
+    Normalize one enum list item: drop YAML ``#`` comment suffix, then strip YAML quotes.
 
-    Handles lines like: ``- "Data Submitter" # these? ...`` → ``- "Data Submitter"`` (caller strips list marker).
+    - **Quoted** values (start with ``"`` or ``'``): use :func:`strip_inline_yaml_comment` like CCDI
+      so ``"Data Submitter" # these? 01/26/2022`` becomes ``Data Submitter``.
+    - **Unquoted** values: strip only `` #`` (space + hash) so ``https://host/path#frag`` is not
+      truncated at the URL fragment ``#``.
     """
-    in_dq = False
-    in_sq = False
-    escape = False
-    i = 0
-    while i < len(raw):
-        c = raw[i]
-        if escape:
-            escape = False
-            i += 1
+    val = val.strip()
+    if val.startswith('"') or val.startswith("'"):
+        val = strip_inline_yaml_comment(val)
+    else:
+        idx = val.find(" #")
+        if idx != -1:
+            val = val[:idx]
+    val = val.strip()
+    if len(val) >= 2:
+        if (val.startswith('"') and val.endswith('"')) or (
+            val.startswith("'") and val.endswith("'")
+        ):
+            val = val[1:-1].replace('\\"', '"').replace("\\'", "'")
+    return val.strip()
+
+
+def is_enum_url(s: str) -> bool:
+    """Return True if ``s`` is an http(s) URL (enum expands to remote YAML list)."""
+    t = s.strip()
+    return t.startswith("http://") or t.startswith("https://")
+
+
+def _parse_remote_prop_definitions_yaml(body: str) -> list[str]:
+    """
+    Parse a fetched remote YAML body for CBIIT-style ``PropDefinitions`` list-of-values.
+
+    Heuristic: after ``PropDefinitions:``, walk keys and collect ``- item`` lines under the first
+    key block; each item is normalized with :func:`clean_enum_value`.
+    """
+    values: list[str] = []
+    lines = body.splitlines()
+    in_list = False
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("PropDefinitions:"):
             continue
-        if c == "\\" and in_dq:
-            escape = True
-            i += 1
+        if (
+            stripped
+            and not stripped.startswith("-")
+            and stripped.endswith(":")
+            and " " not in stripped.rstrip(":")
+        ):
+            in_list = True
             continue
-        if c == '"' and not in_sq:
-            in_dq = not in_dq
-        elif c == "'" and not in_dq:
-            in_sq = not in_sq
-        elif c == "#" and not in_dq and not in_sq:
-            return raw[:i].rstrip()
-        i += 1
-    return raw
+        if in_list and stripped.startswith("-"):
+            rest = stripped[1:].strip()
+            s = clean_enum_value(rest)
+            if s:
+                values.append(s)
+    seen: set[str] = set()
+    deduped = [v for v in values if v not in seen and not seen.add(v)]
+    return deduped
 
 
-def parse_ccdi_yaml_props(path: Path) -> list[tuple[str, str, list[str]]]:
+def fetch_enum_values_from_url(url: str, cache: dict[str, list[str]]) -> list[str]:
     """
-    Walk the CCDI property YAML and collect every property that has an ``Enum`` block.
+    HTTP GET ``url``, parse enum list via :func:`_parse_remote_prop_definitions_yaml`, with caching.
 
-    Uses the same line/regex strategy as ``extract_ccdi_enum_properties.py``: two-space property
-    keys, four-space ``Desc:`` and ``Enum:``, list items under ``Enum`` until the next four-space
-    key. Enum entries are **handles** (after stripping inline ``#`` comments and YAML quotes).
+    On failure, prints a warning and returns ``[]`` (cache stores empty list to avoid retries).
+    """
+    if url in cache:
+        return cache[url]
+    try:
+        req = urllib.request.Request(url, headers={"Accept": "application/x-yaml, text/plain"})
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            body = resp.read().decode("utf-8")
+    except (urllib.error.URLError, urllib.error.HTTPError, OSError) as e:
+        print(f"Warning: could not fetch enum URL {url!r}: {e}")
+        cache[url] = []
+        return []
+    values = _parse_remote_prop_definitions_yaml(body)
+    if not values:
+        print(f"Warning: no enum values parsed from {url!r}")
+    cache[url] = values
+    return values
+
+
+def parse_ccdi_dcc_yaml_props(
+    path: Path, url_cache: dict[str, list[str]] | None = None
+) -> list[tuple[str, str, list[str]]]:
+    """
+    Line-parse main CCDI-DCC YAML; for each enum item, either append a literal value or **expand**
+    a remote URL into many values via :func:`fetch_enum_values_from_url`.
+
+    Args:
+        path: Main property YAML file.
+        url_cache: Optional shared cache for remote fetches (same URL fetched once per run).
 
     Returns:
-        List of ``(prop_handle, description, enum_values)`` where ``enum_values`` are deduped
-        in file order.
+        ``(prop_handle, description, enum_values)`` tuples with deduped enum lists.
     """
+    cache = url_cache if url_cache is not None else {}
     with open(path, "r", encoding="utf-8") as f:
         lines = f.readlines()
 
@@ -122,7 +176,7 @@ def parse_ccdi_yaml_props(path: Path) -> list[tuple[str, str, list[str]]]:
                     desc = desc_match.group(1).strip().replace("\n", " ").replace("\r", " ")
                     i += 1
                     continue
-                if cur.rstrip() == ENUM_HEADER:
+                if ENUM_HEADER_PATTERN.match(cur):
                     i += 1
                     while i < len(lines):
                         item_line = lines[i]
@@ -130,13 +184,12 @@ def parse_ccdi_yaml_props(path: Path) -> list[tuple[str, str, list[str]]]:
                             break
                         item_match = ENUM_ITEM_PATTERN.match(item_line)
                         if item_match:
-                            val = strip_inline_yaml_comment(item_match.group(1).strip())
-                            if (val.startswith('"') and val.endswith('"')) or (
-                                val.startswith("'") and val.endswith("'")
-                            ):
-                                val = val[1:-1].replace('\\"', '"').replace("\\'", "'")
+                            val = clean_enum_value(item_match.group(1))
                             if val:
-                                enum_values.append(val)
+                                if is_enum_url(val):
+                                    enum_values.extend(fetch_enum_values_from_url(val, cache))
+                                else:
+                                    enum_values.append(val)
                             i += 1
                         else:
                             i += 1
@@ -158,24 +211,16 @@ def parse_ccdi_yaml_props(path: Path) -> list[tuple[str, str, list[str]]]:
 
 
 def run_extract(yaml_path: Path, out_dir: Path) -> tuple[Path, Path]:
-    """
-    **Extract stage:** parse ``yaml_path`` and write two CSVs into ``out_dir``.
-
-    - ``ccdi_enum_properties_summary.csv`` — one row per property with enums (counts + joined list).
-    - ``ccdi_enum_terms_for_verification.csv`` — one row per ``(prop_handle, enum_value)`` with
-      empty ``term_value`` and empty discovery columns (filled during enrich).
-
-    Returns:
-        ``(path_to_summary_csv, path_to_query_csv)``.
-    """
+    """Write ``ccdi_dcc_enum_properties_summary.csv`` and ``ccdi_dcc_enum_terms_for_verification.csv``."""
     if not yaml_path.exists():
         raise FileNotFoundError(f"YAML not found: {yaml_path}")
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    summary_csv = out_dir / "ccdi_enum_properties_summary.csv"
-    query_csv = out_dir / "ccdi_enum_terms_for_verification.csv"
+    summary_csv = out_dir / "ccdi_dcc_enum_properties_summary.csv"
+    query_csv = out_dir / "ccdi_dcc_enum_terms_for_verification.csv"
 
-    parsed = parse_ccdi_yaml_props(yaml_path)
+    url_cache: dict[str, list[str]] = {}
+    parsed = parse_ccdi_dcc_yaml_props(yaml_path, url_cache)
     summary_rows: list[dict] = []
     query_rows: list[dict] = []
 
@@ -225,49 +270,12 @@ def run_extract(yaml_path: Path, out_dir: Path) -> tuple[Path, Path]:
     return summary_csv, query_csv
 
 
-# --- enrich (APIClient) ---
-
-RELEASE_VERSION = re.compile(r"^\d+\.\d+\.\d+$")
-
-
-def _parse_semver_tuple(v: str) -> tuple[int, int, int]:
-    """Parse ``major.minor.patch`` for comparing release version strings (internal helper)."""
-    if not RELEASE_VERSION.match(v):
-        return (0, 0, 0)
-    parts = v.split(".")
-    return (int(parts[0]), int(parts[1]), int(parts[2])) if len(parts) == 3 else (0, 0, 0)
-
-
-def get_latest_version(client: APIClient, model_handle: str) -> str | None:
-    """Prefer latest release from /versions; else /latest-version (e.g. pre-release)."""
-    path = f"/model/{quote(model_handle, safe='')}/versions"
-    response = client.get(path)
-    if response.status_code != 200:
-        return None
-    versions = response.json()
-    if not isinstance(versions, list):
-        return None
-    release = [v for v in versions if isinstance(v, str) and RELEASE_VERSION.match(v)]
-    if release:
-        return max(release, key=_parse_semver_tuple)
-    latest_path = f"/model/{quote(model_handle, safe='')}/latest-version"
-    latest_res = client.get(latest_path)
-    if latest_res.status_code != 200:
-        return None
-    data = latest_res.json()
-    if isinstance(data, dict):
-        ver = data.get("version")
-        if isinstance(ver, str) and ver.strip():
-            return ver.strip()
-    return None
-
-
-def discover_ccdi_version(client: APIClient) -> str | None:
+def discover_ccdi_dcc_model_and_version(client: APIClient) -> tuple[str, str] | None:
     """
-    Resolve which **model version string** to use for all subsequent paths.
+    Return ``(model_handle, version_string)`` for STS paths.
 
-    Prefer ``GET /models`` entry with ``handle == CCDI`` and ``is_latest_version``; if missing,
-    fall back to :func:`get_latest_version` (release semver first, else ``/latest-version``).
+    Prefer ``GET /models`` with ``is_latest_version`` and handle ``CCDI-DCC`` or ``CCDI_DCC``;
+    otherwise try :func:`get_latest_version` for each handle.
     """
     r = client.get("/models/", params={"limit": 500})
     if r.status_code == 200:
@@ -276,24 +284,25 @@ def discover_ccdi_version(client: APIClient) -> str | None:
             for m in models:
                 if not isinstance(m, dict):
                     continue
-                if m.get("handle") == MODEL_HANDLE and m.get("is_latest_version"):
+                h = m.get("handle")
+                if h in ("CCDI-DCC", "CCDI_DCC") and m.get("is_latest_version"):
                     ver = m.get("version")
                     if isinstance(ver, str) and ver.strip():
-                        return ver.strip()
-    return get_latest_version(client, MODEL_HANDLE)
+                        return (str(h), ver.strip())
+    for handle in ("CCDI-DCC", "CCDI_DCC"):
+        v = get_latest_version(client, handle)
+        if v:
+            return (handle, v)
+    return None
 
 
 def build_prop_to_node_map(
-    client: APIClient, version_string: str
+    client: APIClient, model_handle: str, version_string: str
 ) -> dict[str, str]:
-    """
-    Map each **property handle** to a **node handle** for STS path construction.
-
-    Iterates every node under the model version and lists each node's properties. The **first**
-    node that exposes a given property wins (same as legacy enrich scripts). Used so each
-    ``prop_handle`` row knows which ``.../node/{nodeHandle}/property/{propHandle}/...`` to call.
-    """
-    nodes_path = f"/model/{quote(MODEL_HANDLE, safe='')}/version/{quote(version_string, safe='')}/nodes"
+    """Map property handle → first node (same semantics as CCDI, but parameterized ``model_handle``)."""
+    nodes_path = (
+        f"/model/{quote(model_handle, safe='')}/version/{quote(version_string, safe='')}/nodes"
+    )
     nr = client.get(nodes_path, params={"limit": 500})
     if nr.status_code != 200:
         return {}
@@ -306,7 +315,7 @@ def build_prop_to_node_map(
         if not node_handle:
             continue
         props_path = (
-            f"/model/{quote(MODEL_HANDLE, safe='')}/version/{quote(version_string, safe='')}"
+            f"/model/{quote(model_handle, safe='')}/version/{quote(version_string, safe='')}"
             f"/node/{quote(node_handle, safe='')}/properties"
         )
         pr = client.get(props_path, params={"limit": 500})
@@ -324,20 +333,16 @@ def build_prop_to_node_map(
 
 def fetch_handle_to_value_all(
     client: APIClient,
+    model_handle: str,
     version_string: str,
     node_handle: str,
     prop_handle: str,
     *,
     page_size: int = 500,
 ) -> dict[str, str]:
-    """
-    GET .../terms with ``skip``/``limit`` pagination until all pages are read.
-
-    A single page is insufficient for very large enums (e.g. ``laboratory_test_name``);
-    handle ``T4`` must resolve to value ``T4 Stage Finding`` via the full list.
-    """
+    """Paginated ``GET .../terms`` for the given model handle (not a module constant)."""
     path = (
-        f"/model/{quote(MODEL_HANDLE, safe='')}/version/{quote(version_string, safe='')}"
+        f"/model/{quote(model_handle, safe='')}/version/{quote(version_string, safe='')}"
         f"/node/{quote(node_handle, safe='')}/property/{quote(prop_handle, safe='')}/terms"
     )
     out: dict[str, str] = {}
@@ -361,34 +366,25 @@ def fetch_handle_to_value_all(
     return out
 
 
-def run_enrich(
-    client: APIClient, query_csv: Path, out_dir: Path
-) -> tuple[str, Path]:
+def run_enrich(client: APIClient, query_csv: Path, out_dir: Path) -> tuple[str, str, Path]:
     """
-    **Enrich stage:** read the query CSV, call STS to fill discovery + ``term_value``, write enriched CSV.
-
-    Steps:
-
-    #. Discover ``version_string`` and build ``prop_to_node`` map.
-    #. For each query row, if ``prop_handle`` is known, set ``model_handle``, ``version_string``,
-       ``node_handle``.
-    #. For each distinct ``(node_handle, prop_handle)``, fetch **all** terms via
-       :func:`fetch_handle_to_value_all` (paginated).
-    #. For each row, set ``term_value`` to the API **value** for the row's ``enum_value`` **handle**.
+    Discover model + version, map properties to nodes, resolve ``term_value`` from ``/terms``.
 
     Returns:
-        ``(version_string, path_to_ccdi_enum_terms_for_verification_enriched.csv)``.
+        ``(model_handle, version_string, enriched_csv_path)`` — model handle is the STS string
+        (``CCDI-DCC`` or ``CCDI_DCC``).
     """
     out_dir.mkdir(parents=True, exist_ok=True)
-    enriched_csv = out_dir / "ccdi_enum_terms_for_verification_enriched.csv"
+    enriched_csv = out_dir / "ccdi_dcc_enum_terms_for_verification_enriched.csv"
 
-    version_string = discover_ccdi_version(client)
-    if not version_string:
-        raise RuntimeError("Could not discover CCDI version from STS")
+    discovered = discover_ccdi_dcc_model_and_version(client)
+    if not discovered:
+        raise RuntimeError("Could not discover CCDI-DCC model handle/version from STS")
+    model_handle, version_string = discovered
 
-    print(f"Enrich: CCDI version {version_string!r}")
+    print(f"Enrich: {MODEL_LABEL} version {version_string!r} (handle: {model_handle!r})")
 
-    prop_to_node = build_prop_to_node_map(client, version_string)
+    prop_to_node = build_prop_to_node_map(client, model_handle, version_string)
     print(f"Enrich: mapped {len(prop_to_node)} properties to nodes")
 
     rows: list[dict] = []
@@ -403,7 +399,7 @@ def run_enrich(
                 row["term_value"] = ""
             ph = row.get("prop_handle", "")
             if ph in prop_to_node:
-                row["model_handle"] = MODEL_HANDLE
+                row["model_handle"] = model_handle
                 row["version_string"] = version_string
                 row["node_handle"] = prop_to_node[ph]
             rows.append(row)
@@ -420,7 +416,7 @@ def run_enrich(
         if key not in seen_node_prop:
             seen_node_prop.add(key)
             handle_to_value_cache[key] = fetch_handle_to_value_all(
-                client, version_string, nh, ph
+                client, model_handle, version_string, nh, ph
             )
 
     for row in rows:
@@ -441,54 +437,7 @@ def run_enrich(
         f"Enrich: wrote {enriched_csv.name} ({filled_node}/{len(rows)} with node, "
         f"{filled_tv}/{len(rows)} with term_value)"
     )
-    return version_string, enriched_csv
-
-
-# --- verify ---
-
-def verify_row(
-    client: APIClient,
-    model_handle: str,
-    version_string: str,
-    node_handle: str,
-    prop_handle: str,
-    term_value: str,
-) -> tuple[int, bool, str]:
-    """
-    Perform a single **GET** for the term-by-value endpoint (shared by all commons pipelines).
-
-    Calls::
-
-        GET /model/{model_handle}/version/{version_string}/node/{node_handle}/
-            property/{prop_handle}/term/{url_encoded_term_value}
-
-    **Important:** ``term_value`` must be the Term **value** field returned by STS (what we store
-    in enriched CSV ``term_value`` for CCDI-like models), not the YAML/API handle, unless the model's
-    legacy script explicitly uses the handle (e.g. CDS ``enum_value`` only).
-
-    Returns:
-        ``(http_status, passed, notes)`` where ``passed`` means status 200 and the response JSON
-        array contains at least one object with ``"value" == term_value``.
-    """
-    quoted_term = quote(str(term_value), safe="")
-    path = (
-        f"/model/{quote(model_handle, safe='')}/version/{quote(version_string, safe='')}"
-        f"/node/{quote(node_handle, safe='')}/property/{quote(prop_handle, safe='')}"
-        f"/term/{quoted_term}"
-    )
-    response = client.get(path)
-    status = response.status_code
-    body = response.json()
-
-    if status != 200:
-        body_note = body if isinstance(body, dict) else (response.body[:200] if response.body else "")
-        return status, False, "non-200" if isinstance(body, dict) else str(body_note)
-    if not isinstance(body, list):
-        return status, False, "response not array"
-    for item in body:
-        if isinstance(item, dict) and item.get("value") == term_value:
-            return status, True, ""
-    return status, False, "no matching term value in response"
+    return model_handle, version_string, enriched_csv
 
 
 def run_verify(
@@ -500,45 +449,40 @@ def run_verify(
     limit: int = 0,
 ) -> tuple[Path, Path, int, int]:
     """
-    **Verify stage:** HTTP-check each row of the enriched CSV and write pass/fail reports.
+    Call :func:`verify_row` with legacy URL value: ``(term_value or enum_value)`` after empty check.
 
-    Skips rows missing model path fields or with empty ``term_value`` (handle cannot be used in the
-    URL for CCDI). Optional ``limit`` truncates **after** filtering (for smoke tests).
-
-    Writes:
-
-    - ``ccdi_term_endpoint_verification_report.csv`` — per-row status and notes.
-    - ``ccdi_term_endpoint_verification_report.md`` — human-readable summary + failed row preview.
-
-    Returns:
-        ``(report_csv_path, report_md_path, passed_count, total_verified_rows)``.
+    Writes ``ccdi_dcc_term_endpoint_verification_report.{csv,md}``.
     """
     out_dir.mkdir(parents=True, exist_ok=True)
-    report_csv = out_dir / "ccdi_term_endpoint_verification_report.csv"
-    report_md = out_dir / "ccdi_term_endpoint_verification_report.md"
+    report_csv = out_dir / "ccdi_dcc_term_endpoint_verification_report.csv"
+    report_md = out_dir / "ccdi_dcc_term_endpoint_verification_report.md"
 
     with open(enriched_csv, "r", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
 
-    # CCDI: /term/{termValue} requires the Term *value* from /terms, never the YAML/API *handle*
-    # (enum_value). Rows without a resolved term_value are skipped (no HTTP call).
     to_verify: list[dict] = []
-    skipped_no_value = 0
+    skipped_no_url_value = 0
     for row in rows:
-        if not (row.get("model_handle") and row.get("version_string") and row.get("node_handle")):
+        if not (
+            row.get("model_handle")
+            and row.get("version_string")
+            and row.get("node_handle")
+        ):
             continue
-        term_value_only = row.get("term_value") or ""
-        if not str(term_value_only).strip():
-            skipped_no_value += 1
+        # Match verify_ccdi_dcc_term_endpoint_from_sheet.py: prefer term_value, else enum_value
+        value_for_url = (row.get("term_value") or "") or (row.get("enum_value") or "")
+        if not str(value_for_url).strip():
+            skipped_no_url_value += 1
             continue
-        to_verify.append({**row, "_value_for_url": term_value_only})
+        to_verify.append({**row, "_value_for_url": value_for_url})
 
     if limit and limit > 0:
         to_verify = to_verify[:limit]
 
     print(
         f"Verify: {len(to_verify)} rows to GET (from {len(rows)} enriched; "
-        f"skipped {skipped_no_value} with empty term_value — handle cannot be used as URL param)"
+        f"skipped {skipped_no_url_value} empty after (term_value or enum_value); "
+        f"legacy: `(term_value or '') or (enum_value or '')` then `.strip()` check)"
     )
 
     report_rows: list[dict] = []
@@ -581,7 +525,7 @@ def run_verify(
     failed = [r for r in report_rows if not r["passed"]]
 
     with open(report_md, "w", encoding="utf-8") as f:
-        f.write("# CCDI term endpoint verification report\n\n")
+        f.write(f"# {MODEL_LABEL} term endpoint verification report\n\n")
         f.write(
             f"**Base URL:** `{base_url}`\n\n"
             f"**Endpoint:** `GET {{base}}/model/{{modelHandle}}/version/{{versionString}}/"
@@ -589,9 +533,11 @@ def run_verify(
         )
         f.write(f"**Input:** `{enriched_csv.name}`\n\n")
         f.write(
-            f"**Rows skipped (no API `term_value`):** {skipped_no_value} "
-            "(YAML handle could not be resolved from paginated `/terms`; "
-            "`/term/{termValue}` requires the Term **value**, not the handle.)\n\n"
+            f"**Rows skipped (neither `term_value` nor `enum_value` usable):** {skipped_no_url_value}\n\n"
+        )
+        f.write(
+            "**URL term:** `(term_value or '') or (enum_value or '')` must be non-empty after strip "
+            "(legacy). Prefer API `term_value` from `/terms` when enrich resolved the handle.\n\n"
         )
         f.write(f"**Rows verified (HTTP):** {len(report_rows)}\n\n")
         f.write(f"**Passed:** {passed_count}\n\n")
@@ -622,27 +568,22 @@ def run_verify(
 
 
 def main() -> None:
-    """
-    CLI entrypoint: run extract → enrich → verify unless ``--skip-extract`` / ``--skip-enrich``.
-
-    Exit code **1** if any verified row fails (unless ``--warn-only``). Uses ``STS_BASE_URL`` or
-    ``--base-url`` (must include ``/v2``).
-    """
+    """CLI for ``sts-ccdi-dcc-term-verify`` (extract may require network for remote enum URLs)."""
     import argparse
-
-    from .config import DEFAULT_STS_BASE_URL, sts_base_url
+    from sts_test_framework.config import DEFAULT_STS_BASE_URL, sts_base_url
 
     parser = argparse.ArgumentParser(
         description=(
-            "CCDI term-by-value pipeline: extract from YAML, enrich via STS, verify /term/{value}, "
-            "write CSV + Markdown under reports/term_value/CCDI/"
+            f"{MODEL_LABEL} term pipeline: extract from YAML (optional remote enum URLs), "
+            "enrich via STS, verify /term/{{value}}, write CSV + Markdown under "
+            "reports/term_value/CCDI-DCC/"
         )
     )
     parser.add_argument(
         "--yaml",
         type=Path,
         default=None,
-        help=f"Path to ccdi-model-props.yml (default: {default_yaml_path()})",
+        help=f"Path to ccdi-dcc-model-props-3.yml (default: {default_yaml_path()})",
     )
     parser.add_argument(
         "--out-dir",
@@ -664,27 +605,29 @@ def main() -> None:
     parser.add_argument(
         "--skip-extract",
         action="store_true",
-        help="Skip extract; expect ccdi_enum_terms_for_verification.csv in out-dir",
+        help="Skip extract; expect ccdi_dcc_enum_terms_for_verification.csv in out-dir",
     )
     parser.add_argument(
         "--skip-enrich",
         action="store_true",
-        help="Skip enrich; expect ccdi_enum_terms_for_verification_enriched.csv in out-dir",
+        help="Skip enrich; expect ccdi_dcc_enum_terms_for_verification_enriched.csv in out-dir",
     )
     parser.add_argument(
         "--warn-only",
         action="store_true",
-        help="Exit 0 even if some rows fail (still writes reports; use when refreshing artifacts)",
+        help="Exit 0 even if some rows fail (still writes reports)",
     )
     args = parser.parse_args()
 
     yaml_path = Path(args.yaml) if args.yaml else default_yaml_path()
     out_dir = Path(args.out_dir) if args.out_dir else default_report_dir()
-    base_url = (args.base_url or sts_base_url()).rstrip("/")
+    base_url = (
+        args.base_url or sts_base_url()
+    ).rstrip("/")
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    query_csv = out_dir / "ccdi_enum_terms_for_verification.csv"
-    enriched_csv = out_dir / "ccdi_enum_terms_for_verification_enriched.csv"
+    query_csv = out_dir / "ccdi_dcc_enum_terms_for_verification.csv"
+    enriched_csv = out_dir / "ccdi_dcc_enum_terms_for_verification_enriched.csv"
 
     if not args.skip_extract:
         run_extract(yaml_path, out_dir)
@@ -695,7 +638,7 @@ def main() -> None:
     client = APIClient(base_url)
 
     if not args.skip_enrich:
-        _, enriched_path = run_enrich(client, query_csv, out_dir)
+        _, _, enriched_path = run_enrich(client, query_csv, out_dir)
         enriched_csv = enriched_path
     elif not enriched_csv.exists():
         print(f"--skip-enrich but missing {enriched_csv}", file=sys.stderr)

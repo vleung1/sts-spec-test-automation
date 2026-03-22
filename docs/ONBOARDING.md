@@ -1,6 +1,6 @@
 # STS v2 API Test Framework – Onboarding Guide
 
-This document explains what the framework does, how it works, how to run it, and how to maintain or extend it. Use it together with the [README](../README.md) for quick reference; this guide provides the full picture.
+This document explains what the framework does, how it works, how to run it, and how to maintain or extend it. Use it together with the [README](../README.md) for quick reference; this guide provides the full picture. For a **minimal command-only** path (install, optional env vars, pytest, three convenience scripts), see **[RUNBOOK.md](RUNBOOK.md)**.
 
 ---
 
@@ -133,8 +133,6 @@ sts-test-framework-agent/
 ├── README.md                 # Quick start and overview (complement to this doc)
 ├── pyproject.toml            # Python package and dependencies (pytest, PyYAML, jsonschema)
 ├── requirements.txt          # Same deps for pip install
-├── config/
-│   └── env.example           # Example env vars (STS_BASE_URL, STS_SSL_VERIFY, etc.)
 ├── spec/
 │   └── v2.yaml               # OpenAPI spec for STS v2 (source of truth; do not edit by hand unless you own the API)
 ├── src/sts_test_framework/   # Main framework code
@@ -161,7 +159,7 @@ sts-test-framework-agent/
 │   │   └── test_model_pvs_no_duplicates.py
 │   └── test_generated/        # Dynamic tests: one test per generated case
 │       └── test_from_spec.py   # Uses pytest_generate_tests to parametrize by case
-├── data/data-models-yaml/     # Vendored property YAML; sts-*-term-verify per commons
+├── data/data-models-yaml/     # Vendored property YAML; tests/term_verify/* per commons
 ├── reports/                   # Default output for timestamped report_*.json and report_*.html
 │   └── term_value/            # YAML-driven term-by-value reports (CCDI, C3DC, CTDC, ICDC, CDS, CCDI-DCC, …)
 └── docs/
@@ -174,7 +172,7 @@ sts-test-framework-agent/
 - **spec/** – Keeps the API contract in one place; the rest of the code only reads it.
 - **src/sts_test_framework/** – Reusable library: loader, client, discover, generator, runners, reporters. The CLI and pytest both use these.
 - **tests/conftest.py** – Shared fixtures so that both manual and generated tests get the same `api_client` and `test_data` without repeating setup.
-- **test_manual/** vs **test_generated/** vs **unit/** – Manual tests are for things that don’t fit the “one endpoint, one positive/negative case” pattern (e.g. `/id` by entity type, model-PVS duplicate checks). **Unit** tests under `tests/unit/` exercise `functional.py` helpers with mocks (no live API). **Full term-by-value coverage per commons** (YAML → enrich → verify) is run via `**sts-ccdi-term-verify`**, `**sts-c3dc-term-verify**`, `**sts-ctdc-term-verify**`, `**sts-icdc-term-verify**`, `**sts-cds-term-verify**`, `**sts-ccdi-dcc-term-verify**`, etc., not pytest. Generated tests are the bulk of coverage and come from the spec.
+- **test_manual/** vs **test_generated/** vs **unit/** – Manual tests are for things that don’t fit the “one endpoint, one positive/negative case” pattern (e.g. `/id` by entity type, model-PVS duplicate checks). **Unit** tests under `tests/unit/` exercise `functional.py` helpers with mocks (no live API). **Full term-by-value coverage per commons** (YAML → enrich → verify) is run via standalone scripts under `tests/term_verify/` (e.g. `python tests/term_verify/ccdi_term_verify.py`), not pytest. Generated tests are the bulk of coverage and come from the spec.
 
 ---
 
@@ -206,14 +204,11 @@ sts-test-framework-agent/
   pip install -e .
   ```
 
-### 6.2 Configuration: the config folder and environment variables
+### 6.2 Configuration: environment variables
 
-The framework does **not** read a config file by default. It reads **environment variables** (e.g. `os.getenv("STS_BASE_URL")`). So you control the base URL, SSL behavior, and report directory by **setting those variables** before you run pytest or the CLI.
+The framework does **not** read a repo config file and does **not** auto-load `.env`. It reads **environment variables** (e.g. `os.getenv("STS_BASE_URL")`). Control the base URL, SSL behavior, and report directory by **setting those variables** before pytest or the CLI, or pass **`--base-url`** to the CLI only.
 
-**What is `config/env.example`?**  
-It is a **template** that lists the variable names and shows example values (commented out). It is there so you know what you *can* set. The framework never loads `env.example` automatically. You use it as a reference when setting your own configuration.
-
-**How do I actually set the variables?** You have a few options:
+**How do I set the variables?**
 
 1. **Command line (one-off run)**  
    Prefix the variable for a single command (pytest or CLI):
@@ -235,14 +230,7 @@ It is a **template** that lists the variable names and shows example values (com
    python -m sts_test_framework.cli --report reports/
    ```
 
-3. **A real env file (e.g. `config/env` or `.env`)**  
-   Copy `config/env.example` to a file like `config/env` or `.env` and put real values there (one per line, `NAME=value`). The framework does **not** load that file by itself. You either:
-   - **Source it** before running: `source config/env` (if you name the file `config/env` and use `export`-style lines), or  
-   - Use a tool that loads `.env` (e.g. `python-dotenv`) and run your tests through that, or  
-   - In CI, set the same variables in the job config (see below).  
-   If you create `config/env`, add it to `.gitignore` so you don’t commit secrets or environment-specific URLs.
-
-4. **CI (e.g. GitHub Actions)**  
+3. **CI (e.g. GitHub Actions)**  
    Set the variables in the job’s `env` block so each run targets the right environment (see “Running against QA, stage, or prod” below).
 
 **Variable reference:**
@@ -255,10 +243,10 @@ Implementation detail: base URL resolution lives in [`sts_test_framework.config.
 | `STS_BASE_URL`   | Base URL of the STS v2 API (pytest, CLI, and `APIClient`; include `/v2`)                                                | `https://sts-qa.cancer.gov/v2` |
 | `STS_SSL_VERIFY` | Set to `false` to disable SSL certificate verification (e.g. local/dev with self-signed certs)                         | `true`                         |
 | `REPORT_DIR`     | Directory where the CLI writes timestamped `report_YYYY-MM-DDTHH-MM-SS.json` and `.html` (each run gets its own files) | `reports`                      |
-| `STS_MODELS`     | Comma-separated model handles for `scripts/run_all_models.py` only (subset of models)                                   | (all models in script)         |
+| `STS_MODELS`     | Comma-separated model handles for `scripts/run_autogenerated_tests.py` only (subset of models)                                   | (all models in script)         |
 | `STS_DEDUP_LIMIT` | Integer cap on parametrized dedup test cases in `tests/test_manual/test_model_pvs_no_duplicates.py`                   | `14`                           |
 
-`STS_QA_URL` may appear in `config/env.example` as a **comment** for human reference; the framework does **not** read it—use **`STS_BASE_URL`** for QA (or any environment).
+`STS_QA_URL` is **not** read by the framework—use **`STS_BASE_URL`** for QA (or any environment).
 
 
 If you don’t set these, the defaults are used. The framework needs **network access** to the STS server for discovery and for running the tests.
@@ -332,6 +320,8 @@ The framework can be run in **two ways**. Both use the same spec, discovery, and
 
 ### 6.4 Run with pytest (recommended for day-to-day work)
 
+For **timestamped HTML/JSON reports** for the OpenAPI-generated GET suite (especially **per data model**), use `python scripts/run_autogenerated_tests.py` or `python -m sts_test_framework.cli --report ...` rather than pytest alone. The **`tests/test_generated/`** tree remains the pytest-based way to run the same generated cases when you want IDE integration or a single-process `pytest tests/ -v` run.
+
 From the project root:
 
 ```bash
@@ -395,7 +385,7 @@ To run the full test suite once **per data model** (CDS, CCDI, CCDI-DCC, ICDC, C
 
 ```bash
 # From project root; uses STS_BASE_URL (default: https://sts-qa.cancer.gov/v2)
-python scripts/run_all_models.py
+python scripts/run_autogenerated_tests.py
 ```
 
 **Behavior:**
@@ -416,13 +406,13 @@ python scripts/run_all_models.py
 **Example – run only PSDC and CTDC:**
 
 ```bash
-STS_MODELS=PSDC,CTDC python scripts/run_all_models.py
+STS_MODELS=PSDC,CTDC python scripts/run_autogenerated_tests.py
 ```
 
 **Example – run against prod:**
 
 ```bash
-STS_BASE_URL=https://sts.cancer.gov/v2 python scripts/run_all_models.py
+STS_BASE_URL=https://sts.cancer.gov/v2 python scripts/run_autogenerated_tests.py
 ```
 
 ### 6.7 What happens when you run (under the hood)
@@ -510,6 +500,63 @@ A more detailed breakdown of each step is below.
 
 When you run **pytest** only, step 6 does not run unless you add a pytest hook or plugin that calls the same aggregation and report-writing code after the test run.
 
+### 6.8 Convenience shell scripts
+
+These wrap common workflows from the project root. See also **[RUNBOOK.md](RUNBOOK.md)** for a short summary table.
+
+**`scripts/run_manual_tests.sh`**
+
+- Runs: `pytest tests/test_manual/ -v --html=reports/manual_tests.html --self-contained-html`
+- Extra arguments are forwarded to pytest (e.g. `-m nullcde`, `-k test_name`).
+- Output: standalone **pytest-html** report at `reports/manual_tests.html`. This is separate from the framework CLI’s `report_*.html` (from `python -m sts_test_framework.cli`). The project depends on `pytest-html` for this path.
+
+**`scripts/run_all_term_verify.sh`**
+
+- Runs every `tests/term_verify/*_term_verify.py` in sequence.
+- Sets `PYTHONPATH` to include `src/` so `from sts_test_framework...` imports resolve.
+- Forwards all arguments to each script (e.g. `--warn-only`, `--limit 50`).
+- For per-commons scripts, outputs, and flags, see [§6.9 Term-by-value](#69-term-by-value-yaml--sts) below.
+
+**`scripts/run_full_suite.sh`**
+
+- Runs the three pipelines **in order**: `run_manual_tests.sh` → `run_autogenerated_tests.py` → `run_all_term_verify.sh`.
+- **Always runs all three** stages even if one fails; prints per-stage pass/fail and a short summary. **Exit code 1** if any stage failed (so CI still goes red).
+- Does **not** forward command-line arguments; use each script alone when you need `-m nullcde`, `STS_MODELS`, `--warn-only`, etc.
+
+### 6.9 Term-by-value (YAML → STS)
+
+These pipelines are **not** pytest and **not** the OpenAPI-generated suite. Each script reads a vendored YAML under `data/data-models-yaml/`, enriches enum handles with STS, and verifies term-by-value endpoints. Run from the project root with `pip install -e .` (or ensure `src` is on `PYTHONPATH`).
+
+**Run all commons in one go:**
+
+```bash
+bash scripts/run_all_term_verify.sh
+```
+
+**Run one commons** (repeat `PYTHONPATH` if not using the shell runner):
+
+```bash
+PYTHONPATH=src python tests/term_verify/ccdi_term_verify.py
+```
+
+| Script | Output directory (default) | Final report filenames (under that dir) |
+|--------|----------------------------|----------------------------------------|
+| `python tests/term_verify/ccdi_term_verify.py` | `reports/term_value/CCDI/` | `ccdi_term_endpoint_verification_report.csv`, `ccdi_term_endpoint_verification_report.md` |
+| `python tests/term_verify/c3dc_term_verify.py` | `reports/term_value/C3DC/` | `c3dc_term_endpoint_verification_report.csv`, `.md` |
+| `python tests/term_verify/ctdc_term_verify.py` | `reports/term_value/CTDC/` | `ctdc_term_endpoint_verification_report.csv`, `.md` |
+| `python tests/term_verify/icdc_term_verify.py` | `reports/term_value/ICDC/` | `icdc_term_endpoint_verification_report.csv`, `.md` |
+| `python tests/term_verify/cds_term_verify.py` | `reports/term_value/CDS/` | `cds_term_endpoint_verification_report.csv`, `.md` |
+| `python tests/term_verify/ccdi_dcc_term_verify.py` | `reports/term_value/CCDI-DCC/` | `ccdi_dcc_term_endpoint_verification_report.csv`, `.md` |
+
+**Useful flags** (supported by the term-verify CLIs; also work when passed through `run_all_term_verify.sh`):
+
+```bash
+python tests/term_verify/ctdc_term_verify.py --limit 50   # first N rows only
+python tests/term_verify/ctdc_term_verify.py --warn-only  # exit 0 even if some rows fail (failures still listed in reports)
+```
+
+Each pipeline may write intermediate CSVs during extract/enrich; for triage use the final `*_term_endpoint_verification_report.csv` / `.md` pair. Open the **`.md`** for a readable summary; use the **`.csv`** for per-row filtering.
+
 ---
 
 ## 7. How to add or change tests
@@ -578,7 +625,19 @@ The CLI writes **timestamped** report files so each run keeps its own reports (n
 
 Use the JSON for metrics and automation; use the HTML for quick inspection.
 
-### 8.2 Running in CI (e.g. GitHub Actions)
+### 8.2 Which file should I open?
+
+| Goal | Open this |
+|------|-----------|
+| Run **all three** report pipelines in one command | `bash scripts/run_full_suite.sh` — then open the artifacts below (`manual_tests.html`, per-model `report_*.html`, term-verify `*.md` / `*.csv`) |
+| Did every generated GET pass (single CLI run)? | Latest `reports/report_*.html` from `python -m sts_test_framework.cli --report reports/` |
+| Did generated GETs pass **per data model**? | Newest `reports/<ModelHandle>/report_*.html` from `python scripts/run_autogenerated_tests.py` |
+| Automate pass rate / export failures | The same run’s `report_*.json` |
+| Manual pytest results as HTML | `reports/manual_tests.html` from `bash scripts/run_manual_tests.sh` |
+| Manual pytest failed (no HTML run) | Pytest console output; or re-run with `run_manual_tests.sh` |
+| Did YAML enum terms resolve in STS? | Latest `reports/term_value/<COMMONS>/*_term_endpoint_verification_report.md` (and matching `.csv` for detail) |
+
+### 8.3 Running in CI (e.g. GitHub Actions)
 
 Example:
 
