@@ -249,6 +249,7 @@ Implementation detail: base URL resolution lives in [`sts_test_framework.config.
 
 `STS_QA_URL` is **not** read by the framework—use **`STS_BASE_URL`** for QA (or any environment).
 
+**Legacy CDE-PVS vs v2 (manual tests):** Some manual tests compare the pre-v2 route `GET {origin}/cde-pvs/{id}/{version}?format=json` to v2 `GET .../terms/cde-pvs/{id}/{version}/pvs`. The **origin** is derived from `STS_BASE_URL` by stripping a trailing `/v2` (`sts_test_framework.config.sts_legacy_origin()`). You do **not** set a second base URL unless your deployment serves legacy paths on a different host—in that case adjust `STS_BASE_URL` or extend the helper. See `tests/test_manual/test_cde_pvs_legacy_vs_v2.py` and marker `cde_pvs_legacy`.
 
 If you don’t set these, the defaults are used. The framework needs **network access** to the STS server for discovery and for running the tests.
 
