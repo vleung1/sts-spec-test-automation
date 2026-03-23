@@ -35,8 +35,8 @@ WHERE THE DATA COMES FROM
      from the original dedup ticket (always run; expects HTTP 200 and no duplicates).
 
 **Environment:** ``STS_BASE_URL`` (current STS). ``STS_DEDUP_LIMIT`` — total discovered cases (default
-**60**), **fairly split** across all major models; use e.g. **14** for a smaller run (with 7 models,
-2 properties each when discovery succeeds).
+**140**), **fairly split** across ``len(MAJOR_MODELS)`` (with **7** models, **20** properties per model
+when discovery succeeds). Use e.g. **14** for a smaller run (2 per model with 7 models).
 
 ================================================================================
 TESTS IN THIS FILE (summary)
@@ -61,7 +61,8 @@ HOW TO RUN
 
     pytest tests/test_manual/test_model_pvs_no_duplicates.py -v
 
-Optional: ``STS_DEDUP_LIMIT=14`` for a smaller total cap (e.g. 2 per model with 7 models).
+Optional: ``STS_DEDUP_LIMIT=14`` for a smaller total cap (e.g. 2 per model with 7 models). Override
+the default **140** when you need a different total or per-model budget.
 """
 import json
 import os
@@ -80,8 +81,8 @@ BUG_TICKET_MODEL_PVS_CASES = [
     {"model": "CDS", "property": "file_type", "version": "11.0.0"},
 ]
 
-# Default: 60 total discovered cases, split across len(MAJOR_MODELS) (fair remainder to first models).
-# Override with STS_DEDUP_LIMIT.
+# Default: 140 total discovered cases (= 20 properties × 7 models with current MAJOR_MODELS).
+# Fair split across len(MAJOR_MODELS); override with STS_DEDUP_LIMIT.
 def _dedup_limit():
     try:
         return int(os.getenv("STS_DEDUP_LIMIT", "140"))
@@ -93,7 +94,7 @@ def _max_properties_for_model_index(max_total: int, n_models: int, model_index: 
     """
     Fair split of max_total across n_models: first (max_total % n_models) models get one extra slot.
 
-    Example: max_total=60, n=7 -> 9+9+9+9+8+8+8. Scales when MAJOR_MODELS grows (uses n_models, not 7).
+    Examples: max_total=140, n=7 -> 20 each. max_total=60, n=7 -> 9+9+9+9+8+8+8. Uses n_models, not a hardcoded count.
     """
     if n_models <= 0 or max_total <= 0:
         return 0
