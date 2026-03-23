@@ -1,30 +1,89 @@
 """
-Manual tests for:
+Manual tests: model permissible values (model-pvs) — aggregate and property-level routes.
 
-- ``GET /terms/model-pvs/{model}/`` — all properties with PVS for a model
-- ``GET /terms/model-pvs/{model}/{property}`` — PVS for one property (query ``version`` optional;
-  same semantics as by-model route; product docs may say ``model_version``)
+================================================================================
+WHAT THIS IS (plain English)
+================================================================================
 
-Bundled ``spec/v2.yaml`` may omit ``GET /terms/model-pvs/{model}/``; property-level path is the documented contract reference.
+STS exposes **permissible values** (PVs) for data model properties — the allowed values clients
+see when filling or validating metadata. These tests check that the **model-pvs** HTTP API behaves
+consistently: correct JSON shape, correct **model version** in the response when you omit or pass
+``version``, and that **aggregate** (whole model) and **single-property** routes agree with each
+other and with ``GET /model/{handle}/latest-version``.
 
-Behavior verified against live STS:
-- Omitting the version query uses the server's latest model version for that model.
-- Use query parameter ``version`` (not ``model_version``) to pin a model version; the same
-  name is used elsewhere for model-PVS (e.g. property-level routes). Product docs may refer
-  to ``model_version``; the deployed API uses ``version``.
+**Why it matters:** Wrong version pinning or drift between “no query param” vs “explicit latest”
+would confuse clients and break tooling that relies on stable PVS payloads.
 
-Tests are **parametrized** over ``MAJOR_MODELS`` (same handles as
-``test_model_pvs_no_duplicates.py``). For each handle, ``model_pvs_pin_context`` loads
-``model_version`` as ``versions[0]`` from ``GET /model/{handle}/versions`` (same default as
-``discover(..., use_release_version=False)``), cached **once per model** per session — not full
-``discover()`` (nodes/properties/terms).
+================================================================================
+ENDPOINTS UNDER TEST
+================================================================================
 
-Property-level ``/terms/model-pvs/{model}/{property}`` tests use the **same** ``MAJOR_MODELS``
-list. The **property** handle is chosen by scanning ``GET /terms/model-pvs/{model}/`` (pin version
-first, then latest aggregate) for rows with non-empty ``permissibleValues``, then **probing**
-``GET /terms/model-pvs/{model}/{property}`` with and without ``?version=<versions[0]>`` until
-both return 200 with non-empty PVs (aggregate-only listings can mislead, e.g. ``index_date`` on
-CDS). Session-cached **once per model**; no ``discover()`` walks.
+1. **Aggregate (all properties for a model)** — ``GET /terms/model-pvs/{model}/``
+
+   - Optional query: ``version=<model version string>``.
+   - Omitting ``version``: server should use that model’s **current latest** snapshot (we verify
+     rows’ ``version`` against ``GET /model/{handle}/latest-version``).
+
+2. **Single property** — ``GET /terms/model-pvs/{model}/{property}``
+
+   - Same optional ``version`` semantics as the aggregate route.
+   - Bundled ``spec/v2.yaml`` may omit the aggregate path; property-level is the documented
+     contract reference — we still test both for regression.
+
+**Important:** On deployed STS the query parameter is named ``version``, **not** ``model_version``
+(product docs sometimes say ``model_version``).
+
+================================================================================
+WHERE THE DATA COMES FROM
+================================================================================
+
+- **Which models:** ``MAJOR_MODELS`` from ``conftest`` (7 handles: C3DC, CCDI, CCDI-DCC, ICDC,
+  CTDC, CDS, PSDC). Tests are **parametrized** — one run per model.
+
+- **Pinned version** (for “specific version” tests): ``model_pvs_pin_context`` loads
+  ``versions[0]`` from ``GET /model/{handle}/versions`` (cached once per model per session),
+  matching ``discover(..., use_release_version=False)`` — not a full graph walk.
+
+- **Which property** (property-level tests only): chosen by scanning the aggregate list (pinned
+  then latest) for rows with non-empty ``permissibleValues``, then probing property GETs until both
+  unversioned and pinned calls return 200 with PVs (aggregate-only can mislead, e.g. ``index_date``
+  on CDS). Cached once per model per session.
+
+================================================================================
+TESTS IN THIS FILE (summary)
+================================================================================
+
+**Aggregate — ``GET /terms/model-pvs/{model}/``**
+
+- ``test_model_pvs_by_model_latest`` — No ``version`` query. **Passes** if: HTTP 200, JSON array,
+  every row has valid shape, every row’s ``version`` equals ``GET /model/{handle}/latest-version``,
+  and at least one row has non-empty ``permissibleValues`` (so nested PV objects are validated).
+
+- ``test_model_pvs_by_model_specific_version`` — With ``version=<versions[0]>``. **Passes** if: every
+  row’s ``version`` matches the query (proves the pin is honored).
+
+- ``test_model_pvs_by_model_unversioned_matches_explicit_latest_version`` — Call without ``version``,
+  read version from row 0, call again with ``version=<that>``. **Passes** if: sorted payloads are
+  identical (omitting param = explicit latest).
+
+**Property-level — ``GET /terms/model-pvs/{model}/{property}``**
+
+- ``test_terms_model_pvs_property_latest`` — No ``version``; row ``version`` must match latest-version.
+  May **skip** if the chosen property is missing for that model.
+
+- ``test_terms_model_pvs_property_pinned_version`` — With ``version=<pin>``; all rows use that version.
+  May **skip** if property/version unavailable.
+
+- ``test_terms_model_pvs_property_unversioned_matches_explicit_latest`` — Unversioned vs explicit
+  ``version=<version from first row>``; **Passes** if normalized payloads match.
+
+================================================================================
+HOW TO RUN
+================================================================================
+
+Uses ``api_client`` (``STS_BASE_URL``, default QA). Example::
+
+    pytest tests/test_manual/test_model_pvs_by_model.py -v
 
 **Console output:** This module prints which endpoints and models are under test. The project
 ``pyproject.toml`` sets ``pytest -s`` so stdout is shown on pass (override with ``--capture=fd``
@@ -665,7 +724,11 @@ def test_terms_model_pvs_property_pinned_version(
 def test_terms_model_pvs_property_unversioned_matches_explicit_latest(
     api_client, model_handle, model_pvs_property_context
 ):
-    """Omitting ``version`` equals ``version=<version from first row>`` (normalized compare)."""
+    """
+    Omitting ``version`` equals ``version=<version from first row>`` (normalized compare).
+
+    See module docstring for full context on property-level model-pvs tests.
+    """
     model_handle, property_handle, td = _require_property_context(
         model_pvs_property_context, model_handle
     )

@@ -1,12 +1,68 @@
 """
-Manual tests: verify v2/terms/model-pvs returns no duplicate permissible values.
+Manual tests: no **duplicate** permissible values inside model-pvs responses.
 
-Port of endpoint_tests/verify_dedup_across_models.py. Uses major models
-(C3DC, CCDI, CCDI-DCC, ICDC, CTDC, CDS, PSDC). Release versions preferred;
-falls back to latest (including pre-release) when a model has no release version.
-Asserts no duplicate PVs on current env (STS_BASE_URL).
+================================================================================
+WHAT THIS IS (plain English)
+================================================================================
 
-Second test covers explicit model/property/version pairs from the original bug ticket.
+Each **permissible value** in a property’s list should appear **once** (for a given canonical
+identity). If the same value appears twice in ``permissibleValues``, clients and validators can
+double-count or show duplicate options — that was a real product bug.
+
+These tests call ``GET /terms/model-pvs/{model}/{property}`` (with a pinned ``version``), walk the
+JSON rows, and **fail** if any row’s ``permissibleValues`` array contains duplicates (by a stable
+key: ``value`` / preferred name / etc.; see ``pv_key`` in this file).
+
+**Port:** Evolved from ``endpoint_tests/verify_dedup_across_models.py``.
+
+================================================================================
+WHERE THE DATA COMES FROM
+================================================================================
+
+1. **Discovery test** (``test_model_pvs_no_duplicate_permissible_values``)
+
+   - **Models:** ``MAJOR_MODELS`` from ``conftest`` (C3DC, CCDI, CCDI-DCC, ICDC, CTDC, CDS, PSDC).
+   - **Version:** ``get_latest_version`` — **release** version preferred; falls back to latest
+     (including pre-release) when a model has no release.
+   - **Which properties:** walks model nodes/properties via the API. ``STS_DEDUP_LIMIT`` is a **global**
+     cap on discovered cases, **split across** ``len(MAJOR_MODELS)``: ``base = limit // n``,
+     ``extra = limit % n`` — the first ``extra`` models (in list order) get ``base + 1`` properties
+     each; the rest get ``base``. Adding models to ``MAJOR_MODELS`` scales automatically (no hardcoded count).
+
+2. **Bug-ticket regression** (``test_model_pvs_no_duplicates_bug_ticket_endpoints``)
+
+   - **Fixed tuples:** ``BUG_TICKET_MODEL_PVS_CASES`` — explicit ``model`` / ``property`` / ``version``
+     from the original dedup ticket (always run; expects HTTP 200 and no duplicates).
+
+**Environment:** ``STS_BASE_URL`` (current STS). ``STS_DEDUP_LIMIT`` — total discovered cases (default
+**140**), **fairly split** across ``len(MAJOR_MODELS)`` (with **7** models, **20** properties per model
+when discovery succeeds). Use e.g. **14** for a smaller run (2 per model with 7 models).
+
+================================================================================
+TESTS IN THIS FILE (summary)
+================================================================================
+
+**``test_model_pvs_no_duplicate_permissible_values``**
+
+- Discovers cases, then for each: ``GET .../model-pvs/{model}/{property}?version=...``.
+- **Skips** individual cases that do not return 200 or a list (prints a line).
+- **Fails** if any item’s ``permissibleValues`` has duplicate keys.
+
+**``test_model_pvs_no_duplicates_bug_ticket_endpoints``**
+
+- Same duplicate check on **fixed** paths only.
+- **Fails** on non-200 or non-list (stricter than discovery test — ticket endpoints must work).
+
+================================================================================
+HOW TO RUN
+================================================================================
+
+::
+
+    pytest tests/test_manual/test_model_pvs_no_duplicates.py -v
+
+Optional: ``STS_DEDUP_LIMIT=14`` for a smaller total cap (e.g. 2 per model with 7 models). Override
+the default **140** when you need a different total or per-model budget.
 """
 import json
 import os
@@ -25,12 +81,26 @@ BUG_TICKET_MODEL_PVS_CASES = [
     {"model": "CDS", "property": "file_type", "version": "11.0.0"},
 ]
 
-# Limit cases for default run (14 = 7 models × 2 props); override with STS_DEDUP_LIMIT (e.g. 14 or 60)
+# Default: 140 total discovered cases (= 20 properties × 7 models with current MAJOR_MODELS).
+# Fair split across len(MAJOR_MODELS); override with STS_DEDUP_LIMIT.
 def _dedup_limit():
     try:
-        return int(os.getenv("STS_DEDUP_LIMIT", "14"))
+        return int(os.getenv("STS_DEDUP_LIMIT", "140"))
     except ValueError:
-        return 14
+        return 140
+
+
+def _max_properties_for_model_index(max_total: int, n_models: int, model_index: int) -> int:
+    """
+    Fair split of max_total across n_models: first (max_total % n_models) models get one extra slot.
+
+    Examples: max_total=140, n=7 -> 20 each. max_total=60, n=7 -> 9+9+9+9+8+8+8. Uses n_models, not a hardcoded count.
+    """
+    if n_models <= 0 or max_total <= 0:
+        return 0
+    base = max_total // n_models
+    extra = max_total % n_models
+    return base + (1 if model_index < extra else 0)
 
 
 def pv_key(pv):
@@ -61,13 +131,25 @@ def item_signature(item):
     return (item.get("model"), item.get("property"), item.get("version"))
 
 
-def discover_model_pvs_cases(client, major_models, limit=12, max_per_model=2):
-    """Discover (model, property, version) for major models; release preferred, fallback to latest-version endpoint when no release."""
-    out = []
-    seen_pair = set()
-    for model_handle in major_models:
-        if len(out) >= limit:
-            break
+def discover_model_pvs_cases(client, major_models, max_total: int):
+    """
+    Discover (model, property, version) for major models; release preferred, fallback to latest-version
+    endpoint when no release.
+
+    ``max_total`` is a **global** cap split **across every** handle in ``major_models`` (see
+    ``_max_properties_for_model_index``). No single model can consume the whole budget and skip
+    later models.
+    """
+    out: list[dict] = []
+    seen_pair: set[tuple[str, str]] = set()
+    n = len(major_models)
+    if n == 0 or max_total <= 0:
+        return out
+
+    for model_index, model_handle in enumerate(major_models):
+        max_per_model = _max_properties_for_model_index(max_total, n, model_index)
+        if max_per_model <= 0:
+            continue
         ver = get_latest_version(client, model_handle)
         if not ver:
             continue
@@ -80,7 +162,7 @@ def discover_model_pvs_cases(client, major_models, limit=12, max_per_model=2):
         if not isinstance(nodes, list):
             continue
         for node in nodes:
-            if len(out) >= limit or taken >= max_per_model:
+            if taken >= max_per_model:
                 break
             node_handle = node.get("handle")
             if not node_handle:
@@ -96,7 +178,7 @@ def discover_model_pvs_cases(client, major_models, limit=12, max_per_model=2):
             if not isinstance(props, list):
                 continue
             for prop in props:
-                if len(out) >= limit or taken >= max_per_model:
+                if taken >= max_per_model:
                     break
                 prop_handle = prop.get("handle")
                 if prop_handle and (model_handle, prop_handle) not in seen_pair:
@@ -109,10 +191,13 @@ def discover_model_pvs_cases(client, major_models, limit=12, max_per_model=2):
 
 
 def test_model_pvs_no_duplicate_permissible_values(api_client):
-    """GET model-pvs for major models (release versions); assert no duplicate PVs in any item."""
+    """
+    Discover model/property/version cases from ``MAJOR_MODELS``, then assert no duplicate PV rows.
+
+    See module docstring for discovery rules and ``STS_DEDUP_LIMIT``.
+    """
     limit = _dedup_limit()
-    max_per_model = 2 if limit <= 14 else 10
-    cases = discover_model_pvs_cases(api_client, MAJOR_MODELS, limit=limit, max_per_model=max_per_model)
+    cases = discover_model_pvs_cases(api_client, MAJOR_MODELS, max_total=limit)
     if not cases:
         pytest.skip("No model/property/version cases discovered (check API and major models)")
 
@@ -157,7 +242,11 @@ def test_model_pvs_no_duplicate_permissible_values(api_client):
 
 
 def test_model_pvs_no_duplicates_bug_ticket_endpoints(api_client):
-    """v2/terms/model-pvs for paths from the original dedup bug ticket (fixed model/property/version)."""
+    """
+    Regression: fixed ``BUG_TICKET_MODEL_PVS_CASES`` must return 200 and contain no duplicate PVs.
+
+    See module docstring for ticket context.
+    """
     cases = BUG_TICKET_MODEL_PVS_CASES
     print(f"\nmodel-pvs bug-ticket endpoints: testing {len(cases)} combinations")
     for case in cases:
