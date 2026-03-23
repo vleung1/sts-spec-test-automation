@@ -3,12 +3,15 @@ Session-scoped pytest fixtures: loaded OpenAPI spec, HTTP client, discovery dict
 """
 import pytest
 
-from sts_test_framework.config import bundled_spec_path, sts_base_url
+from sts_test_framework.config import bundled_spec_path, cadsr_base_url, sts_base_url
 
 
 def pytest_report_header(config):
-    """Add STS environment (base URL) to the pytest run header."""
-    return f"STS environment: {sts_base_url()}"
+    """Add STS and caDSR base URLs to the pytest run header."""
+    return (
+        f"STS environment: {sts_base_url()}\n"
+        f"caDSR API: {cadsr_base_url()}"
+    )
 
 
 @pytest.fixture(scope="session")

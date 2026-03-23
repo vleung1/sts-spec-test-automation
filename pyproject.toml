@@ -33,4 +33,5 @@ addopts = "-v -s"
 markers = [
     "nullcde: Null CDE / useNullCDE checks across models (manual STS; pytest -m nullcde)",
     "cde_pvs_legacy: Legacy /cde-pvs vs v2 /terms/cde-pvs/.../pvs — distinct (value, ncit) pairs (manual STS; pytest -m cde_pvs_legacy)",
+    "cadsr_alt_pvs: caDSR Designations vs STS cde-pvs + model-pvs (manual; pytest -m cadsr_alt_pvs)",
 ]
