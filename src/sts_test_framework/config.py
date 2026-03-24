@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 
 DEFAULT_STS_BASE_URL = "https://sts-qa.cancer.gov/v2"
+DEFAULT_CADSR_BASE_URL = "https://cadsrapi.cancer.gov/rad/NCIAPI/1.0/api"
 
 
 def sts_base_url() -> str:
@@ -31,7 +32,21 @@ def sts_legacy_origin() -> str:
     return base
 
 
+def cadsr_base_url() -> str:
+    """
+    caDSR REST API root (no trailing path segment).
+
+    Used for ``GET {base}/DataElement/{{publicId}}`` (``CADSR_BASE_URL`` or
+    :data:`DEFAULT_CADSR_BASE_URL`).
+    """
+    return os.getenv("CADSR_BASE_URL", DEFAULT_CADSR_BASE_URL).rstrip("/")
+
+
+def project_root() -> Path:
+    """Project root (parent of ``src/``)."""
+    return Path(__file__).resolve().parent.parent.parent
+
+
 def bundled_spec_path() -> Path:
     """Path to ``spec/v2.yaml`` at the project root (sibling of ``src/``)."""
-    root = Path(__file__).resolve().parent.parent.parent
-    return root / "spec" / "v2.yaml"
+    return project_root() / "spec" / "v2.yaml"
