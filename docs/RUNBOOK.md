@@ -83,6 +83,6 @@ pytest tests/ -v
 | How to run (pytest, CLI, scripts in depth) | [ONBOARDING §6](ONBOARDING.md#6-how-to-run-the-framework)   |
 | Report formats and which file to open      | [ONBOARDING §8](ONBOARDING.md#8-reports-and-ci)             |
 | Term-by-value per commons                  | [ONBOARDING §6.9](ONBOARDING.md#69-term-by-value-yaml--sts) |
-| caDSR vs STS manual tests (Designations, DRAFT NEW cde-pvs) | [ONBOARDING §6.2](ONBOARDING.md#62-configuration-environment-variables) — `pytest tests/test_manual/test_cadsr_alternatevalues_draftnew_cdes.py -m cadsr_alt_pvs` or `-m cadsr_draft_new` |
+| caDSR vs STS manual tests (Designations, DRAFT NEW, multi-Concept PVs) | [ONBOARDING §6.2](ONBOARDING.md#62-configuration-environment-variables) — `pytest tests/test_manual/test_cadsr_alternatevalues_draftnew_cdes.py -m cadsr_alt_pvs` or `-m cadsr_draft_new`; `pytest tests/test_manual/test_cadsr_multi_concept_cdes.py -m cadsr_multi_concept_pv` |
 
 

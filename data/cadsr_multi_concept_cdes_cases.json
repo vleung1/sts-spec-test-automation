@@ -1,0 +1,51 @@
+{
+  "cases": [
+    {
+      "case_type": "multi_concept_pv",
+      "cde_id": "14714144",
+      "cde_version": "1.00",
+      "pv_value": "CNS Diagnosis Category",
+      "min_concept_count": 3,
+      "expected_concept_codes": ["C15220", "C12438", "C25372"],
+      "description": "ValueMeaning has multiple Concepts; STS cde-pvs/model-pvs use null ncit_concept_code and empty synonyms for this PV",
+      "model_pvs": [
+        {
+          "model": "C3DC",
+          "model_version": "4.0.5",
+          "property": "diagnosis_classification_system"
+        },
+        {
+          "model": "CCDI",
+          "model_version": "3.1.0",
+          "property": "diagnosis_classification_system"
+        },
+        {
+          "model": "CTDC",
+          "model_version": "1.22.1",
+          "property": "diagnosis_classification_system"
+        }
+      ]
+    },
+    {
+      "case_type": "url_pv_yaml_enum_model_pvs",
+      "pytest_param_id": "14883047-url-pv",
+      "cde_id": "14883047",
+      "cde_version": "1.00",
+      "pv_value": "https://www.ebi.ac.uk/ols4/ontologies/uberon",
+      "min_concept_count": 1,
+      "expected_concept_codes": ["C190111"],
+      "description": "caDSR PV value is by-reference URL; cde-pvs not asserted (STS may set ncit/synonyms on URL row); model-pvs expands to YAML Enum labels (no URL row), all null ncit and empty synonyms",
+      "yaml_enum": {
+        "file": "data/data-models-yaml/cds-model-props-4.yml",
+        "property": "primary_site"
+      },
+      "model_pvs": [
+        {
+          "model": "CDS",
+          "model_version": "11.0.3",
+          "property": "primary_site"
+        }
+      ]
+    }
+  ]
+}

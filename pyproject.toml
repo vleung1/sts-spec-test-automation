@@ -35,4 +35,5 @@ markers = [
     "cde_pvs_legacy: Legacy /cde-pvs vs v2 /terms/cde-pvs/.../pvs — distinct (value, ncit) pairs (manual STS; pytest -m cde_pvs_legacy)",
     "cadsr_alt_pvs: caDSR Designations vs STS cde-pvs + model-pvs (manual; pytest -m cadsr_alt_pvs)",
     "cadsr_draft_new: DRAFT NEW: longName vs CDEFullName + PV⊆cde-pvs ncit rows; optional model-pvs PV subset (manual; pytest -m cadsr_draft_new)",
+    "cadsr_multi_concept_pv: caDSR special PVs (multi-Concept or URL + YAML enum); STS null ncit + empty synonyms; pytest -m cadsr_multi_concept_pv",
 ]
