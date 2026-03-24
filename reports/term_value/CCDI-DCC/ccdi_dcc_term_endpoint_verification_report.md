@@ -16,6 +16,30 @@
 
 **Failed:** 12
 
+**Exit code (without `--warn-only`):** process exits **1** only if there is at least one failed row **not** listed under [Known missing in STS DB](#known-missing-in-sts-db) below. Per-row `passed` in the CSV is unchanged.
+
+**Failed rows matching known-missing allowlist (exit ignored):** 11
+
+**Failed rows not allowlisted (would fail the run):** 1
+
+## Known missing in STS DB
+
+These `(prop_handle, enum_value)` pairs are in the model enum but confirmed absent from the STS DB; they remain `passed=False` in the CSV for visibility.
+
+| prop_handle | enum_value |
+|-------------|------------|
+| diagnosis | Chondroma, NOS |
+| file_type | cnn |
+| file_type | cnr |
+| file_type | mzid |
+| file_type | parquet |
+| file_type | psm |
+| file_type | selfsm |
+| file_type | sf |
+| library_source_molecule | Not Applicable |
+| library_strategy | CITE-Seq |
+| submitted_diagnosis | Chondroma, NOS |
+
 ## Failed rows (first 50)
 
 | prop_handle | enum_value (handle) | term_value | http_status | notes |

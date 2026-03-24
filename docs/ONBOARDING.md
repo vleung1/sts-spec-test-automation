@@ -556,6 +556,8 @@ PYTHONPATH=src python tests/term_verify/ccdi_term_verify.py
 | `python tests/term_verify/cds_term_verify.py` | `reports/term_value/CDS/` | `cds_term_endpoint_verification_report.csv`, `.md` |
 | `python tests/term_verify/ccdi_dcc_term_verify.py` | `reports/term_value/CCDI-DCC/` | `ccdi_dcc_term_endpoint_verification_report.csv`, `.md` |
 
+**CCDI-DCC only:** A fixed allowlist of `(prop_handle, enum_value)` pairs (see `KNOWN_MISSING_IN_STS_DB` in `tests/term_verify/ccdi_dcc_term_verify.py`) marks rows that are expected to be missing from the STS graph DB. Those rows still appear as **failed** in the CSV/MD, but the process exits **0** unless there is at least one **non-allowlisted** failure. Use `--warn-only` to force exit **0** even when unexpected failures exist.
+
 **Useful flags** (supported by the term-verify CLIs; also work when passed through `run_all_term_verify.sh`):
 
 ```bash
