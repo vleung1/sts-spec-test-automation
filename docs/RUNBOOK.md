@@ -9,9 +9,11 @@ Short path: install, then **three scripts** that cover OpenAPI functional tests 
 From the **project root**:
 
 ```bash
+pip install -r requirements.txt
 pip install -e .
-# or: uv sync && uv run ...
 ```
+
+`requirements.txt` includes **boto3** for the optional **`parser_agent`** step after manual pytest (Bedrock summaries when **`AWS_ACCESS_KEY_ID`**, **`AWS_SECRET_ACCESS_KEY`**, and **`AWS_REGION`** are set). Without those variables, manual tests do not invoke the parser. The same boto3 stack is available via `pip install -e ".[agent]"` if you prefer not to use the flat file. If you use **uv**, ensure boto3 is present when you enable the parser.
 
 You need **network access** to STS for API tests and term-verify runs.
 

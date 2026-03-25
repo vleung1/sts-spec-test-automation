@@ -18,6 +18,8 @@ FAILURE_PATTERNS: list[re.Pattern[str]] = [
     re.compile(r"\[FAIL\]", re.IGNORECASE),
     re.compile(r">>> Result: FAILED"),
     re.compile(r"^\s*FAILED:", re.MULTILINE),
+    # term-verify / run_all_term_verify.sh inner wrapper (output is tee'd; "FAILED:" summary lines may be appended later)
+    re.compile(r"finished \(FAILED\)"),
     re.compile(r"AssertionError"),
     re.compile(r"pytest\.fail\("),
     re.compile(r"xargs exited with [1-9]"),

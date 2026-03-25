@@ -4,11 +4,17 @@ config/env
 __pycache__/
 *.pyc
 .pytest_cache/
-reports/*.json
-reports/*.html
+
+# Run logs (manual suite, term-verify, full suite, parser hooks, etc.)
+logs/
+
+# Generated CLI/suite/term-value outputs under reports/ (keep **/README.md)
+reports/**/*
+!reports/**/
+!reports/**/README.md
+
 *.egg-info/
 dist/
 build/
 **/.DS_Store
 .DS_Store
-reports/

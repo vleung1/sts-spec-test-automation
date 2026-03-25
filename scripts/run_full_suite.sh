@@ -11,6 +11,11 @@ set -uo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
 
+_SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=parser_agent_hook.sh
+source "$_SCRIPT_DIR/parser_agent_hook.sh"
+parser_agent_print_preamble "run_full_suite.sh" "after all suite stages"
+
 mkdir -p logs
 LOGFILE="logs/full_suite_$(date +%Y-%m-%dT%H-%M-%S).log"
 
@@ -45,7 +50,7 @@ else
   printf '  - %s\n' "${failures[@]}" >&2
 fi
 
-python3 parser_agent/main.py "$LOGFILE"
+parser_agent_run_if_ok "$REPO_ROOT" "$LOGFILE"
 
 if [ "${#failures[@]}" -gt 0 ]; then
   exit 1
