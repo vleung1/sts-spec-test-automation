@@ -8,7 +8,7 @@ Detects failures in the log file. If any are found, calls AWS Bedrock to
 produce a summary and writes it to reports/agent-summaries/.
 Requires AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, and boto3.
 
-``run_manual_tests.sh`` only invokes this when those three env vars are set.
+Only invokes this when those three env vars are set.
 
 Always exits 0 -- the agent is informational and should not block CI.
 """

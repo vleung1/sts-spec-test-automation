@@ -16,5 +16,5 @@ BEDROCK_MODEL_ID = os.getenv(
     "BEDROCK_MODEL_ID", "us.anthropic.claude-3-5-haiku-20241022-v1:0"
 )
 
-MAX_LOG_CHARS = 80_000
+MAX_LOG_CHARS = 150_000
 MAX_OUTPUT_TOKENS = 4096
