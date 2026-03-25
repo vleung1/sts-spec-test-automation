@@ -13,7 +13,7 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-`requirements.txt` includes **boto3** for the optional **`parser_agent`** step after manual pytest (Bedrock summaries when **`AWS_ACCESS_KEY_ID`**, **`AWS_SECRET_ACCESS_KEY`**, and **`AWS_REGION`** are set). Without those variables, manual tests do not invoke the parser. The same boto3 stack is available via `pip install -e ".[agent]"` if you prefer not to use the flat file. If you use **uv**, ensure boto3 is present when you enable the parser.
+`requirements.txt` includes **boto3** for the optional **`parser_agent`** step: an **AI (Amazon Bedrock) log parser** that reads captured run logs and, when failures are present, writes Markdown summaries under **`reports/agent-summaries/*.md`** (only when **`AWS_ACCESS_KEY_ID`**, **`AWS_SECRET_ACCESS_KEY`**, and **`AWS_REGION`** are all set). Without those variables, the convenience scripts skip the parser. The same boto3 stack is available via `pip install -e ".[agent]"` if you prefer not to use the flat file. If you use **uv**, ensure boto3 is present when you enable the parser.
 
 You need **network access** to STS for API tests and term-verify runs.
 
@@ -84,6 +84,7 @@ pytest tests/ -v
 | ------------------------------------------ | ----------------------------------------------------------- |
 | How to run (pytest, CLI, scripts in depth) | [ONBOARDING §6](ONBOARDING.md#6-how-to-run-the-framework)   |
 | Report formats and which file to open      | [ONBOARDING §8](ONBOARDING.md#8-reports-and-ci)             |
+| Optional AI failure summaries (parser agent) | [ONBOARDING §8.4](ONBOARDING.md#84-optional-ai-failure-summaries-parser-agent) |
 | Term-by-value per commons                  | [ONBOARDING §6.9](ONBOARDING.md#69-term-by-value-yaml--sts) |
 | caDSR vs STS manual tests (Designations, DRAFT NEW, multi-Concept PVs) | [ONBOARDING §6.2](ONBOARDING.md#62-configuration-environment-variables) — `pytest tests/test_manual/test_cadsr_alternatevalues_draftnew_cdes.py -m cadsr_alt_pvs` or `-m cadsr_draft_new`; `pytest tests/test_manual/test_cadsr_multi_concept_cdes.py -m cadsr_multi_concept_pv` |
 

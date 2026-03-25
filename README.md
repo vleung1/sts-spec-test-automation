@@ -1,6 +1,12 @@
 # STS v2 API Test Framework Agent
 
-OpenAPI-driven end-to-end API tests for the **Simple Terminology Server (STS) v2** API. The framework loads `spec/v2.yaml`, discovers live IDs, generates cases, and reports results as HTML/JSON. Manual integration tests, term-by-value scripts, and optional contract checks live alongside the generated suite.
+This repository is an **API test framework** for the **Simple Terminology Server (STS) v2** HTTP API. STS exposes oncology data models (nodes, properties, allowed values/terms) from a graph backing store; clients use it to resolve model metadata consistently across programs such as the Cancer Research Data Commons.
+
+The framework treats an OpenAPI spec document, loaded as **`spec/v2.yaml`**, as the contract: it loads the spec, **discovers** live IDs in the target environment, **generates** positive and negative HTTP test cases, and **runs** them through a shared client. Results are written as **JSON and HTML** reports (per run and, for multi-model runs, under `reports/<ModelHandle>/`). Alongside that generated suite, the repo ships **"manual" integration tests** (pytest), **term-by-value** verification pipelines that compare vendored data-model YAML enums to STS term endpoints per data commons.
+
+Use **[docs/RUNBOOK.md](docs/RUNBOOK.md)** for the shortest install-and-run path, and **[docs/ONBOARDING.md](docs/ONBOARDING.md)** for explanations on system design and functionality, and how to extend tests.
+
+**AI-assisted log parsing:** If required environment variables are all set, the **`parser_agent`** module parses captured run logs for test failures, calls **Amazon Bedrock** for analysis, and writes summary reports under **`reports/agent-summaries/`**. The test scripts invoke this hook after their runs ([ONBOARDING §6.8](docs/ONBOARDING.md#68-convenience-shell-scripts)); it is informational only, does not run when all tests pass, and does not change pytest or CLI exit codes. Details and manual invocation: [ONBOARDING §8.4](docs/ONBOARDING.md#84-optional-ai-failure-summaries-parser-agent).
 
 ## Documentation
 
@@ -28,26 +34,26 @@ pip install -e .
 
 ## Set environment (optional)
 
-By default the framework targets **STS QA** (`STS_BASE_URL` unset). Set **`STS_BASE_URL`** when you need another host; the value must be the v2 API root including `/v2`.
+By default the framework targets **STS QA** and no extra configuration is needed. Set **`STS_BASE_URL`** when you need another environment; the value must be the v2 API root including `/v2`.
 
-Example — run manual tests against **stage** for one shell session (adjust the URL to match your deployment):
+Example — run tests against **stage** for one shell session (adjust the URL to match your deployment):
 
 ```bash
 export STS_BASE_URL=https://sts-stage.cancer.gov/v2
-bash scripts/run_manual_tests.sh
+bash scripts/run_full_suite.sh
 ```
 
 Or set it for a single command without `export`:
 
 ```bash
-STS_BASE_URL=https://sts-stage.cancer.gov/v2 bash scripts/run_manual_tests.sh
+STS_BASE_URL=https://sts-stage.cancer.gov/v2 bash scripts/run_full_suite.sh
 ```
 
 More variables and detail: [RUNBOOK — Configuration](docs/RUNBOOK.md#configuration-optional) and [ONBOARDING §6.2](docs/ONBOARDING.md#62-configuration-environment-variables).
 
 ## Run tests (three scripts OR optional full suite)
 
-Run from the project root after install. Network access to STS is required.
+Run from the project root after installing dependencies. Network access to STS is required.
 
 **All three stages in order** (manual tests → auto-generated tests → terms verifications); exits non-zero if any stage fails:
 
