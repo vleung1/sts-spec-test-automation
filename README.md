@@ -2,7 +2,7 @@
 
 This repository is an **API test framework** for the **Simple Terminology Server (STS) v2** HTTP API. STS exposes oncology data models (nodes, properties, allowed values/terms) from a graph backing store; clients use it to resolve model metadata consistently across programs such as the Cancer Research Data Commons.
 
-The framework treats an OpenAPI spec document, loaded as **`spec/v2.yaml`**, as the contract: it loads the spec, **discovers** live IDs in the target environment, **generates** positive and negative HTTP test cases, and **runs** them through a shared client. Results are written as **JSON and HTML** reports (per run and, for multi-model runs, under `reports/<ModelHandle>/`). Alongside that generated suite, the repo ships **"manual" integration tests** (pytest), **term-by-value** verification pipelines that compare vendored data-model YAML enums to STS term endpoints per data commons.
+The framework treats an OpenAPI spec document, loaded as **`spec/v2.yaml`**, as the contract: it loads the spec, **discovers** live IDs in the target environment, **generates** positive and negative HTTP test cases, and **runs** them through a shared client. Results are written as **JSON and HTML** reports (per run and, for multi-model runs, under `reports/<ModelHandle>/`). Alongside that generated suite, the repo ships **"manual" integration tests** (pytest), and **term-by-value** verification pipelines that compare vendored data-model YAML enums to STS term endpoints per data commons.
 
 Use **[docs/RUNBOOK.md](docs/RUNBOOK.md)** for the shortest install-and-run path, and **[docs/ONBOARDING.md](docs/ONBOARDING.md)** for explanations on system design and functionality, and how to extend tests.
 
