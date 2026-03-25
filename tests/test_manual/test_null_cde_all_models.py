@@ -10,9 +10,14 @@ When a property lists **every** permissible value that belongs to that null CDE 
 from the null CDE term), that is a strong signal that ``useNullCDE: Yes`` (or equivalent) is in
 effect for that property.
 
-**Business rule we check:** Only the **CDS** data model in the **11.0.x** line (e.g. latest **11.0.3**)
-is supposed to use that pattern. No other model (at its **latest** published version) should have any property whose
-permissible values include the **complete** set of null CDE values.
+**Business rule we check:** Only these data models are supposed to use that pattern at **latest**,
+each on its own version line:
+
+- **CDS** — version string contains ``11.0.`` (11.0.x).
+- **PSDC** — version string contains ``1.0.`` (1.0.x, e.g. ``1.0.0-5c0d1c3``).
+
+No **other** model (at its **latest** published version) should have any property whose permissible
+values include the **complete** set of null CDE values.
 
 If another model shows the same pattern, it may mean ``useNullCDE`` was turned on where it
 should not be.
@@ -34,39 +39,42 @@ WHERE THE DATA COMES FROM
 4. **Model permissible values** — ``GET /terms/model-pvs/{handle}/?version={latest}``  
    Query parameter name is ``version`` (not ``model_version``) on deployed STS.
 
-5. **Pinned CDS check** — ``GET /terms/model-pvs/CDS/?version=11.0.3`` (current pinned release under test).  
-   Example QA URL: https://sts-qa.cancer.gov/v2/terms/model-pvs/CDS/?version=11.0.3
+5. **Pinned snapshot checks** — model-pvs at fixed versions (see ``CDS_PINNED_VERSION``,
+   ``PSDC_PINNED_VERSION`` in code). Example QA URLs:
+
+   - https://sts-qa.cancer.gov/v2/terms/model-pvs/CDS/?version=11.0.3
+   - https://sts-qa.cancer.gov/v2/terms/model-pvs/PSDC/?version=1.0.0-5c0d1c3
 
 ================================================================================
 TESTS IN THIS FILE (summary)
 ================================================================================
 
-**Test 1 — ``test_no_models_except_cds_11_have_full_null_cde_pattern``**
+**Test 1 — ``test_no_models_except_allowed_handles_have_full_null_cde_pattern``**
 
 - Walks every model, uses that model's **latest** version, and scans all properties in the
   model-pvs response.
 - For each property, we ask: "Does this property's PV list contain **every** value from the null
   CDE set?" (same count as the full null CDE set, with each distinct null CDE value appearing at
   least once in the property's PVs).
-- **Passes** if: the only case where that happens is **CDS** whose latest version string
-  **contains** ``11.0.`` (so ``11.0.0``, ``11.0.3``, or a build suffix with that prefix).
+- **Passes** if: the only cases where that happens are **CDS** (latest contains ``11.0.``) or
+  **PSDC** (latest contains ``1.0.``).
 - **Fails** if: any **other** model/version has at least one property with that full pattern.
   The failure message lists model, version, and property names so you can investigate.
 
-  **Note:** CDS **latest** (e.g. ``11.0.4-…``) and CDS **pinned** (``CDS_PINNED_VERSION``) are different
-  snapshots; the count of properties that bind the full NCIt-filtered set can differ (e.g. 10 vs 11).
+  **Note:** **Latest** and **pinned** snapshots differ; property counts for the full NCIt-filtered
+  set can differ (e.g. CDS latest vs ``CDS_PINNED_VERSION``).
 
-**Test 2 — ``test_cds_pinned_release_has_full_null_cde_pattern``**
+**Test 2 — ``test_pinned_release_has_full_null_cde_pattern``** (parametrized)
 
-- Calls model-pvs for **CDS** pinned to ``CDS_PINNED_VERSION`` (currently **11.0.3**, not "latest").
+- Calls model-pvs for **CDS** at ``CDS_PINNED_VERSION`` (e.g. **11.0.3**) and **PSDC** at
+  ``PSDC_PINNED_VERSION`` (pre-GA snapshot **1.0.0-5c0d1c3** until **1.0.0** exists in STS).
 - **Passes** if: there is **at least one** property whose PVs cover the **entire** null CDE value
   set returned by STS **at this moment** (same rule as test 1: every distinct null CDE value
   appears on that property). That strongly suggests the expected ``useNullCDE``-style behavior
   for that release.
-- **Skips** (with an explanation) if: the pinned snapshot is available but **no** property lists
-  the full **NCIt-filtered** null CDE set (every distinct value from step 1). That can happen if
-  the CDS snapshot no longer binds all of those values on one property. The legacy script
-  **warned** in this case; we skip so CI stays green while still surfacing the message in ``-v``.
+- **Skips** (with an explanation) if: the pinned snapshot responds HTTP 200 but **no** property lists
+  the full **NCIt-filtered** null CDE set. The legacy script **warned** in this case; we skip so CI
+  stays green while still surfacing the message in ``-v``.
 - **Skips** if: the null CDE list could not be loaded, or the pinned endpoint is not available.
 
 **Test 3 — ``test_cde_pvs_use_null_cde_param_behavior``**
@@ -86,8 +94,8 @@ Uses ``api_client`` (``STS_BASE_URL``, default QA). Run only these tests::
 
     pytest tests/test_manual/test_null_cde_all_models.py -m nullcde -v
 
-See also ``README.md`` / ``docs/RUNBOOK.md``. Example pinned URL (QA):
-https://sts-qa.cancer.gov/v2/terms/model-pvs/CDS/?version=11.0.3
+See also ``README.md`` / ``docs/RUNBOOK.md``. Example pinned URLs (QA): CDS ``?version=11.0.3``,
+PSDC ``?version=1.0.0-5c0d1c3`` (see constants in this module).
 """
 from __future__ import annotations
 
@@ -101,14 +109,21 @@ from sts_test_framework.client import full_url
 logger = logging.getLogger(__name__)
 
 
-# Null CDE term used by the CDS model configuration (same as legacy qa_vs_prod_nullcde script).
+# Null CDE term (same as legacy qa_vs_prod_nullcde script). Used by CDS/PSDC model configuration.
 NULL_CDE_ID = "16476366"
 NULL_CDE_VERSION = "1"
 
-# CDS is the only model expected to expose the "full null CDE set" on properties (11.0.x line).
-# Substring must match current CDS latest (e.g. 11.0.3) — "11.0.0" alone would not match "11.0.3".
-CDS_EXPECTED_SUBSTRING = "11.0."
+# Models allowed to expose the "full null CDE set" on properties at **latest**: each handle maps
+# to a substring that must appear in that model's latest ``version`` string.
+NULL_CDE_ALLOWED_VERSION_SUBSTRING_BY_HANDLE: dict[str, str] = {
+    "CDS": "11.0.",
+    "PSDC": "1.0.",
+}
+
+# Pinned snapshots for manual verification (not necessarily the same string as "latest").
 CDS_PINNED_VERSION = "11.0.3"
+# Pre-GA: full null-CDE pattern appears on this build; update to "1.0.0" when that release exists in STS.
+PSDC_PINNED_VERSION = "1.0.0-5c0d1c3"
 
 # CDE used to exercise the ``use_null_cde`` query parameter (see OpenAPI ``use_null_cde`` on
 # ``GET /terms/cde-pvs/{id}/{version}/pvs``).
@@ -252,24 +267,35 @@ def _find_properties_with_full_null_cde_set(
     return out
 
 
-def _is_expected_cds_11(model_handle: str, version: str | None) -> bool:
-    """True if this model/version is the allowed exception (CDS latest in the 11.0.x line)."""
-    return (
-        model_handle == "CDS"
-        and bool(version)
-        and CDS_EXPECTED_SUBSTRING in version
-    )
+def _is_expected_null_cde_model(model_handle: str, version: str | None) -> bool:
+    """True if this model/version is an allowed exception (handle + version substring rule)."""
+    if not version or not model_handle:
+        return False
+    sub = NULL_CDE_ALLOWED_VERSION_SUBSTRING_BY_HANDLE.get(model_handle)
+    if sub is None:
+        return False
+    return sub in version
+
+
+def _expected_null_cde_log_tag(model_handle: str) -> str:
+    """Short human-readable tag for [expected for ...] log lines."""
+    if model_handle == "CDS":
+        return "expected for CDS 11.0.x"
+    if model_handle == "PSDC":
+        return "expected for PSDC 1.0.x"
+    sub = NULL_CDE_ALLOWED_VERSION_SUBSTRING_BY_HANDLE.get(model_handle, "")
+    return f"expected for {model_handle} ({sub!r} in version)"
 
 
 @pytest.mark.nullcde
-def test_no_models_except_cds_11_have_full_null_cde_pattern(api_client, null_cde_values):
+def test_no_models_except_allowed_handles_have_full_null_cde_pattern(api_client, null_cde_values):
     """
     **Assertion (plain English):** After checking every model at its **latest** version, there
     must be **zero** properties that expose the **full** null CDE value set—**except** when the
-    model is CDS and the latest version string contains ``11.0.`` (11.0.0, 11.0.3, etc.).
+    model is **CDS** (latest contains ``11.0.``) or **PSDC** (latest contains ``1.0.``).
 
-    If this test fails, at least one non-CDS model (or CDS not on an 11.0.x latest) has a property
-    that lists all null CDE values; that is treated as unexpected.
+    If this test fails, some other model or a disallowed version line has a property that lists
+    all null CDE values; that is treated as unexpected.
     """
     n_null = len(null_cde_values)
 
@@ -335,11 +361,12 @@ def test_no_models_except_cds_11_have_full_null_cde_pattern(api_client, null_cde
                 f"full NCIt-filtered null CDE set on a property: NOT FOUND"
             )
             continue
-        if _is_expected_cds_11(model_handle, version):
+        if _is_expected_null_cde_model(model_handle, version):
             prop_list = ", ".join(repr(h["property"]) for h in hits)
             print(
                 f"  [{model_handle}] {version!r}  GET {mp_url}  -> "
-                f"full null CDE set: FOUND ({len(hits)} properties) [expected for CDS 11.0.x]"
+                f"full null CDE set: FOUND ({len(hits)} properties) "
+                f"[{_expected_null_cde_log_tag(model_handle)}]"
             )
             print(f"      properties: {prop_list}")
             continue
@@ -354,8 +381,8 @@ def test_no_models_except_cds_11_have_full_null_cde_pattern(api_client, null_cde
             )
 
     assert not unexpected, (
-        "Unexpected: non-CDS (or CDS not at 11.0.x latest) models with at least one "
-        "property listing the FULL null CDE value set:\n  - "
+        "Unexpected: model(s) other than CDS (11.0.x) / PSDC (1.0.x) at latest, or "
+        "disallowed version line, with at least one property listing the FULL null CDE value set:\n  - "
         + "\n  - ".join(unexpected)
     )
     print(
@@ -365,34 +392,43 @@ def test_no_models_except_cds_11_have_full_null_cde_pattern(api_client, null_cde
 
 
 @pytest.mark.nullcde
-def test_cds_pinned_release_has_full_null_cde_pattern(api_client, null_cde_values):
+@pytest.mark.parametrize(
+    "model_handle,pinned_version",
+    [
+        ("CDS", CDS_PINNED_VERSION),
+        ("PSDC", PSDC_PINNED_VERSION),
+    ],
+)
+def test_pinned_release_has_full_null_cde_pattern(
+    api_client, null_cde_values, model_handle: str, pinned_version: str
+):
     """
-    **Assertion (plain English):** We **prefer** to see at least one CDS property on the **pinned**
-    release (``CDS_PINNED_VERSION``, e.g. 11.0.3) whose PVs cover the **full** null CDE set: every
-    distinct ``value`` in the **NCIt-filtered** reference from ``GET /terms/cde-pvs/16476366/1/pvs``
-    (see ``null_cde_values`` fixture).
+    **Assertion (plain English):** We **prefer** to see at least one property on the **pinned**
+    release (``CDS_PINNED_VERSION`` or ``PSDC_PINNED_VERSION``) whose PVs cover the **full** null CDE
+    set: every distinct ``value`` in the **NCIt-filtered** reference from
+    ``GET /terms/cde-pvs/16476366/1/pvs`` (see ``null_cde_values`` fixture).
 
     If the snapshot responds with HTTP 200 but **no** property covers the full NCIt-filtered set, we
     **skip** the test with a detailed reason (legacy script printed a warning only). Use this
-    pass/skip output to decide whether to investigate the CDS model or null CDE term on that
+    pass/skip output to decide whether to investigate the model or null CDE term on that
     environment.
     """
     n_null = len(null_cde_values)
-    path = f"/terms/model-pvs/{quote('CDS', safe='')}/"
-    response = api_client.get(path, params={"version": CDS_PINNED_VERSION})
+    path = f"/terms/model-pvs/{quote(model_handle, safe='')}/"
+    response = api_client.get(path, params={"version": pinned_version})
     if response.status_code != 200:
         pytest.skip(
-            f"GET {path}?version={CDS_PINNED_VERSION!r} returned {response.status_code}"
+            f"GET {path}?version={pinned_version!r} returned {response.status_code}"
         )
     data = response.json()
     hits = _find_properties_with_full_null_cde_set(data, null_cde_values)
     if not hits:
         pytest.skip(
-            f"CDS {CDS_PINNED_VERSION!r} returned HTTP 200 but no property has PVs covering "
+            f"{model_handle} {pinned_version!r} returned HTTP 200 but no property has PVs covering "
             f"all {n_null} distinct NCIt-filtered null CDE values (16476366/1). "
-            f"Verify useNullCDE / CDS pinned release content manually if needed."
+            f"Verify useNullCDE / pinned release content manually if needed."
         )
-    pinned_url = full_url(api_client, path, {"version": CDS_PINNED_VERSION})
+    pinned_url = full_url(api_client, path, {"version": pinned_version})
     prop_list = ", ".join(repr(h["property"]) for h in hits)
     print(
         f"PASS: GET {pinned_url}  — {len(hits)} propert(ies) with full NCIt-filtered null CDE set:\n"

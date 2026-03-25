@@ -8,7 +8,9 @@ CCDI-DCC term-by-value verification driven by vendored ``ccdi-dcc-model-props-3.
 - **enrich** — ``GET /models`` may return handle ``CCDI-DCC`` or ``CCDI_DCC``; paginated
   ``/terms`` fills ``term_value`` (handle → API value).
 - **verify** — Uses :func:`verify_row`; URL value = ``(term_value or '') or (enum_value or '')``
-  per legacy sheet (non-empty after ``strip``).
+  per legacy sheet (non-empty after ``strip``). Some YAML enum values are not in the STS DB;
+  :data:`KNOWN_MISSING_IN_STS_DB` lists ``(prop_handle, enum_value)`` pairs that still appear as
+  failed rows in reports but do not cause a non-zero exit unless other rows fail.
 
 CLI: ``sts-ccdi-dcc-term-verify`` (see pyproject ``[project.scripts]``).
 """
@@ -28,6 +30,29 @@ from sts_test_framework.discover import get_latest_version
 
 # Preferred display name for reports; API may return CCDI-DCC or CCDI_DCC
 MODEL_LABEL = "CCDI-DCC"
+
+# Enum values present in the model YAML (incl. remote-expanded lists) that are not loaded in the
+# STS graph DB. Rows still appear as failed in CSV/MD; process exit code ignores only these pairs.
+KNOWN_MISSING_IN_STS_DB: frozenset[tuple[str, str]] = frozenset(
+    {
+        ("file_type", "cnn"),
+        ("file_type", "cnr"),
+        ("file_type", "mzid"),
+        ("file_type", "mzml"),
+        ("file_type", "parquet"),
+        ("file_type", "psm"),
+        ("file_type", "sf"),
+        ("file_type", "selfsm"),
+        ("library_strategy", "CITE-Seq"),
+        ("library_source_molecule", "Not Applicable"),
+        ("diagnosis", "Chondroma, NOS"),
+        ("submitted_diagnosis", "Chondroma, NOS"),
+    }
+)
+
+
+def _pair_known_missing(prop_handle: str, enum_value: str) -> bool:
+    return (prop_handle, enum_value) in KNOWN_MISSING_IN_STS_DB
 
 
 def _repo_root() -> Path:
@@ -448,11 +473,16 @@ def run_verify(
     base_url: str,
     *,
     limit: int = 0,
-) -> tuple[Path, Path, int, int]:
+) -> tuple[Path, Path, int, int, int]:
     """
     Call :func:`verify_row` with legacy URL value: ``(term_value or enum_value)`` after empty check.
 
     Writes ``ccdi_dcc_term_endpoint_verification_report.{csv,md}``.
+
+    Returns:
+        ``(report_csv, report_md, passed_count, total_rows, unexpected_failure_count)``.
+        ``unexpected_failure_count`` is failed rows whose ``(prop_handle, enum_value)`` is not in
+        :data:`KNOWN_MISSING_IN_STS_DB` (used for process exit code in :func:`main`).
     """
     out_dir.mkdir(parents=True, exist_ok=True)
     report_csv = out_dir / "ccdi_dcc_term_endpoint_verification_report.csv"
@@ -524,6 +554,12 @@ def run_verify(
 
     passed_count = sum(1 for r in report_rows if r["passed"])
     failed = [r for r in report_rows if not r["passed"]]
+    failed_allowlisted = [
+        r
+        for r in failed
+        if _pair_known_missing(str(r["prop_handle"]), str(r["enum_value"]))
+    ]
+    unexpected_failure_count = len(failed) - len(failed_allowlisted)
 
     with open(report_md, "w", encoding="utf-8") as f:
         f.write(f"# {MODEL_LABEL} term endpoint verification report\n\n")
@@ -543,6 +579,27 @@ def run_verify(
         f.write(f"**Rows verified (HTTP):** {len(report_rows)}\n\n")
         f.write(f"**Passed:** {passed_count}\n\n")
         f.write(f"**Failed:** {len(failed)}\n\n")
+        f.write(
+            "**Exit code (without `--warn-only`):** process exits **1** only if there is at least "
+            "one failed row **not** listed under [Known missing in STS DB](#known-missing-in-sts-db) "
+            "below. Per-row `passed` in the CSV is unchanged.\n\n"
+        )
+        f.write(
+            f"**Failed rows matching known-missing allowlist (exit ignored):** "
+            f"{len(failed_allowlisted)}\n\n"
+        )
+        f.write(
+            f"**Failed rows not allowlisted (would fail the run):** {unexpected_failure_count}\n\n"
+        )
+        f.write("## Known missing in STS DB\n\n")
+        f.write(
+            "These `(prop_handle, enum_value)` pairs are in the model enum but confirmed absent "
+            "from the STS DB; they remain `passed=False` in the CSV for visibility.\n\n"
+        )
+        f.write("| prop_handle | enum_value |\n|-------------|------------|\n")
+        for ph, ev in sorted(KNOWN_MISSING_IN_STS_DB):
+            f.write(f"| {ph} | {ev} |\n")
+        f.write("\n")
         if failed:
             f.write("## Failed rows (first 50)\n\n")
             f.write(
@@ -564,8 +621,13 @@ def run_verify(
                 )
         f.write(f"\n**Full results:** `{report_csv.name}`\n")
 
-    print(f"Verify: passed {passed_count}/{len(report_rows)} → {report_csv.name}, {report_md.name}")
-    return report_csv, report_md, passed_count, len(report_rows)
+    print(
+        f"Verify: passed {passed_count}/{len(report_rows)} "
+        f"(allowlisted failures: {len(failed_allowlisted)}, "
+        f"unexpected failures: {unexpected_failure_count}) "
+        f"→ {report_csv.name}, {report_md.name}"
+    )
+    return report_csv, report_md, passed_count, len(report_rows), unexpected_failure_count
 
 
 def main() -> None:
@@ -616,7 +678,7 @@ def main() -> None:
     parser.add_argument(
         "--warn-only",
         action="store_true",
-        help="Exit 0 even if some rows fail (still writes reports)",
+        help="Exit 0 even if some rows fail, including non-allowlisted failures (still writes reports)",
     )
     args = parser.parse_args()
 
@@ -645,10 +707,12 @@ def main() -> None:
         print(f"--skip-enrich but missing {enriched_csv}", file=sys.stderr)
         sys.exit(2)
 
-    _, _, passed, total = run_verify(
+    _, _, passed, total, unexpected_failures = run_verify(
         client, enriched_csv, out_dir, base_url, limit=args.limit
     )
-    if passed < total and not args.warn_only:
+    if args.warn_only:
+        sys.exit(0)
+    if unexpected_failures > 0:
         sys.exit(1)
     sys.exit(0)
 

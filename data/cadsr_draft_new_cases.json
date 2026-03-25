@@ -1,0 +1,63 @@
+{
+  "cases": [
+    {
+      "cde_id": "15235975",
+      "description": "Sample DRAFT NEW CDE (caDSR workflowStatus)",
+      "model": "CCDI",
+      "model_version": "3.1.0",
+      "property": "library_source_material"
+    },
+    {
+      "cde_id": "15235981",
+      "description": "Sample DRAFT NEW CDE (caDSR workflowStatus)",
+      "model": "CDS",
+      "model_version": "11.0.3",
+      "property": "library_source_molecule"
+    },
+    {
+      "cde_id": "15607838",
+      "description": "Sample DRAFT NEW CDE (caDSR workflowStatus)",
+      "model": "C3DC",
+      "model_version": "4.0.5",
+      "property": "study_status"
+    },
+    {
+      "cde_id": "15296752",
+      "description": "Sample DRAFT NEW CDE (caDSR workflowStatus)"
+    },
+    {
+      "cde_id": "14767264",
+      "description": "Sample DRAFT NEW CDE (caDSR workflowStatus)"
+    },
+    {
+      "cde_id": "14767270",
+      "description": "Sample DRAFT NEW CDE (caDSR workflowStatus)"
+    },
+    {
+      "cde_id": "14768386",
+      "description": "Sample DRAFT NEW CDE (caDSR workflowStatus)"
+    },
+    {
+      "cde_id": "15112968",
+      "description": "Sample DRAFT NEW CDE (caDSR workflowStatus)",
+      "model": "CDS",
+      "model_version": "11.0.3",
+      "property": "analytical_fractions"
+    },
+    {
+      "cde_id": "14765193",
+      "description": "Sample DRAFT NEW CDE (caDSR workflowStatus)"
+    },
+    {
+      "cde_id": "14765187",
+      "description": "Sample DRAFT NEW CDE (caDSR workflowStatus)"
+    },
+    {
+      "cde_id": "16280721",
+      "description": "Example ID from caDSR DataElement URL (verify DRAFT NEW if applicable)",
+      "model": "CCDI-DCC",
+      "model_version": "1.0.0",
+      "property": "tumor_spatial_extent"
+    }
+  ]
+}
