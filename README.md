@@ -4,7 +4,7 @@ This repository is an **API test framework** for the **Simple Terminology Server
 
 The framework treats the OpenAPI spec document STS is built on (loaded as `spec/v2.yaml`) as the contract: it loads the spec, **discovers** live IDs in the target environment, **generates** positive and negative HTTP test cases, and **runs** them through a shared client. Results are written as **JSON and HTML** reports (per run and, for multi-model runs, under `reports/<ModelHandle>/`). Alongside that generated suite, the repo ships **"manual" integration tests** (pytest), and **term-by-value** verification pipelines that compare vendored data-model YAML enums to STS term endpoints per data commons.
 
-**AI-assisted log parsing:** If required environment variables are set, the `**parser_agent`** module parses captured run logs for test failures, calls **Amazon Bedrock** for analysis, and writes summary reports under `**reports/agent-summaries/`**. The test scripts invoke this hook after their runs.
+**AI-assisted log parsing:** If required environment variables are set, the `parser_agent` module parses captured run logs for test failures, calls **Amazon Bedrock** for analysis, and writes summary reports under `reports/agent-summaries/`. The test scripts invoke this hook after their runs.
 
 ## Documentation
 
