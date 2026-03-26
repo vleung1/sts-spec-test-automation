@@ -32,7 +32,7 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-`requirements.txt` includes **boto3** for the optional `**parser_agent`** step: an **AI (Amazon Bedrock) log parser** that reads captured run logs and, when failures are present, writes Markdown summaries under `**reports/agent-summaries/*.md`** (only when `**AWS_ACCESS_KEY_ID**`, `**AWS_SECRET_ACCESS_KEY**`, and `**AWS_REGION**` are all set). Without those variables, the convenience scripts skip the parser. The same boto3 stack is available via `pip install -e ".[agent]"` if you prefer not to use the flat file. If you use **uv**, ensure boto3 is present when you enable the parser.
+`requirements.txt` includes **boto3** for the optional **parser_agent** step: an **AI (Amazon Bedrock) log parser** that reads captured run logs and, when failures are present, writes Markdown summaries under **`reports/agent-summaries/*.md`** (only when **`AWS_ACCESS_KEY_ID`**, **`AWS_SECRET_ACCESS_KEY`**, and **`AWS_REGION`** are all set). Without those variables, the convenience scripts skip the parser. The same boto3 stack is available via `pip install -e ".[agent]"` if you prefer not to use the flat file. If you use **uv**, ensure boto3 is present when you enable the parser.
 
 You need **network access** to STS for API tests and term-verify runs.
 
@@ -42,13 +42,13 @@ You need **network access** to STS for API tests and term-verify runs.
 
 **Default:** If you do **not** set anything, the framework uses **QA**: `https://sts-qa.cancer.gov/v2` (see [sts_base_url()](../src/sts_test_framework/config.py)). You can run the scripts below with no `export`.
 
-**Other environments:** Set `**STS_BASE_URL`** only when you want something other than QA (stage, prod, local dev, etc.). STS v2 root must include `/v2`. The web UI sets this for you per run when you pick a preset.
+**Other environments:** Set **`STS_BASE_URL`** only when you want something other than QA (stage, prod, local dev, etc.). STS v2 root must include `/v2`. The web UI sets this for you per run when you pick a preset.
 
 ```bash
 export STS_BASE_URL=https://sts.cancer.gov/v2   # example: prod
 ```
 
-Same effect without `export` for one command: `STS_BASE_URL=https://... bash scripts/run_manual_tests.sh`. After `pip install -e .`, the `**sts-test**` CLI also accepts `--base-url` (details: [ONBOARDING §5.2](ONBOARDING.md#52-configuration-environment-variables)).
+Same effect without `export` for one command: `STS_BASE_URL=https://... bash scripts/run_manual_tests.sh`. After `pip install -e .`, the **`sts-test`** CLI also accepts `--base-url` (details: [ONBOARDING §5.2](ONBOARDING.md#52-configuration-environment-variables)).
 
 When you run **manual** tests via `run_manual_tests.sh`, pytest prints `STS environment: https://...` — use that line to confirm which host you hit.
 
