@@ -58,6 +58,7 @@ def write_html_report(
             "expected": r.get("expected_status"),
             "actual": r.get("actual_status"),
             "duration": duration_str,
+            "perf_warning": bool(r.get("perf_warning")),
             "error": r.get("error") or "",
         })
 
@@ -95,8 +96,14 @@ def _template(
     total = summary.get("total", 0)
     passed = summary.get("passed", 0)
     failed = summary.get("failed", 0)
+    p50 = summary.get("p50_ms")
+    p90 = summary.get("p90_ms")
     p95 = summary.get("p95_ms")
+    avg = summary.get("avg_ms")
     p95_str = f"{p95} ms" if p95 is not None else "N/A"
+    slow_count = summary.get("slow_count", 0)
+    slow_requests = summary.get("slow_requests", [])
+    perf_threshold = summary.get("perf_threshold_ms", 2000)
 
     env_block = ""
     env_lines = []
@@ -124,6 +131,37 @@ def _template(
         neg = cases_generated.get("negative", 0)
         cases_block = f'<div class="cases-generated"><strong>Generated cases:</strong> {t} total ({pos} positive, {neg} negative).</div>'
 
+    # Performance summary block
+    perf_stats_html = (
+        f"<span><strong>Avg:</strong> {avg} ms</span>"
+        f"<span><strong>P50:</strong> {p50} ms</span>"
+        f"<span><strong>P90:</strong> {p90} ms</span>"
+        f"<span><strong>P95:</strong> {p95_str}</span>"
+    ) if p95 is not None else ""
+
+    if slow_count > 0:
+        slow_rows_html = "".join(
+            f"<tr><td><code>{_esc(s['operation_id'])}</code></td>"
+            f"<td><code>{_esc(s['path'])}</code></td>"
+            f"<td>{_esc(str(s['duration_ms']))} ms</td></tr>"
+            for s in slow_requests
+        )
+        slow_detail = (
+            f'<details><summary>{slow_count} slow request(s) above {perf_threshold} ms — click to expand</summary>'
+            f'<table class="slow-table"><thead><tr><th>Operation</th><th>Path</th><th>Duration</th></tr></thead>'
+            f'<tbody>{slow_rows_html}</tbody></table></details>'
+        )
+    else:
+        slow_detail = f'<span class="perf-ok">No requests exceeded the {perf_threshold} ms threshold.</span>'
+
+    perf_block = (
+        f'<div class="perf-summary">'
+        f'<strong>Performance:</strong>&nbsp; {perf_stats_html} &nbsp;|&nbsp; '
+        f'<strong>Slow (&gt;{perf_threshold} ms):</strong> {slow_count}'
+        f'</div>'
+        f'<div class="perf-detail">{slow_detail}</div>'
+    ) if perf_stats_html else ""
+
     rows_html = "".join(
         f"""
         <tr>
@@ -133,7 +171,7 @@ def _template(
             <td class="status-{r['status'].lower()}">{r['status']}</td>
             <td>{r['expected']}</td>
             <td>{r['actual']}</td>
-            <td>{_esc(r['duration'])}</td>
+            <td class="{'duration-slow' if r['perf_warning'] else ''}">{_esc(r['duration'])}</td>
             <td>{_esc(r['error'][:200] if r['error'] else '')}</td>
         </tr>
         """
@@ -157,8 +195,17 @@ def _template(
         th {{ background: #f5f5f5; }}
         .status-pass {{ background: #d4edda; color: #155724; font-weight: 600; }}
         .status-fail {{ background: #f8d7da; color: #721c24; font-weight: 600; }}
-        .summary {{ margin-bottom: 1.5rem; }}
+        .duration-slow {{ background: #fff3cd; color: #856404; font-weight: 600; }}
+        .summary {{ margin-bottom: 0.75rem; }}
         .summary span {{ margin-right: 1.5rem; }}
+        .perf-summary {{ color: #444; margin-bottom: 0.4rem; font-size: 0.9rem; }}
+        .perf-summary span {{ margin-right: 1.2rem; }}
+        .perf-detail {{ margin-bottom: 1.25rem; font-size: 0.88rem; color: #555; }}
+        .perf-ok {{ color: #155724; }}
+        .slow-table {{ border-collapse: collapse; margin-top: 0.5rem; width: 100%; }}
+        .slow-table th, .slow-table td {{ border: 1px solid #ddd; padding: 0.3rem 0.6rem; text-align: left; font-size: 0.85rem; }}
+        .slow-table th {{ background: #f5f5f5; }}
+        details summary {{ cursor: pointer; color: #856404; font-weight: 600; }}
     </style>
 </head>
 <body>
@@ -173,6 +220,7 @@ def _template(
         <span><strong>Failed:</strong> {failed}</span>
         <span><strong>P95 response:</strong> {p95_str}</span>
     </div>
+    {perf_block}
     <table>
         <thead>
             <tr>

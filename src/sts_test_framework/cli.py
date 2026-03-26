@@ -34,6 +34,7 @@ def main() -> None:
     parser.add_argument("--quiet", action="store_true", help="Minimal output: only run count, report paths, and result")
     parser.add_argument("--model", default=None, help="Model handle to test (e.g. C3DC). If omitted, first model from /models/ is used.")
     parser.add_argument("--release", action="store_true", help="Use latest release version (no hyphen) for the model; otherwise first version.")
+    parser.add_argument("--perf-threshold-ms", type=int, default=2000, help="Requests slower than this value (ms) are flagged as [SLOW] in output and highlighted in reports (default: 2000). Never causes a test failure.")
     args = parser.parse_args()
 
     base_url = args.base_url or sts_base_url()
@@ -48,6 +49,7 @@ def main() -> None:
 
     tag_filter = [t.strip() for t in args.tags.split(",")] if args.tags else None
     quiet = args.quiet
+    perf_threshold_ms = args.perf_threshold_ms
 
     def log(msg: str) -> None:
         """Print progress line unless ``--quiet`` (then only critical lines go to stdout)."""
@@ -118,19 +120,24 @@ def main() -> None:
         duration_ms = f"{duration * 1000:.0f} ms" if duration is not None else "?"
         note = result.get("pagination_pair_display_note")
         suffix = f" — {note}" if note else ""
+        slow_tag = " [SLOW]" if result.get("perf_warning") else ""
 
         if result.get("passed"):
-            log(f"  [Pass] GET {path} ({duration_ms}){suffix}")
+            log(f"  [Pass]{slow_tag} GET {path} ({duration_ms}){suffix}")
         else:
             err = (result.get("error") or "")[:80]
-            log(f"  [Fail] GET {path} ({duration_ms}) - {err}")
+            log(f"  [Fail]{slow_tag} GET {path} ({duration_ms}) - {err}")
 
     if quiet:
         print(f"Running {len(cases)} test cases...", flush=True)
     else:
         log(f"Running {len(cases)} test cases...")
-    results = run_functional_tests(client, cases, on_case_done=on_case_done if not quiet else None)
-    summary = aggregate_results(results)
+    results = run_functional_tests(
+        client, cases,
+        on_case_done=on_case_done if not quiet else None,
+        perf_threshold_ms=perf_threshold_ms,
+    )
+    summary = aggregate_results(results, perf_threshold_ms=perf_threshold_ms)
 
     # Step 6: Report (timestamped)
     run_id = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
