@@ -297,6 +297,37 @@ class CCDIDCCTermVerify(TermVerifyPipeline):
                     )
             f.write(f"\n**Full results:** `{report_csv.name}`\n")
 
+    def _print_verify_stdout_summary(
+        self,
+        passed_count: int,
+        total_rows: int,
+        failed: list[dict],
+        report_csv: Path,
+        report_md: Path,
+    ) -> None:
+        failed_count = len(failed)
+        u = getattr(self, "_unexpected_failure_count", failed_count)
+        allowlisted_count = failed_count - u
+        print(
+            f"Verify: passed {passed_count}/{total_rows}, failed {failed_count} "
+            f"\u2192 {report_csv.name}, {report_md.name}"
+        )
+        if not failed_count:
+            return
+        print(
+            f"Verify: failed breakdown \u2014 {allowlisted_count} allowlisted "
+            f"(known missing in STS), {u} unexpected (see {report_csv.name})."
+        )
+        if u > 0:
+            print(
+                f"Verify: FAIL — {u} unexpected term verification failure(s) "
+                f"(process exits 1 unless --warn-only)."
+            )
+        else:
+            print(
+                "Verify: OK \u2014 0 unexpected failures (all failed rows are allowlisted; exit 0)."
+            )
+
     def _should_fail(self, passed: int, total: int, warn_only: bool) -> bool:
         if warn_only:
             return False
