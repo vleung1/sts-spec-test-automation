@@ -94,8 +94,9 @@ def main() -> None:
     env = os.environ.copy()
     env["FLASK_APP"] = str(UI_APP)
     env["FLASK_ENV"] = "production"
-    # Disable Flask's default reloader (unnecessary for a launcher)
-    env["WERKZEUG_RUN_MAIN"] = "true"
+    # Do not set WERKZEUG_RUN_MAIN: with Flask 3 / Werkzeug 3 that can force a code path
+    # that expects WERKZEUG_SERVER_FD (reloader socket inheritance) and crashes with KeyError.
+    # --no-reload is sufficient to disable the reloader.
 
     cmd = [python, "-m", "flask", "--app", str(UI_APP), "run", "--port", str(port), "--no-reload"]
 

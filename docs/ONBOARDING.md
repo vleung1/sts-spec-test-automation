@@ -1,11 +1,11 @@
 # STS v2 API Test Framework – Onboarding Guide
 
-This document explains what the framework does, how it works, how to run it, and how to maintain or extend it. Use the [README](../README.md) for install, environment defaults, and the three main scripts; this guide provides the full picture. For a **minimal command-only** path (install, optional env vars, three convenience scripts), see **[RUNBOOK.md](RUNBOOK.md)**. 
+This document explains what the framework does, how it works, how to run it, and how to maintain or extend it. Use the [README](../README.md) for install, environment defaults, and running tests (**web UI first**, then command-line backup); this guide provides the full picture. For a **minimal command-only** path (install, optional env vars, three convenience scripts), see **[RUNBOOK.md](RUNBOOK.md)**.
 
 **How to read this document**
 
-- **First day / QA run:** [§1](#1-what-is-sts-and-the-v2-api)–[§2](#2-what-does-this-framework-do), [§3.6](#36-three-runnable-test-suites-overview)–[§3.8](#38-term-by-value-yaml--sts) (what each suite does), [§5.1](#51-prerequisites)–[§5.6](#56-running-all-data-models-in-one-go-multi-model-runner) (skim [§5.7](#57-what-happens-when-you-run-under-the-hood)), [§7.2](#72-which-file-should-i-open).
-- **Scripts and logs:** [§5.8](#58-convenience-shell-scripts), [§3.8](#38-term-by-value-yaml--sts) (term-by-value reference).
+- **First day / QA run:** [§1](#1-what-is-sts-and-the-v2-api)–[§2](#2-what-does-this-framework-do), [§3.6](#36-three-runnable-test-suites-overview)–[§3.8](#38-term-by-value-yaml--sts) (what each suite does), **[§5.0](#50-web-test-runner-ui-recommended)** (web UI), [§5.1](#51-prerequisites)–[§5.6](#56-running-all-data-models-in-one-go-multi-model-runner) (skim [§5.7](#57-what-happens-when-you-run-under-the-hood)), [§7.2](#72-which-file-should-i-open).
+- **Scripts and logs (CLI backup):** [§5.8](#58-convenience-shell-scripts), [§3.8](#38-term-by-value-yaml--sts) (term-by-value reference).
 - **Changing or debugging tests:** [§6](#6-how-to-add-or-change-tests), [§9](#9-troubleshooting-and-faq).
 - **Generator internals / edge cases:** [§3.3.1](#331-advanced-pagination-skip-oob-and-reporting-quirks), [§5.7](#57-what-happens-when-you-run-under-the-hood).
 
@@ -361,9 +361,16 @@ python tests/term_verify/ctdc_term_verify.py --warn-only
 
 ```
 sts-spec-test-automation/
-├── README.md                 # Entry point: install, env note, three scripts (complement to this doc)
+├── README.md                 # Entry point: install, web UI + CLI run paths (complement to this doc)
+├── launcher.py               # Cross-platform: spawns Flask, opens browser (see §4.3)
+├── launcher.command          # macOS Finder double-click → launcher.py
+├── launcher.bat              # Windows Explorer double-click → launcher.py
 ├── pyproject.toml            # Package metadata and core dependencies
-├── requirements.txt          # pip install -r: core deps plus boto3 (optional parser_agent / Bedrock)
+├── requirements.txt          # pip install -r: core deps, Flask (UI), boto3 (optional parser_agent / Bedrock)
+├── ui/
+│   ├── app.py                # Flask app: /run, /stream (SSE), /status, /stop
+│   └── templates/
+│       └── index.html        # Test runner UI (single page + SSE client)
 ├── spec/
 │   └── v2.json               # OpenAPI spec for STS v2 (source of truth; do not edit by hand unless you own the API)
 ├── src/sts_test_framework/   # Main framework code
@@ -404,6 +411,7 @@ sts-spec-test-automation/
 
 **Why this layout?**
 
+- **ui/**, **launcher.*** – Optional **STS Test Runner** web UI (Flask) and double-click / `python launcher.py` entry points; see [§4.3](#43-web-test-runner-ui-how-it-is-built).
 - **spec/** – Keeps the API contract in one place; the rest of the code only reads it.
 - **src/sts_test_framework/** – Reusable library: loader, client, discover, generator, runners, reporters. The CLI and pytest both use these.
 - **tests/conftest.py** – Shared fixtures so that both manual and generated tests get the same `api_client` and `test_data` without repeating setup.
@@ -418,14 +426,88 @@ These choices apply across the generated suite, manual tests, and term-verify pi
 - **Discovery instead of hardcoding** – Real model/node/property/tag values can differ between environments. Runtime discovery lets the same tests run wherever the API has data.
 - **Positive and negative cases** – Coverage includes invalid IDs and bad parameters so the API returns documented errors (404/422), not opaque 500s or wrong bodies.
 - **Single HTTP client** – All requests share one configurable client (base URL, timeout, SSL), so switching environments or adding logging stays straightforward.
-- **Two ways to run** – **pytest** for developers and CI; **CLI** for full runs and timestamped reports without pytest (e.g. scheduled jobs).
+- **Several ways to run** – **Web UI** ([§5.0](#50-web-test-runner-ui-recommended)) for local runs with environment and suite pickers; **pytest** for developers and CI; **CLI** and shell scripts for full runs, timestamped reports, and automation (e.g. scheduled jobs).
 - **JSON + HTML reports** – JSON for tooling and metrics; HTML for humans and CI artifacts.
+
+### 4.3 Web test runner UI (how it is built)
+
+The **STS Test Runner** is a small **Flask** application under `ui/` plus cross-platform launchers at the repo root.
+
+**Stack**
+
+- **Backend:** `ui/app.py` — `Flask` app with a Jinja template `ui/templates/index.html` for the main page.
+- **Frontend:** The template loads JavaScript that opens an **EventSource** connection to **`GET /stream/<run_id>`** (Server-Sent Events) to append live **stdout/stderr** lines from the test subprocess.
+
+**HTTP routes** (see module docstring in `ui/app.py`)
+
+| Route | Role |
+| ----- | ---- |
+| `GET /` | Serve the UI |
+| `POST /run` | Start a suite; JSON body: `env` (qa \| stage \| prod), `suite` (full \| manual \| autogenerated \| term_verify); returns `run_id` |
+| `GET /stream/<run_id>` | SSE: `log` events (line text) then final `done` (exit code, stage) |
+| `POST /stop/<run_id>` | Terminate the run’s process group |
+| `GET /status` | JSON: idle \| running \| done, elapsed time, suite, env, exit code (used by `launcher.py` to wait for readiness) |
+
+**Run flow**
+
+1. User chooses presets; browser calls **`POST /run`**.
+2. Server builds **`subprocess.Popen`** with `cwd=PROJECT_ROOT`, sets **`STS_BASE_URL`** from an internal map (`ENVIRONMENTS`), and prepends **`src`** to **`PYTHONPATH`** so scripts resolve `sts_test_framework`.
+3. **`SUITES`** maps suite keys to the same argv as the convenience scripts (e.g. `bash scripts/run_full_suite.sh`, `python scripts/run_autogenerated_tests.py`).
+4. A background thread reads the process **stdout** line-by-line into a **queue**; the SSE generator drains the queue. For **full** suite, **stage** (1/3–3/3) is inferred from markers in the shell script output.
+5. Only **one run at a time**; a second `POST /run` while busy returns **409**.
+
+**Launchers**
+
+- **`launcher.py`** picks a free port starting at **5678**, spawns `python -m flask --app ui/app.py run --port <port> --no-reload` in a subprocess, waits until **`GET /status`** responds, then opens the default browser. Do **not** set **`WERKZEUG_RUN_MAIN`** in that subprocess: with Flask 3 / Werkzeug 3 it can trigger a code path that expects **`WERKZEUG_SERVER_FD`** and crashes with `KeyError`.
+- **`launcher.command`** (macOS) and **`launcher.bat`** (Windows) `cd` to the repo, activate `.venv` if present, and run **`launcher.py`**.
+
+**Extension points**
+
+- Add or change **STS environments:** edit **`ENVIRONMENTS`** in `ui/app.py`.
+- Add or change **suites:** edit **`SUITES`** (keep parity with `scripts/` for predictable reports).
+- UX: **`ui/templates/index.html`** (layout, labels, SSE handling).
+
+**Limitations**
+
+- **Custom base URLs** not in the UI dropdown still require **CLI** / **`export STS_BASE_URL`**.
+- **Windows:** suites **`full`**, **`manual`**, and **`term_verify`** invoke **`bash`**; without Git Bash (or another `bash` on `PATH`), use **autogenerated** only from the UI or run from **Git Bash** / WSL. **Stop** uses Unix-style process groups (`os.killpg`); behavior may differ on Windows if process group semantics differ.
+- **macOS / Linux:** `bash` is normally available.
 
 ---
 
 ## 5. How to run the framework
 
 For what each **suite** covers, see [§3.6](#36-three-runnable-test-suites-overview)–[§3.8](#38-term-by-value-yaml--sts).
+
+### 5.0 Web test runner UI (recommended)
+
+After [§5.1 Prerequisites](#51-prerequisites) (venv, `pip install -r requirements.txt`, `pip install -e .`), you can drive the same workflows as [§5.8](#58-convenience-shell-scripts) from a browser.
+
+**Start the UI**
+
+| Platform | Action |
+| -------- | ------ |
+| **macOS** | Double-click **`launcher.command`**, or from a terminal with venv active: **`python launcher.py`** |
+| **Windows** | Double-click **`launcher.bat`**, or from a terminal with venv active: **`python launcher.py`** |
+
+The launcher prints the URL (default **http://localhost:5678**; if that port is in use, the next free port is chosen). Your browser should open automatically once the server is ready.
+
+**In the browser**
+
+1. Select **STS environment:** QA, stage, or prod (maps to the same URLs as in `ui/app.py` — equivalent to setting `STS_BASE_URL` for that run).
+2. Select **suite:** **Full** (manual → autogenerated → term-verify), or one of **Manual**, **Autogenerated**, **Term verify** only.
+3. Click run; watch the **live log**. Use **Stop** to terminate the subprocess tree (same as interrupting a script).
+4. When finished, open reports under **`reports/`** (and **`logs/`** if scripts tee there). Which artifact to open: [§7.2](#72-which-file-should-i-open).
+
+**Windows:** For **Full**, **Manual**, or **Term verify**, ensure **`bash`** is on `PATH` (e.g. **Git Bash**). **Autogenerated** does not need `bash`.
+
+**When to use CLI instead**
+
+- CI, cron, or any **headless** automation.
+- **Custom** `STS_BASE_URL` or extra **environment variables** not exposed in the UI.
+- **Forwarded arguments** (e.g. `bash scripts/run_manual_tests.sh -m nullcde`).
+
+Implementation details: [§4.3](#43-web-test-runner-ui-how-it-is-built).
 
 ### 5.1 Prerequisites
 
@@ -554,17 +636,18 @@ If your dev server uses HTTPS with a self-signed cert, set `STS_SSL_VERIFY=false
 STS_BASE_URL=https://my-dev-server.local/v2 STS_SSL_VERIFY=false pytest tests/ -v
 ```
 
-### 5.3 Two ways to run: pytest vs CLI
+### 5.3 Three ways to run: web UI, pytest, CLI
 
-The framework can be run in **two ways**. Both use the same spec, discovery, and generator—so the same test cases run either way. The difference is **how** you invoke them and **what you get**:
+The framework can be run in **three** complementary ways. The **web UI** ([§5.0](#50-web-test-runner-ui-recommended)) wraps the same shell scripts and sets `STS_BASE_URL` from presets—best for **local** interactive runs. **pytest** and the **CLI** share the same spec, discovery, and generator for generated coverage; the difference is how you invoke them and what artifacts you get.
+
+|                | **Web UI**                                                                                    | **pytest**                                                                                                                                | **CLI**                                                                                                                                |
+| -------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **What it is** | Flask app + browser; starts subprocesses for full / manual / autogenerated / term-verify.     | Standard Python test runner; each generated case is one pytest test.                                                                      | A standalone script that runs the framework and writes report files.                                                                   |
+| **Output**     | Live log in browser; same `reports/` and `logs/` as the underlying scripts.                   | Pytest’s usual pass/fail output (and any pytest plugins, e.g. html). Does *not* write the framework’s report files unless you add a hook. | Always writes timestamped `report_*.json` and `report_*.html` to the folder you choose (each run gets its own pair).                   |
+| **Best for**   | Picking QA/stage/prod and a suite without typing shell commands.                              | Day-to-day development, debugging, running a single test or subset, IDE integration.                                                      | Getting the framework’s reports every time, scripts/cron/CI, or using options like `--tags` / `--no-negative` without touching pytest. |
 
 
-|                | **pytest**                                                                                                                                | **CLI**                                                                                                                                |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **What it is** | Standard Python test runner; each generated case is one pytest test.                                                                      | A standalone script that runs the framework and writes report files.                                                                   |
-| **Output**     | Pytest’s usual pass/fail output (and any pytest plugins, e.g. html). Does *not* write the framework’s report files unless you add a hook. | Always writes timestamped `report_*.json` and `report_*.html` to the folder you choose (each run gets its own pair).                   |
-| **Best for**   | Day-to-day development, debugging, running a single test or subset, IDE integration.                                                      | Getting the framework’s reports every time, scripts/cron/CI, or using options like `--tags` / `--no-negative` without touching pytest. |
-
+**Use the web UI when:** You want to pick **QA / stage / prod** and a **suite** from the browser, see a **live log**, and avoid shell one-liners locally ([§5.0](#50-web-test-runner-ui-recommended)).
 
 **Use pytest when:** You want to run one test or a subset (e.g. only `test_manual`), use your IDE’s “Run Test” button, or integrate STS tests into a larger pytest suite. You don’t need the framework’s HTML/JSON reports for that run.
 
@@ -927,6 +1010,13 @@ python3 parser_agent/main.py logs/manual_2026-03-25T00-00-00.log
 
 ## 9. Troubleshooting and FAQ
 
+**Web UI / launcher**
+
+- **Port in use:** `launcher.py` tries **5678**, then **5679**, etc., until a port is free. Open the URL printed in the terminal.
+- **Flask not found:** Run `pip install -r requirements.txt` in your venv (`flask` is listed there).
+- **`KeyError: 'WERKZEUG_SERVER_FD'`:** The launcher must **not** set `WERKZEUG_RUN_MAIN` on the Flask subprocess (see [§4.3](#43-web-test-runner-ui-how-it-is-built)). If you changed `launcher.py`, remove that env var.
+- **Windows: `bash` not found** when running **Full**, **Manual**, or **Term verify** from the UI: install **Git Bash** and ensure `bash` is on `PATH`, or run those suites from a Git Bash terminal using the shell scripts; use **Autogenerated** from the UI without `bash`.
+
 **No test cases generated**
 
 - Discovery may have failed (e.g. no models, or network error). Check that `STS_BASE_URL` is correct and the server is reachable. Run with pytest or CLI and look for errors during discovery; add print/logging in `discover.py` if needed.
@@ -950,7 +1040,7 @@ python3 parser_agent/main.py logs/manual_2026-03-25T00-00-00.log
 
 **Where do I document our team’s conventions?**
 
-- Use this ONBOARDING.md for how the framework works and how to maintain it. Use the README for quick start and high-level purpose.
+- Use this ONBOARDING.md for how the framework works and how to maintain it. Use the README for quick start (web UI first, then CLI), install, and high-level purpose.
 
 ---
 
