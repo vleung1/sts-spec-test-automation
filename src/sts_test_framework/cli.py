@@ -22,7 +22,7 @@ def main() -> None:
     from .config import DEFAULT_STS_BASE_URL, bundled_spec_path, sts_base_url
 
     parser = argparse.ArgumentParser(description="STS v2 API Test Framework")
-    parser.add_argument("--spec", default=None, help="Path to OpenAPI spec (v2.yaml)")
+    parser.add_argument("--spec", default=None, help="Path to OpenAPI spec (v2.json)")
     parser.add_argument(
         "--base-url",
         default=None,

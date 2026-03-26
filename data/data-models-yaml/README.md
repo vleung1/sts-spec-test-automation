@@ -11,9 +11,13 @@
 
 - **Source:** CBIIT / model release artifacts (same tree as `mdb/data-models-yaml/` in `termValue_verification_scripts`).
 
+### Architecture
+
+Each `tests/term_verify/*_term_verify.py` script is a thin subclass of `TermVerifyPipeline` (`src/sts_test_framework/term_verify_pipeline.py`). The base class implements the shared extract/enrich/verify stages and CLI; each subclass only defines `parse_yaml()` and any model-specific overrides (e.g. CDS skips handle-to-value enrichment, CCDI-DCC has remote URL expansion and a known-missing allowlist). Shared utilities (`verify_row`, `strip_inline_yaml_comment`, `clean_enum_value`) live in `src/sts_test_framework/term_verify_utils.py`.
+
 ### Workflow (YAML-driven pipelines)
 
-Each `sts-*-term-verify` command runs **three stages** against a vendored property file:
+Each term-verify script runs **three stages** against a vendored property file:
 
 1. **Extract** — Parse the YAML and list every enumerated value per property (often the term **handle** in STS, not the human-readable label). Write summary + “query” CSVs.
 
