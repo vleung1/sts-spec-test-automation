@@ -370,8 +370,30 @@ class TermVerifyPipeline:
             report_rows, passed_count, failed, skipped_count,
         )
 
-        print(f"Verify: passed {passed_count}/{len(report_rows)} \u2192 {report_csv.name}, {report_md.name}")
+        self._print_verify_stdout_summary(
+            passed_count, len(report_rows), failed, report_csv, report_md
+        )
         return report_csv, report_md, passed_count, len(report_rows)
+
+    def _print_verify_stdout_summary(
+        self,
+        passed_count: int,
+        total_rows: int,
+        failed: list[dict],
+        report_csv: Path,
+        report_md: Path,
+    ) -> None:
+        """Stdout summary for humans and log parsers (e.g. parser_agent)."""
+        failed_count = len(failed)
+        print(
+            f"Verify: passed {passed_count}/{total_rows}, failed {failed_count} "
+            f"\u2192 {report_csv.name}, {report_md.name}"
+        )
+        if failed_count:
+            print(
+                f"Verify: FAIL — {failed_count} term verification failure(s) "
+                f"(see {report_csv.name}; process exits 1 unless --warn-only)."
+            )
 
     def _print_verify_preamble(self, count: int, total: int, skipped: int) -> None:
         if self.needs_handle_to_value:
