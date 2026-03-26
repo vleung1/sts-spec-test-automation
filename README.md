@@ -1,8 +1,8 @@
 # STS v2 API Test Framework
 
-This repository is an **API test framework** for the **Simple Terminology Server (STS) v2** HTTP API. STS exposes oncology data models (nodes, properties, allowed values/terms) from a graph backing store; clients use it to resolve model metadata consistently across programs such as the Cancer Research Data Commons.
+This repository is an API test framework for the **Simple Terminology Server (STS) v2** API. STS exposes oncology data models (nodes, properties, allowed values/terms) from a graph backing store; clients use it to resolve model metadata consistently across programs such as the Cancer Research Data Commons.
 
-The framework treats the OpenAPI spec document STS is built on (`spec/v2.json`) as the contract: it loads the spec, **discovers** live IDs in the target environment, **generates** positive and negative HTTP test cases, and **runs** them through a shared client. Results are written as JSON and HTML reports. Alongside this auto-generated suite, the repo ships **"manual" tests** to verify special scenarios and business logic, and **term-by-value** verification pipelines that compare vendored data-model YAML enums to the STS termValue endpoint per data commons.
+The framework treats the OpenAPI spec document STS is built on (`spec/v2.json`) as the contract: it loads the spec, **discovers** live IDs in the target environment, **generates** positive and negative HTTP test cases, and **runs** them through a shared client. Results are written as JSON and HTML reports. Alongside this auto-generated suite, the repo ships **"manual" tests** to verify special scenarios and business logic, and **term-by-value** verification pipelines that compare vendored data-model YAML enums to the STS termValue endpoint per data commons. The framework also includes optional **performance/load-style testing** for live STS with reporting.
 
 **AI-agent log parsing:** If required environment variables are set, the `parser_agent` module parses captured run logs for test failures, calls **Amazon Bedrock** for analysis, and writes summary reports under `reports/agent-summaries/`. The test scripts invoke this hook after their runs.
 
@@ -86,4 +86,4 @@ Or set it for a single command without `export`:
 STS_BASE_URL=https://sts-stage.cancer.gov/v2 bash scripts/run_full_suite.sh
 ```
 
-In the **web UI**, pick **stage** (or another preset) instead of exporting `STS_BASE_URL` for that session.
+In the **web UI**, pick **stage** (or another preset).
