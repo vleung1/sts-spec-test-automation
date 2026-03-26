@@ -191,9 +191,9 @@ These are **pytest** modules for behavior that is awkward as “one generated GE
 
 ### 3.7.1 caDSR and legacy CDE-PVS (reference)
 
-Skip unless you run or debug these manual modules (`CADSR_`* env vars in [§5.2](#52-configuration-environment-variables)).
+Skip unless you run or debug these manual modules (`CADSR_*` env vars in [§5.2](#52-configuration-environment-variables)).
 
-Manual caDSR `**GET /DataElement/{publicId}`** calls retry transient failures (connection errors, **429**, **5xx** including **504**) with a short delay; tune with `**CADSR_GET_MAX_ATTEMPTS`** (default **4**) and `**CADSR_GET_RETRY_DELAY_SEC`** (default **2.0**) — see `[tests/test_manual/conftest.py](../tests/test_manual/conftest.py)`.
+Manual caDSR `GET /DataElement/{publicId}` calls retry transient failures (connection errors, **429**, **5xx** including **504**) with a short delay; tune with `CADSR_GET_MAX_ATTEMPTS` (default **4**) and `CADSR_GET_RETRY_DELAY_SEC` (default **2.0**) — see [tests/test_manual/conftest.py](../tests/test_manual/conftest.py).
 
 - **Multi-concept / URL-PV CDE checks**
   - **Test file:** `tests/test_manual/test_cadsr_multi_concept_cdes.py`
@@ -212,8 +212,8 @@ Manual caDSR `**GET /DataElement/{publicId}`** calls retry transient failures (c
 - **caDSR vs STS PVS (Designations / DRAFT NEW)**
   - **Test file:** `tests/test_manual/test_cadsr_alternatevalues_draftnew_cdes.py`
   - **Markers:** `cadsr_alt_pvs`, `cadsr_draft_new`
-  - `**cadsr_alt_pvs`:** Compares caDSR **Designations** names to STS **cde-pvs** and **model-pvs** (`data/cadsr_alternate_values_cases.json`).
-  - `**cadsr_draft_new` assertions:**
+  - **`cadsr_alt_pvs`:** Compares caDSR **Designations** names to STS **cde-pvs** and **model-pvs** (`data/cadsr_alternate_values_cases.json`).
+  - **`cadsr_draft_new` assertions:**
     - caDSR `workflowStatus` is **DRAFT NEW**
     - caDSR `longName` exactly matches STS `CDEFullName`
     - Every caDSR `PermissibleValues[].value` appears in STS cde-pvs rows with non-null `ncit_concept_code` (rows with null NCIt are ignored)
@@ -234,7 +234,7 @@ Manual caDSR `**GET /DataElement/{publicId}`** calls retry transient failures (c
 
 #### 3.8.1 What this is
 
-These verification pipelines are **not** pytest and **not** the OpenAPI-generated suite. Each runner reads a vendored property YAML under `[data/data-models-yaml/](../data/data-models-yaml/)`, walks enums, calls the live STS API to enrich rows, then GETs the term-by-value endpoint per row. From the repo root, use `pip install -e .` so `sts_test_framework` imports resolve, or set `PYTHONPATH=src` when running the scripts under `tests/term_verify/`.
+These verification pipelines are **not** pytest and **not** the OpenAPI-generated suite. Each runner reads a vendored property YAML under [data/data-models-yaml/](../data/data-models-yaml/), walks enums, calls the live STS API to enrich rows, then GETs the term-by-value endpoint per row. From the repo root, use `pip install -e .` so `sts_test_framework` imports resolve, or set `PYTHONPATH=src` when running the scripts under `tests/term_verify/`.
 
 #### 3.8.2 Vendored YAML files
 
@@ -251,25 +251,25 @@ These verification pipelines are **not** pytest and **not** the OpenAPI-generate
 
 - **Source:** CBIIT / model release artifacts (same tree as `mdb/data-models-yaml/` in `termValue_verification_scripts`).
 
-Each model writes final reports as `**{prefix}_term_endpoint_verification_report.csv`** and `**{prefix}_term_endpoint_verification_report.md`** (prefixes: `ccdi_`, `c3dc_`, `ctdc_`, `icdc_`, `cds_`, `ccdi_dcc_`).
+Each model writes final reports as `{prefix}_term_endpoint_verification_report.csv` and `{prefix}_term_endpoint_verification_report.md` (prefixes: `ccdi_`, `c3dc_`, `ctdc_`, `icdc_`, `cds_`, `ccdi_dcc_`).
 
 #### 3.8.3 Architecture
 
-Each `tests/term_verify/*_term_verify.py` module defines a thin subclass of `[TermVerifyPipeline](../src/sts_test_framework/term_verify_pipeline.py)`. The base class implements the shared extract / enrich / verify stages and CLI; each subclass defines `parse_yaml()` and any model-specific overrides (for example CDS skips handle-to-value enrichment; CCDI-DCC may fetch remote enum YAML and uses a known-missing allowlist). Shared helpers such as `verify_row`, `strip_inline_yaml_comment`, and `clean_enum_value` live in `[term_verify_utils.py](../src/sts_test_framework/term_verify_utils.py)`.
+Each `tests/term_verify/*_term_verify.py` module defines a thin subclass of [TermVerifyPipeline](../src/sts_test_framework/term_verify_pipeline.py). The base class implements the shared extract / enrich / verify stages and CLI; each subclass defines `parse_yaml()` and any model-specific overrides (for example CDS skips handle-to-value enrichment; CCDI-DCC may fetch remote enum YAML and uses a known-missing allowlist). Shared helpers such as `verify_row`, `strip_inline_yaml_comment`, and `clean_enum_value` live in [term_verify_utils.py](../src/sts_test_framework/term_verify_utils.py).
 
 #### 3.8.4 Pipeline stages (extract → enrich → verify)
 
 Each runner executes **three stages** against its default YAML (override with the CLI `--yaml` path when supported):
 
 1. **Extract** — Parse the YAML and list every enumerated value per property (often the term **handle** in STS, not the human-readable label). Writes a summary CSV and a flat “query” CSV.
-2. **Enrich** — Call the live STS API: discover model version, map each property to a node, and (for most models) page `GET .../property/{propHandle}/terms` to fill `**term_value`** with the API **value** for each YAML handle. Rows also get `model_handle`, `version_string`, `node_handle`.
+2. **Enrich** — Call the live STS API: discover model version, map each property to a node, and (for most models) page `GET .../property/{propHandle}/terms` to fill `term_value` with the API **value** for each YAML handle. Rows also get `model_handle`, `version_string`, `node_handle`.
 3. **Verify** — For each row, the client performs:
   `GET {STS_BASE_URL}/model/{modelHandle}/version/{versionString}/node/{nodeHandle}/property/{propHandle}/term/{encodedTermValue}`
    (path segments are URL-encoded; `STS_BASE_URL` includes `/v2`, same as elsewhere in this doc). A row **passes** if the response is **200**, the body is a **JSON array**, and **at least one** element has `"value"` equal to the string used in the path.
    **What goes in `{encodedTermValue}`:**
-  - **CCDI, C3DC, CTDC, ICDC** — The enriched `**term_value`** (handle → value from `/terms`). Rows with no resolved `term_value` are skipped for HTTP.
-  - **CCDI-DCC** — Same enrich as above; verify uses `**(term_value or enum_value)`** when non-empty after trim (legacy behavior). Extract may **fetch remote `http(s)` YAML** for some enum lines and merge values.
-  - **CDS** — Enrich does **not** call `/terms`; it only fills model / version / node. The path segment is the YAML `**enum_value`** directly.
+  - **CCDI, C3DC, CTDC, ICDC** — The enriched `term_value` (handle → value from `/terms`). Rows with no resolved `term_value` are skipped for HTTP.
+  - **CCDI-DCC** — Same enrich as above; verify uses `(term_value or enum_value)` when non-empty after trim (legacy behavior). Extract may **fetch remote** `http(s)` **YAML** for some enum lines and merge values.
+  - **CDS** — Enrich does **not** call `/terms`; it only fills model / version / node. The path segment is the YAML `enum_value` directly.
 
 #### 3.8.5 How to run
 
@@ -296,11 +296,11 @@ PYTHONPATH=src python tests/term_verify/cds_term_verify.py --base-url https://st
 PYTHONPATH=src python tests/term_verify/ccdi_dcc_term_verify.py --base-url https://sts-qa.cancer.gov/v2
 ```
 
-`[project.scripts]` in `[pyproject.toml](../pyproject.toml)` exposes `**sts-test**` for the OpenAPI CLI only; term-verify runners are the `python tests/term_verify/<model>_term_verify.py` commands above.
+`[project.scripts]` in [pyproject.toml](../pyproject.toml) exposes `sts-test` for the OpenAPI CLI only; term-verify runners are the `python tests/term_verify/<model>_term_verify.py` commands above.
 
 #### 3.8.6 Outputs and intermediate artifacts
 
-Artifacts are written under `**reports/term_value/<MODEL>/**` by default (`--out-dir` overrides). The flow is always: **summary + query CSV → enriched CSV → verification report**.
+Artifacts are written under `reports/term_value/<MODEL>/` by default (`--out-dir` overrides). The flow is always: **summary + query CSV → enriched CSV → verification report**.
 
 
 | Stage       | Typical filename                                   | What it represents                                                                                                                                                               |
@@ -311,7 +311,7 @@ Artifacts are written under `**reports/term_value/<MODEL>/**` by default (`--out
 | **Verify**  | `{prefix}term_endpoint_verification_report.csv`    | One row per HTTP check: `http_status`, `passed`, `notes`. Skipped rows (e.g. no resolvable URL value) do not appear.                                                             |
 
 
-A Markdown companion `**{prefix}term_endpoint_verification_report.md`** is also written (summary, counts, short failure preview; full detail in the CSV). For triage, use the final `.md` for a readable summary and the `.csv` for per-row filtering.
+A Markdown companion `{prefix}term_endpoint_verification_report.md` is also written (summary, counts, short failure preview; full detail in the CSV). For triage, use the final `.md` for a readable summary and the `.csv` for per-row filtering.
 
 #### 3.8.7 Column reference (CSVs)
 
@@ -334,17 +334,17 @@ A Markdown companion `**{prefix}term_endpoint_verification_report.md`** is also 
 
 **Model-specific report CSV columns:**
 
-- **CCDI, C3DC, CTDC, ICDC** — `prop_handle`, `enum_value`, `term_value`, `http_status`, `passed`, `notes`. Only rows with non-empty enriched `**term_value`** are verified.
-- **CCDI-DCC** — Same columns; the URL may use `**term_value` or `enum_value`**. Extract may merge enums from remote `http(s)` YAML when an enum line is a URL.
-- **CDS** — `prop_handle`, `enum_value`, `http_status`, `passed`, `notes` only (no `term_value`); the URL uses `**enum_value`** directly.
+- **CCDI, C3DC, CTDC, ICDC** — `prop_handle`, `enum_value`, `term_value`, `http_status`, `passed`, `notes`. Only rows with non-empty enriched `term_value` are verified.
+- **CCDI-DCC** — Same columns; the URL may use `term_value` or `enum_value`. Extract may merge enums from remote `http(s)` YAML when an enum line is a URL.
+- **CDS** — `prop_handle`, `enum_value`, `http_status`, `passed`, `notes` only (no `term_value`); the URL uses `enum_value` directly.
 
 #### 3.8.8 Flags and CCDI-DCC allowlist
 
 **Useful flags** (term-verify CLIs; forwarded by `run_all_term_verify.sh`):
 
-- `**--base-url`** — STS v2 root including `/v2` (overrides `STS_BASE_URL` for that run).
-- `**--limit N`** — Verify at most the first N rows (after enrich).
-- `**--warn-only`** — Exit **0** even when some rows fail (failures still appear in reports).
+- **`--base-url`** — STS v2 root including `/v2` (overrides `STS_BASE_URL` for that run).
+- **`--limit N`** — Verify at most the first N rows (after enrich).
+- **`--warn-only`** — Exit **0** even when some rows fail (failures still appear in reports).
 
 ```bash
 python tests/term_verify/ctdc_term_verify.py --limit 50
@@ -562,7 +562,7 @@ Set the variables in the job's `env` block so each run targets the right environ
 
 **Variable reference:**
 
-Implementation detail: base URL resolution lives in `[sts_test_framework.config.sts_base_url()](../src/sts_test_framework/config.py)` (`STS_BASE_URL` or default QA). Pytest prints `STS environment: <url>` at the start of each run (see `tests/conftest.py`).
+Implementation detail: base URL resolution lives in [sts_test_framework.config.sts_base_url()](../src/sts_test_framework/config.py) (`STS_BASE_URL` or default QA). Pytest prints `STS environment: <url>` at the start of each run (see `tests/conftest.py`).
 
 
 | Variable                    | Meaning                                                                                                                                                                                                         | Default                                          |
@@ -683,7 +683,7 @@ The CLI loads the spec, runs discovery, generates cases, runs them, and **always
 python -m sts_test_framework.cli
 ```
 
-Defaults: spec = `spec/v2.json`, base URL = `STS_BASE_URL` or `https://sts-qa.cancer.gov/v2` (same default as `[DEFAULT_STS_BASE_URL` in `sts_test_framework.config](../src/sts_test_framework/config.py)`), report dir = `reports/`. For **prod**, **stage**, or **local**, set `STS_BASE_URL` or pass `--base-url` (see [§5.2](#52-configuration-environment-variables)).
+Defaults: spec = `spec/v2.json`, base URL = `STS_BASE_URL` or `https://sts-qa.cancer.gov/v2` (same default as `DEFAULT_STS_BASE_URL` in [sts_test_framework/config.py](../src/sts_test_framework/config.py)), report dir = `reports/`. For **prod**, **stage**, or **local**, set `STS_BASE_URL` or pass `--base-url` (see [§5.2](#52-configuration-environment-variables)).
 
 **Example:** Your CI job runs after every deploy. You run `python -m sts_test_framework.cli --report reports/` and publish `reports/report.html` as an artifact so the team can open it and see which endpoints passed or failed. You don’t need pytest in that job—just the CLI and the report files.
 
@@ -834,19 +834,19 @@ When you run **pytest** only, step 6 does not run unless you add a pytest hook o
 
 These wrap common workflows from the project root. See also **[RUNBOOK.md](RUNBOOK.md)** for a short summary table.
 
-`**scripts/run_manual_tests.sh`**
+**`scripts/run_manual_tests.sh`**
 
 - Runs: `pytest tests/test_manual/ -v --html=reports/manual_tests.html --self-contained-html`
 - Extra arguments are forwarded to pytest (e.g. `-m nullcde`, `-k test_name`).
 - Output: standalone **pytest-html** report at `reports/manual_tests.html`. This is separate from the framework CLI’s `report_*.html` (from `python -m sts_test_framework.cli`). The project depends on `pytest-html` for this path.
-- After pytest, **parser_agent** runs only if `**AWS_ACCESS_KEY_ID`**, `**AWS_SECRET_ACCESS_KEY`**, and `**AWS_REGION**` are all set (optional Bedrock failure summaries; needs boto3). Otherwise the script prints a short notice and exits with pytest’s status only. Sources `scripts/parser_agent_hook.sh`.
+- After pytest, **parser_agent** runs only if **`AWS_ACCESS_KEY_ID`**, **`AWS_SECRET_ACCESS_KEY`**, and **`AWS_REGION`** are all set (optional Bedrock failure summaries; needs boto3). Otherwise the script prints a short notice and exits with pytest’s status only. Sources `scripts/parser_agent_hook.sh`.
 
-`**scripts/run_autogenerated_tests.py**`
+**`scripts/run_autogenerated_tests.py`**
 
 - Runs the STS CLI once per data model (see script docstring for `STS_MODELS`, `STS_PARALLEL_WORKERS`).
 - Writes a capture log under `logs/autogenerated_*.log` and, when the three AWS variables are set, runs **parser_agent** on that log after all model runs (same messages and skip behavior as `run_manual_tests.sh`).
 
-`**scripts/run_all_term_verify.sh`**
+**`scripts/run_all_term_verify.sh`**
 
 - Runs every `tests/term_verify/*_term_verify.py` with **limited parallelism** (default **2** concurrent commons pipelines via `STS_TERM_VERIFY_WORKERS`; set to `1` for strictly sequential runs).
 - Sets `PYTHONPATH` to include `src/` so `from sts_test_framework...` imports resolve.
@@ -854,7 +854,7 @@ These wrap common workflows from the project root. See also **[RUNBOOK.md](RUNBO
 - For per-commons scripts, outputs, and flags, see [§3.8 Term-by-value](#38-term-by-value-yaml--sts).
 - After all scripts finish, **parser_agent** runs on the term-verify tee log only when the three AWS variables are set (same hook as `run_manual_tests.sh`).
 
-`**scripts/run_full_suite.sh`**
+**`scripts/run_full_suite.sh`**
 
 - Runs the three pipelines **in order**: `run_manual_tests.sh` → `run_autogenerated_tests.py` → `run_all_term_verify.sh`.
 - **Always runs all three** stages even if one fails; prints per-stage pass/fail and a short summary. **Exit code 1** if any stage failed (so CI still goes red).
