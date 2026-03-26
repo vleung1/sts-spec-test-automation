@@ -32,7 +32,7 @@ Optional deep dives: [pagination, skip-OOB, reporting](#331-advanced-pagination-
 
 **STS** stands for **Simple Terminology Server**. It is a web API that exposes data models (e.g. for cancer research) in a consistent way. The data is stored in a graph database (Neo4j) and described as **nodes**, **properties**, **terms**, and **tags**. The API lets clients ask things like: “What models exist?”, “What nodes does this model have?”, “What are the allowed values (terms) for this property?”.
 
-The **v2 API** is the second version of this interface. It is **read-only**: all endpoints use the **GET** method. There is no login in the spec (no API keys or tokens for normal use). The API is documented in an **OpenAPI** specification file (`spec/v2.yaml`), which lists every URL path, its parameters, and the expected response shapes.
+The **v2 API** is the second version of this interface. It is **read-only**: all endpoints use the **GET** method. There is no login in the spec (no API keys or tokens for normal use). The API is documented in an **OpenAPI** specification file (`spec/v2.json`), which lists every URL path, its parameters, and the expected response shapes.
 
 **Why we test it:** Before releasing changes to STS, we need to confirm that every documented endpoint behaves as the spec says (right status codes, right response shape). This framework automates that checking.
 
@@ -42,7 +42,7 @@ The **v2 API** is the second version of this interface. It is **read-only**: all
 
 At a high level, the framework does four things:
 
-1. **Reads the API contract** – It loads the OpenAPI spec (`spec/v2.yaml`) so it knows every endpoint, its parameters, and expected responses.
+1. **Reads the API contract** – It loads the OpenAPI spec (`spec/v2.json`) so it knows every endpoint, its parameters, and expected responses.
 2. **Gets real data from the API** – It calls the live API once to “discover” real IDs and names (e.g. a model handle, a node handle, a tag). That discovery data is used to build valid requests for each endpoint.
 3. **Generates test cases** – For each endpoint in the spec, it creates at least one “positive” test (expects 200 OK) and, where the spec says so, one “negative” test (expects 404 or 422 for bad input).
 4. **Runs the tests and reports** – It sends HTTP requests for each generated case, checks status codes and basic response shape, and writes a **JSON** and **HTML** report with pass/fail and timing.
@@ -59,7 +59,7 @@ The **generated** tests are **not** stored as test case files on disk. They are 
 
 ### 3.1 OpenAPI spec (the “spec”)
 
-The **OpenAPI** (formerly Swagger) specification is a standard way to describe a REST API. The file `spec/v2.yaml` (or `.json`) contains:
+The **OpenAPI** (formerly Swagger) specification is a standard way to describe a REST API. The file `spec/v2.json` contains:
 
 - **Paths** – Each URL pattern (e.g. `/v2/models/`, `/v2/id/{id}`).
 - **Operations** – For each path, the HTTP method (here, only GET) and:
@@ -180,7 +180,7 @@ sts-test-framework-agent/
 ├── pyproject.toml            # Package metadata and core dependencies
 ├── requirements.txt          # pip install -r: core deps plus boto3 (optional parser_agent / Bedrock)
 ├── spec/
-│   └── v2.yaml               # OpenAPI spec for STS v2 (source of truth; do not edit by hand unless you own the API)
+│   └── v2.json               # OpenAPI spec for STS v2 (source of truth; do not edit by hand unless you own the API)
 ├── src/sts_test_framework/   # Main framework code
 │   ├── __init__.py
 │   ├── loader.py              # Load spec file; get paths/schemas; normalize paths
@@ -194,6 +194,8 @@ sts-test-framework-agent/
 │   └── reporters/
 │       ├── report.py          # Aggregate results; write JSON report
 │       └── html_report.py     # Write HTML report
+│   ├── term_verify_pipeline.py # Base class for all term-verify pipelines (extract/enrich/verify/CLI)
+│   └── term_verify_utils.py    # Shared utilities: verify_row, strip_inline_yaml_comment, clean_enum_value
 ├── tests/
 │   ├── conftest.py            # Pytest fixtures: spec, api_client, test_data, generated_cases
 │   ├── unit/                  # Unit tests: runner helpers (mocked APIResponse only)
@@ -221,6 +223,7 @@ sts-test-framework-agent/
 - **src/sts_test_framework/** – Reusable library: loader, client, discover, generator, runners, reporters. The CLI and pytest both use these.
 - **tests/conftest.py** – Shared fixtures so that both manual and generated tests get the same `api_client` and `test_data` without repeating setup.
 - **test_manual/** vs **test_generated/** vs **unit/** – Manual tests are for things that don’t fit the “one endpoint, one positive/negative case” pattern (e.g. `/id` by entity type, model-PVS duplicate checks). **Unit** tests under `tests/unit/` exercise `functional.py` helpers with mocks (no live API). **Full term-by-value coverage per commons** (YAML → enrich → verify) is run via standalone scripts under `tests/term_verify/` (e.g. `python tests/term_verify/ccdi_term_verify.py`), not pytest. Generated tests are the bulk of coverage and come from the spec.
+- **Term-verify architecture** -- Each `tests/term_verify/*_term_verify.py` script is a thin subclass of `TermVerifyPipeline` (in `src/sts_test_framework/term_verify_pipeline.py`). The base class implements the shared extract/enrich/verify stages and CLI; each subclass only defines `parse_yaml()` and any model-specific overrides. Shared utilities (`verify_row`, `strip_inline_yaml_comment`, `clean_enum_value`) live in `src/sts_test_framework/term_verify_utils.py`.
 
 ---
 
@@ -449,7 +452,7 @@ The CLI loads the spec, runs discovery, generates cases, runs them, and **always
 python -m sts_test_framework.cli
 ```
 
-Defaults: spec = `spec/v2.yaml`, base URL = `STS_BASE_URL` or `https://sts-qa.cancer.gov/v2` (same default as `[DEFAULT_STS_BASE_URL` in `sts_test_framework.config](../src/sts_test_framework/config.py)`), report dir = `reports/`. For **prod**, **stage**, or **local**, set `STS_BASE_URL` or pass `--base-url` (see [§6.2](#62-configuration-environment-variables)).
+Defaults: spec = `spec/v2.json`, base URL = `STS_BASE_URL` or `https://sts-qa.cancer.gov/v2` (same default as `[DEFAULT_STS_BASE_URL` in `sts_test_framework.config](../src/sts_test_framework/config.py)`), report dir = `reports/`. For **prod**, **stage**, or **local**, set `STS_BASE_URL` or pass `--base-url` (see [§6.2](#62-configuration-environment-variables)).
 
 **Example:** Your CI job runs after every deploy. You run `python -m sts_test_framework.cli --report reports/` and publish `reports/report.html` as an artifact so the team can open it and see which endpoints passed or failed. You don’t need pytest in that job—just the CLI and the report files.
 
@@ -457,7 +460,7 @@ Defaults: spec = `spec/v2.yaml`, base URL = `STS_BASE_URL` or `https://sts-qa.ca
 
 ```bash
 # Custom spec and base URL
-python -m sts_test_framework.cli --spec spec/v2.yaml --base-url https://sts.cancer.gov/v2
+python -m sts_test_framework.cli --spec spec/v2.json --base-url https://sts.cancer.gov/v2
 
 # Write reports to a specific folder
 python -m sts_test_framework.cli --report reports/
@@ -516,7 +519,7 @@ Whether you use **pytest** or the **CLI**, the same pipeline runs: load spec →
 
 **Short summary:**
 
-1. **Load spec** – Read `spec/v2.yaml` (or the path you gave); parse as JSON or YAML into a dict with paths and schemas.
+1. **Load spec** – Read `spec/v2.json` (or the path you gave); parse as JSON or YAML into a dict with paths and schemas.
 2. **Create client** – HTTP client with the chosen base URL (and optional SSL verify from env).
 3. **Discovery** – GET models → nodes → properties → terms, GET tags; build `test_data` with real handles and IDs.
 4. **Generate cases** – For each GET operation in the spec, build positive (200) and optionally negative (404/422) cases using `test_data`.
@@ -529,7 +532,7 @@ A more detailed breakdown of each step is below.
 
 #### Step 1: Load the spec
 
-- **What happens:** The framework reads the spec file from disk (e.g. `spec/v2.yaml`). The file may be JSON or YAML; the loader tries to parse it as JSON first (so a `.yaml` file that actually contains JSON still works), then falls back to YAML if needed.
+- **What happens:** The framework reads the spec file from disk (e.g. `spec/v2.json`). The file may be JSON or YAML; the loader tries to parse it as JSON first, then falls back to YAML if needed.
 - **Result:** A Python dictionary with at least:
   - `paths` – each key is a path template (e.g. `/v2/models/`, `/v2/id/{id}`); each value describes the HTTP methods and their parameters and responses.
   - `components.schemas` – reusable response/request body schemas (e.g. `Model`, `Node`, `Entity`).
@@ -760,7 +763,7 @@ Example:
     STS_BASE_URL: ${{ vars.STS_BASE_URL }}
   run: |
     pip install -e .
-    python -m sts_test_framework.cli --spec spec/v2.yaml --report reports/
+    python -m sts_test_framework.cli --spec spec/v2.json --report reports/
 ```
 
 Or run pytest and optionally run the CLI for reports:
@@ -806,7 +809,7 @@ python3 parser_agent/main.py logs/manual_2026-03-25T00-00-00.log
 - **Positive test** – A test that sends valid input and expects success (200).
 - **Query parameter** – Key-value in the URL after `?` (e.g. `skip=0`, `limit=10`).
 - **Schema** – In OpenAPI, the description of a response body (e.g. “object with fields nanoid, handle, version”). Used for contract validation.
-- **Spec** – The OpenAPI specification file (`spec/v2.yaml`); the “contract” of the API.
+- **Spec** – The OpenAPI specification file (`spec/v2.json`); the “contract” of the API.
 - **Tag** – In OpenAPI, a label on an operation (e.g. `id`, `model`, `models`). Used to group endpoints and to filter which tests to run (`--tags`).
 - **test_data** – The dictionary produced by discovery (model_handle, node_handle, etc.) used to fill path and query parameters when generating cases.
 

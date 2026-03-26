@@ -7,12 +7,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Callable
-from urllib.parse import quote
 
 if TYPE_CHECKING:
     from ..client import APIClient
 
-from ..client import APIResponse
+from ..client import APIResponse, _build_query_string
 
 _TERMS_NO_VALUE_SET_DETAIL = "Property exists, but does not use an acceptable value set."
 
@@ -177,20 +176,7 @@ def _pagination_pair_check(client: "APIClient", case: dict) -> PaginationPairOut
 
 def _path_with_query(path: str, params: dict | None) -> str:
     """Append URL-encoded query string to path for human-readable report columns."""
-    if not params:
-        return path
-    query_parts = []
-    for k, v in params.items():
-        if v is None:
-            continue
-        if isinstance(v, list):
-            for item in v:
-                query_parts.append(f"{k}={quote(str(item), safe='')}")
-        else:
-            query_parts.append(f"{k}={quote(str(v), safe='')}")
-    if not query_parts:
-        return path
-    return path + "?" + "&".join(query_parts)
+    return path + _build_query_string(params)
 
 
 def run_functional_tests(
@@ -372,7 +358,7 @@ def _check_basic_shape(response: APIResponse, case: dict) -> tuple[bool, str | N
     if schema_ref in ("Entity", "Term", "Model", "Node", "PropertyResponse", "Tag"):
         if not isinstance(data, dict):
             return False, f"Expected object for {schema_ref}, got {type(data).__name__}"
-        if "nanoid" in ("Entity", "Term", "Node", "PropertyResponse", "Tag") and schema_ref != "Model":
+        if schema_ref in ("Entity", "Term", "Node", "PropertyResponse", "Tag") and schema_ref != "Model":
             if "nanoid" not in data and "value" not in data and "key" not in data:
                 return False, f"Expected nanoid/value/key in {schema_ref}"
         return True, None

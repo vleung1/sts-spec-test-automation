@@ -27,7 +27,7 @@ ENDPOINTS UNDER TEST
 2. **Single property** — ``GET /terms/model-pvs/{model}/{property}``
 
    - Same optional ``version`` semantics as the aggregate route.
-   - Bundled ``spec/v2.yaml`` may omit the aggregate path; property-level is the documented
+   - Bundled ``spec/v2.json`` may omit the aggregate path; property-level is the documented
      contract reference — we still test both for regression.
 
 **Important:** On deployed STS the query parameter is named ``version``, **not** ``model_version``

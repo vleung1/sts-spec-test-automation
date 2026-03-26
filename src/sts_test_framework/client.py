@@ -56,19 +56,7 @@ class APIClient:
 
     def _make_request(self, method: str, path: str, params: dict | None = None) -> APIResponse:
         """Build URL, perform request, return ``APIResponse`` (handles HTTP errors as responses)."""
-        url = self.base_url + path
-        if params:
-            query_parts = []
-            for k, v in params.items():
-                if v is None:
-                    continue
-                if isinstance(v, list):
-                    for item in v:
-                        query_parts.append(f"{k}={quote(str(item), safe='')}")
-                else:
-                    query_parts.append(f"{k}={quote(str(v), safe='')}")
-            if query_parts:
-                url += "?" + "&".join(query_parts)
+        url = self.base_url + path + _build_query_string(params)
 
         request = Request(url)
         request.add_header("Accept", "application/json")
@@ -113,19 +101,24 @@ class APIClient:
         return self._make_request("GET", path, params)
 
 
+def _build_query_string(params: dict | None) -> str:
+    """URL-encode ``params`` into a ``?key=val&...`` suffix (empty string if no params)."""
+    if not params:
+        return ""
+    query_parts = []
+    for k, v in params.items():
+        if v is None:
+            continue
+        if isinstance(v, list):
+            for item in v:
+                query_parts.append(f"{k}={quote(str(item), safe='')}")
+        else:
+            query_parts.append(f"{k}={quote(str(v), safe='')}")
+    if not query_parts:
+        return ""
+    return "?" + "&".join(query_parts)
+
+
 def full_url(client: APIClient, path: str, params: dict | None = None) -> str:
     """Concatenate ``client.base_url`` + path + query string (for display/debug only)."""
-    url = client.base_url + path
-    if params:
-        query_parts = []
-        for k, v in params.items():
-            if v is None:
-                continue
-            if isinstance(v, list):
-                for item in v:
-                    query_parts.append(f"{k}={quote(str(item), safe='')}")
-            else:
-                query_parts.append(f"{k}={quote(str(v), safe='')}")
-        if query_parts:
-            url += "?" + "&".join(query_parts)
-    return url
+    return client.base_url + path + _build_query_string(params)

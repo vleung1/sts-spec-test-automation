@@ -503,26 +503,19 @@ def _resolve_path_params(path_template: str, path_params: list[dict], test_data:
 
 def _negative_path_params(path_template: str, path_params: list[dict], test_data: dict) -> dict | None:
     """
-    Build path values using a fixed invalid string for every known id/handle param.
+    Build path values using a fixed invalid string for every path param.
 
     Intended to produce a request the server treats as non-existent or invalid.
     """
     if not path_params:
         return {}
-    # Use a single invalid value for path params that look like ids/handles
     invalid = "invalid_nonexistent_xyz"
     values = {}
     for p in path_params:
         name = p.get("name")
         if not name:
             continue
-        if name in ("id", "modelHandle", "versionString", "nodeHandle", "propHandle", "termValue", "key", "value", "model", "property", "version"):
-            values[name] = invalid
-        else:
-            if name == "id" and test_data.get("model_nanoid"):
-                values[name] = invalid
-            else:
-                values[name] = invalid
+        values[name] = invalid
     return values
 
 
