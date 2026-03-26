@@ -487,8 +487,8 @@ After [§5.1 Prerequisites](#51-prerequisites) (venv, `pip install -r requiremen
 
 | Platform | Action |
 | -------- | ------ |
-| **macOS** | Double-click **`launcher.command`**, or from a terminal with venv active: **`python launcher.py`** |
-| **Windows** | Double-click **`launcher.bat`**, or from a terminal with venv active: **`python launcher.py`** |
+| **macOS** | Double-click [`launcher.command`](../launcher.command), or from a terminal with venv active: **`python launcher.py`** |
+| **Windows** | Double-click [`launcher.bat`](../launcher.bat), or from a terminal with venv active: **`python launcher.py`** |
 
 The launcher prints the URL (default **http://localhost:5678**; if that port is in use, the next free port is chosen). Your browser should open automatically once the server is ready.
 
