@@ -47,9 +47,9 @@ def main() -> None:
                         help="Output directory for reports (default: reports/perf/<model>/)")
 
     # -- perf config --
-    parser.add_argument("--concurrency", type=int, default=5,
+    parser.add_argument("--concurrency", type=int, default=3,
                         help="Number of concurrent request threads.")
-    parser.add_argument("--iterations", type=int, default=1,
+    parser.add_argument("--iterations", type=int, default=5,
                         help="How many times to repeat each test case.")
     parser.add_argument("--ramp-up", type=float, default=0.0,
                         help="Stagger thread starts over this many seconds (0 = no ramp-up).")

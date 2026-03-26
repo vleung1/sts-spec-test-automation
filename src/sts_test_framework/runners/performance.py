@@ -107,7 +107,7 @@ def _endpoint_stats(op_id: str, results: list[PerfResult]) -> EndpointStats:
 def run_perf_tests(
     client: "APIClient",
     cases: list[dict],
-    concurrency: int = 5,
+    concurrency: int = 2,
     iterations: int = 1,
     ramp_up_seconds: float = 0.0,
     perf_threshold_ms: int = 2000,
