@@ -56,6 +56,7 @@ ID_BY_TYPE = [
     ("Concept", "hXZyty"),
     ("Relationship", "ueqz5Y"),
     ("ValueSet", "QGBE31"),
+    #("Origin", "oHBbMJ"), # Origin test is turned off for now because of bug DATATEAM-430 -- uncomment when fixed
 ]
 
 

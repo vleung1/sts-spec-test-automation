@@ -183,6 +183,7 @@ def run_functional_tests(
     client: "APIClient",
     cases: list[dict],
     on_case_done: Callable[[dict], None] | None = None,
+    perf_threshold_ms: int | None = None,
 ) -> list[dict]:
     """
     Execute every case in order via ``client.get``.
@@ -227,6 +228,11 @@ def run_functional_tests(
             else:
                 path_display = path_a
                 display_duration = pair_out.duration_a
+            perf_warning = (
+                perf_threshold_ms is not None
+                and display_duration is not None
+                and display_duration * 1000 > perf_threshold_ms
+            )
             result = {
                 "operation_id": operation_id,
                 "summary": summary,
@@ -245,6 +251,7 @@ def run_functional_tests(
                 "error": pair_out.error,
                 "tag": case.get("tag"),
                 "negative": case.get("negative", False),
+                "perf_warning": perf_warning,
             }
             results.append(result)
             if on_case_done:
@@ -278,6 +285,11 @@ def run_functional_tests(
                 error = shape_error
 
         path_display = _path_with_query(path, params)
+        perf_warning = (
+            perf_threshold_ms is not None
+            and response.duration is not None
+            and response.duration * 1000 > perf_threshold_ms
+        )
         result = {
             "operation_id": operation_id,
             "summary": summary,
@@ -291,6 +303,7 @@ def run_functional_tests(
             "error": error,
             "tag": case.get("tag"),
             "negative": case.get("negative", False),
+            "perf_warning": perf_warning,
         }
         results.append(result)
         if on_case_done:
